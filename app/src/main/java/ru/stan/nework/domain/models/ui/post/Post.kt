@@ -1,4 +1,7 @@
-package ru.stan.nework.domain.models.post
+package ru.stan.nework.domain.models.ui.post
+
+import ru.stan.nework.domain.models.network.post.Attachment
+import ru.stan.nework.domain.models.network.post.Users
 
 data class Post(
     val attachment: Attachment,
@@ -7,7 +10,6 @@ data class Post(
     val authorId: Int,
     val authorJob: String,
     val content: String,
-    val coords: Coords,
     val id: Int,
     val likeOwnerIds: List<Int>,
     val likedByMe: Boolean,
