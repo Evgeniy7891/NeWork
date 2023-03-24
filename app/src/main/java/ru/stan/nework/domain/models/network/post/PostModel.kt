@@ -1,44 +1,44 @@
 package ru.stan.nework.domain.models.network.post
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import ru.stan.nework.domain.models.IConvertableTo
 import ru.stan.nework.domain.models.ui.post.Post
-
+@Parcelize
 data class PostModel(
-    val attachment: Attachment,
-    val author: String,
-    val authorAvatar: String,
-    val authorId: Int,
-    val authorJob: String,
-    val content: String,
-    val coords: Coords,
     val id: Int,
+    val authorId: Int,
+    val author: String,
+    val authorAvatar: String?,
+    val authorJob: String?,
+    val content: String?,
+    val published: String?,
+    val coords: Coords?,
+    val link: String?,
     val likeOwnerIds: List<Int>,
-    val likedByMe: Boolean,
-    val link: String,
     val mentionIds: List<Int>,
     val mentionedMe: Boolean,
+    val likedByMe: Boolean,
+    val attachment: Attachment?,
     val ownedByMe: Boolean,
-    val published: String,
-    val users: List<Users>
-) : IConvertableTo<Post> {
+) : IConvertableTo<Post>, Parcelable {
 
    override fun convertTo() : Post {
         return Post(
-            attachment = attachment,
+            attachment = attachment ?: Attachment("",""),
             author = author,
-            authorAvatar = authorAvatar,
+            authorAvatar = authorAvatar ?: "",
             authorId = authorId,
-            authorJob = authorJob,
-            content = content,
+            authorJob = authorJob ?: "",
+            content = content ?: "",
             id = id,
             likeOwnerIds = likeOwnerIds,
             likedByMe = likedByMe,
-            link = link,
+            link = link ?: "",
             mentionIds = mentionIds,
             mentionedMe = mentionedMe,
             ownedByMe = ownedByMe,
-            published = published,
-            users = users
+            published = published ?: "",
         )
     }
 }

@@ -21,7 +21,7 @@ suspend fun <T> safeApiCall(
                 }
                 is IOException -> NetworkState.Error("Network error")
                 else -> {
-                    NetworkState.Error("Unknown error")
+                    NetworkState.Error("Unknown error - ${throwable.message}")
                 }
             }
         }

@@ -35,7 +35,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_author" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/tv_content"
         style="@style/TextStylePoppins"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -66,7 +66,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="@id/ib_menu"
         app:layout_constraintStart_toStartOf="@+id/iv_avatar"
-        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:layout_constraintTop_toBottomOf="@+id/tv_content"
         tools:srcCompat="@tools:sample/avatars[5]" />
 
     <ImageView
