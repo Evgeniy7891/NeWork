@@ -19,6 +19,7 @@ class PostRepositoryImpl @Inject constructor(
             remoteDataSource.getPosts()
                 .map { it.convertTo() }
         }
+
     }
 
 }

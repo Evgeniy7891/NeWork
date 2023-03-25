@@ -5,6 +5,6 @@ import ru.stan.nework.domain.models.network.post.PostModel
 
 interface NetworkService {
 
-    @GET("api/posts/")
+    @GET("api/posts")
     suspend fun getPosts() : List<PostModel>
 }

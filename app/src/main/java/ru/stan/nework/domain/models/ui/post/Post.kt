@@ -18,5 +18,4 @@ data class Post(
     val mentionedMe: Boolean,
     val ownedByMe: Boolean,
     val published: String,
-    val users: List<Users>
 )
