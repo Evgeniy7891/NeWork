@@ -35,8 +35,7 @@ class HomeFragment : Fragment() {
     private fun initPosts() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.posts.collectLatest { posts ->
-                delay(5000)
-           //    println("POSTS - $posts")
+                delay(1000)
                 initAdapter(posts)
             }
         }
@@ -45,6 +44,9 @@ class HomeFragment : Fragment() {
     private fun initAdapter(posts: List<Post>) {
         val adapter = PostAdapter(posts)
         binding.rvListPosts.adapter = adapter
+        binding.rvListPosts.recycledViewPool.setMaxRecycledViews(
+            PostAdapter.VIEW_TYPE, PostAdapter.MAX_POOL_SIZE
+        )
     }
 
     override fun onDestroyView() {
