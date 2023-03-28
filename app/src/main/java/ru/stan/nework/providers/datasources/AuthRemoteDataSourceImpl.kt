@@ -10,4 +10,8 @@ class AuthRemoteDataSourceImpl @Inject constructor(private val apiService: Netwo
     override suspend fun register(login: String, password: String, name: String): AuthState {
        return apiService.register(login, password, name)
     }
+
+    override suspend fun authentication(login: String, password: String): AuthState {
+        return apiService.authentication(login, password)
+    }
 }

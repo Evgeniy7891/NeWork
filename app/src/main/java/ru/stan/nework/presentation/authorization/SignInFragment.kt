@@ -33,16 +33,26 @@ class SignInFragment : Fragment() {
             val password = binding.etPassword.text.toString()
             val name = binding.etName.text.toString()
 
-          if ( binding.etLogin.text.isNullOrBlank() || binding.etPassword.text.isNullOrBlank()) {
-              Toast.makeText(
-                  activity,
-                  "Заполните все поля",
-                  Toast.LENGTH_LONG
-              )
-                  .show()
-          } else viewModel.register(login, password, name)
-            findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+            if (binding.etLogin.text.isNullOrBlank() || binding.etPassword.text.isNullOrBlank()) {
+                Toast.makeText(
+                    activity,
+                    "Заполните все поля",
+                    Toast.LENGTH_LONG
+                )
+                    .show()
+            } else {
+                viewModel.register(login, password, name)
+                findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+            }
         }
+
+        binding.tvLogIn.setOnClickListener {
+            findNavController().navigate(R.id.action_signInFragment_to_logInFragment)
+        }
+
+
+        if (viewModel.authenticated) findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+
 
         return binding.root
     }

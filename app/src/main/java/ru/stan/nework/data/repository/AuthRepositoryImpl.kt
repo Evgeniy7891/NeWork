@@ -23,4 +23,10 @@ class AuthRepositoryImpl @Inject constructor(
             authRemoteDataSource.register(login, password, name)
         }
     }
+
+    override suspend fun authentication(login: String, password: String): NetworkState<AuthState> {
+        return safeApiCall(ioDispatcher) {
+            authRemoteDataSource.authentication(login, password)
+        }
+    }
 }
