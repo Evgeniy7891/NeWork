@@ -1,6 +1,7 @@
 package ru.stan.nework.presentation.addPost
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,12 +37,16 @@ class PostViewModel @Inject constructor(
     private val _media = MutableLiveData(noMedia)
     val media: LiveData<MediaModel>
         get() = _media
+
     fun createPost(content: String) {
         newPost.value = newPost.value?.copy(content = content)
         val post = newPost.value!!
+        println("ViewModel Create - ${post}")
         viewModelScope.launch {
             when (val response = addPostUseCase.invoke(post)) {
-                is NetworkState.Success -> deleteEditPost()
+                is NetworkState.Success -> {
+                    deleteEditPost()
+                }
                 is NetworkState.Error -> throw RuntimeException("Error ${response.throwable}")
                 else -> {}
             }
@@ -56,7 +61,10 @@ class PostViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             when(val response = addMultiMediaUseCase.invoke(type, file)) {
-                is NetworkState.Success -> newPost.value?.copy(attachment = response.success)
+                is NetworkState.Success -> {
+                    newPost.value = newPost.value?.copy(attachment = response.success)
+                println("ViewModel addMedia - ${response.success}")
+                }
                 is NetworkState.Error -> throw RuntimeException("Error ${response.throwable}")
                 else -> {}
             }

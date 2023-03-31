@@ -10,6 +10,7 @@ import javax.inject.Inject
 class AddMultiMediaUseCase @Inject constructor(private val repository: PostRepository){
 
     suspend operator fun invoke(type: AttachmentType, file: MultipartBody.Part): NetworkState<Attachment> {
+        println("USE CASE ${repository.addMultimedia(type, file)}")
         return repository.addMultimedia(type, file)
     }
 }

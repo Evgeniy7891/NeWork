@@ -20,6 +20,7 @@ class PostRemoteDataSourceImpl @Inject constructor(private val apiService: Netwo
     }
     override suspend fun addMultimedia(type: AttachmentType, file: MultipartBody.Part): Attachment {
         val response = apiService.addMultimedia(file)
+        println("DATA SOURCE ${response}")
         return Attachment(type, response.url)
     }
 }

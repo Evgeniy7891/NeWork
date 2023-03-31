@@ -84,7 +84,7 @@ class PostFragment : Fragment() {
             onAddButtonClicked()
         }
         binding.fbDone.setOnClickListener {
-            Log.d("TAG", "FBDONE")
+            println("FBDONE")
             viewModel.createPost(binding.etContent.text.toString())
         }
         binding.fbAttach.setOnClickListener {
