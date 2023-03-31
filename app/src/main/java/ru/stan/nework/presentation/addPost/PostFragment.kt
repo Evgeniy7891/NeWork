@@ -1,18 +1,48 @@
 package ru.stan.nework.presentation.addPost
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.github.dhaval2404.imagepicker.ImagePicker
+import com.github.dhaval2404.imagepicker.constant.ImageProvider
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.net.toFile
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import ru.stan.nework.R
-import ru.stan.nework.databinding.FragmentHomeBinding
 import ru.stan.nework.databinding.FragmentPostBinding
+import ru.stan.nework.domain.models.ui.post.AttachmentType
 
+@AndroidEntryPoint
 class PostFragment : Fragment() {
+
+    private val viewModel: PostViewModel by viewModels()
+
+    private val photoLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            when (it.resultCode) {
+                ImagePicker.RESULT_ERROR -> {
+                    Toast.makeText(requireContext(), "Image pick error", Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    val uri = it.data?.data ?: return@registerForActivityResult
+                    val resultFile = uri?.toFile()
+                    val file = MultipartBody.Part.createFormData(
+                        "file", resultFile?.name, resultFile!!.asRequestBody()
+                    )
+                    viewModel.changeMedia(uri, resultFile, AttachmentType.IMAGE)
+                    viewModel.addMediaToPost(AttachmentType.IMAGE, file)
+                }
+            }
+        }
 
     private val rotateOpen: Animation by lazy {
         AnimationUtils.loadAnimation(
@@ -53,6 +83,34 @@ class PostFragment : Fragment() {
         binding.fbAdd.setOnClickListener {
             onAddButtonClicked()
         }
+        binding.fbDone.setOnClickListener {
+            Log.d("TAG", "FBDONE")
+            viewModel.createPost(binding.etContent.text.toString())
+        }
+        binding.fbAttach.setOnClickListener {
+
+        }
+        binding.fbCamera.setOnClickListener {
+            ImagePicker.Builder(this).cameraOnly().maxResultSize(2048, 2048).createIntent(photoLauncher::launch)
+        }
+        viewModel.media.observe(viewLifecycleOwner)
+        { mediaModel ->
+            if (mediaModel.uri == null) {
+                return@observe
+            }
+            when (mediaModel.type) {
+                AttachmentType.IMAGE -> {
+                    binding.ivAttachment.setImageURI(mediaModel.uri)
+                }
+                AttachmentType.VIDEO -> {
+
+                }
+                AttachmentType.AUDIO -> {
+
+                }
+                null -> return@observe
+            }
+        }
 
         return binding.root
     }
@@ -65,7 +123,7 @@ class PostFragment : Fragment() {
     }
 
     private fun setAnimation(clicked: Boolean) {
-        if(!clicked){
+        if (!clicked) {
             binding.fbDone.visibility = View.VISIBLE
             binding.fbAttach.visibility = View.VISIBLE
             binding.fbCamera.visibility = View.VISIBLE
@@ -77,7 +135,7 @@ class PostFragment : Fragment() {
     }
 
     private fun setVisibility(clicked: Boolean) {
-        if(!clicked) {
+        if (!clicked) {
             binding.fbDone.startAnimation(fromBottom)
             binding.fbAttach.startAnimation(fromBottom)
             binding.fbCamera.startAnimation(fromBottom)
@@ -91,7 +149,7 @@ class PostFragment : Fragment() {
     }
 
     private fun setClickable(clicked: Boolean) {
-        if(!clicked){
+        if (!clicked) {
             binding.fbDone.isClickable = true
             binding.fbAttach.isClickable = true
             binding.fbCamera.isClickable = true

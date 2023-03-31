@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import ru.stan.nework.databinding.ItemPostBinding
+import ru.stan.nework.domain.models.ui.post.AttachmentType
 import ru.stan.nework.domain.models.ui.post.Post
 import ru.stan.nework.utils.MediaHelper
 
@@ -38,7 +39,7 @@ class PostAdapter(private val listPosts: List<Post>) :
                 tvTime.text = post.published
                 tvContent.text = post.content
                 when (post.attachment.type) {
-                    "VIDEO" -> {
+                    AttachmentType.VIDEO -> {
                         exo.visibility = View.VISIBLE
                         val media = MediaHelper(exo, post.attachment.url)
                         media.create()
@@ -46,13 +47,13 @@ class PostAdapter(private val listPosts: List<Post>) :
                             media.onPlay()
                         }
                     }
-                    "IMAGE" -> {
+                    AttachmentType.IMAGE -> {
                         Glide.with(ivAtachment)
                             .load(post.attachment.url)
                             .timeout(5000)
                             .into(ivAtachment)
                     }
-                    "AUDIO" -> {
+                    AttachmentType.AUDIO -> {
                         exo.visibility = View.VISIBLE
                         val media = MediaHelper(exo, post.attachment.url)
                         media.create()

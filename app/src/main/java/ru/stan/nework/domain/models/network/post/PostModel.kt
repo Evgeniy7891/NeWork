@@ -3,6 +3,7 @@ package ru.stan.nework.domain.models.network.post
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import ru.stan.nework.domain.models.IConvertableTo
+import ru.stan.nework.domain.models.ui.post.AttachmentType
 import ru.stan.nework.domain.models.ui.post.Post
 @Parcelize
 data class PostModel(
@@ -25,7 +26,7 @@ data class PostModel(
 
    override fun convertTo() : Post {
         return Post(
-            attachment = attachment ?: Attachment("",""),
+            attachment = attachment ?: Attachment(AttachmentType.IMAGE,""),
             author = author,
             authorAvatar = authorAvatar ?: "",
             authorId = authorId,
