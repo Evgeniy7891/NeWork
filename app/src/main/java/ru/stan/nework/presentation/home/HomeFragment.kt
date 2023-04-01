@@ -35,6 +35,10 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_homeFragment_to_postFragment)
         }
 
+        binding.swipeRefresh.setOnClickListener {
+           initPosts()
+        }
+
         return binding.root
     }
 

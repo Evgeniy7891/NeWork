@@ -87,11 +87,18 @@ class PostFragment : Fragment() {
             println("FBDONE")
             viewModel.createPost(binding.etContent.text.toString())
         }
-        binding.fbAttach.setOnClickListener {
 
+        binding.fbAttach.setOnClickListener {
+            ImagePicker.with(this).crop().compress(2048).provider(ImageProvider.GALLERY)
+                .galleryMimeTypes(
+                    arrayOf("image/png", "image/jpeg", "image/jpg")
+                )
+                .createIntent(photoLauncher::launch)
         }
+
         binding.fbCamera.setOnClickListener {
-            ImagePicker.Builder(this).cameraOnly().maxResultSize(2048, 2048).createIntent(photoLauncher::launch)
+            ImagePicker.Builder(this).cameraOnly().maxResultSize(2048, 2048)
+                .createIntent(photoLauncher::launch)
         }
         viewModel.media.observe(viewLifecycleOwner)
         { mediaModel ->

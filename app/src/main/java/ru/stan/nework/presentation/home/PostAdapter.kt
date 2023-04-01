@@ -50,7 +50,7 @@ class PostAdapter(private val listPosts: List<Post>) :
                     AttachmentType.IMAGE -> {
                         Glide.with(ivAtachment)
                             .load(post.attachment.url)
-                            .timeout(5000)
+                            .timeout(10_000)
                             .into(ivAtachment)
                     }
                     AttachmentType.AUDIO -> {
