@@ -97,6 +97,21 @@
             app:layout_constraintEnd_toEndOf="@+id/fb_attach"
             android:focusable="true" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/ib_add_urers"
+            android:layout_width="150dp"
+            android:layout_height="55dp"
+            android:layout_marginStart="32dp"
+            android:background="@drawable/button"
+            android:backgroundTint="#33A2C6"
+            android:fontFamily="@font/montserrat_medium"
+            android:text="Отметить друзей"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/fb_add"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/fb_add" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

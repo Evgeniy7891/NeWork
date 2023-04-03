@@ -6,6 +6,7 @@ import retrofit2.http.*
 import ru.stan.nework.domain.models.network.post.MediaResponse
 import ru.stan.nework.domain.models.network.post.PostModel
 import ru.stan.nework.domain.models.network.post.PostRequest
+import ru.stan.nework.domain.models.network.user.User
 import ru.stan.nework.domain.models.ui.post.MediaModel
 import ru.stan.nework.domain.models.ui.post.Post
 
@@ -35,4 +36,7 @@ interface NetworkService {
     @Multipart
     @POST("api/media")
     suspend fun addMultimedia(@Part file: MultipartBody.Part?): MediaResponse
+
+    @GET("api/users")
+    suspend fun getUsers(): List<User>
 }

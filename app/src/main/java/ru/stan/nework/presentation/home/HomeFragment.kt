@@ -45,7 +45,7 @@ class HomeFragment : Fragment() {
     private fun initPosts() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.posts.collectLatest { posts ->
-                delay(1000)
+                delay(500)
                 initAdapter(posts)
             }
         }

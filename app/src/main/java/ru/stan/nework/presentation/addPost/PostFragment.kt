@@ -14,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -117,6 +118,10 @@ class PostFragment : Fragment() {
                 }
                 null -> return@observe
             }
+        }
+
+        binding.ibAddUrers.setOnClickListener {
+            findNavController().navigate(R.id.action_postFragment_to_usersFragment)
         }
 
         return binding.root
