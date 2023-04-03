@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -29,13 +30,22 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         initPosts()
+
+        binding.floatingActionButton.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_postFragment)
+        }
+
+        binding.swipeRefresh.setOnClickListener {
+           initPosts()
+        }
+
         return binding.root
     }
 
     private fun initPosts() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.posts.collectLatest { posts ->
-                delay(1000)
+                delay(500)
                 initAdapter(posts)
             }
         }
