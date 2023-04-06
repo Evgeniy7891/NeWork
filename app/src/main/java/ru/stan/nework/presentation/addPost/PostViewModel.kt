@@ -7,14 +7,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import ru.stan.nework.domain.models.network.NetworkState
 import ru.stan.nework.domain.models.network.post.PostRequest
 import ru.stan.nework.domain.models.ui.post.AttachmentType
 import ru.stan.nework.domain.models.ui.post.MediaModel
+import ru.stan.nework.domain.models.ui.user.UserUI
 import ru.stan.nework.domain.usecase.post.AddMultiMediaUseCase
 import ru.stan.nework.domain.usecase.post.AddPostUseCase
+import ru.stan.nework.domain.usecase.post.GetUsersUseCase
 import java.io.File
 import javax.inject.Inject
 
@@ -23,13 +26,15 @@ private val editedPost = PostRequest(
     content = "",
     link = null,
     attachment = null,
-    mentionIds = listOf()
+    mentionIds = mutableListOf()
 )
 private val noMedia = MediaModel()
+private val mentions = mutableListOf<UserUI>()
+
 @HiltViewModel
 class PostViewModel @Inject constructor(
     private val addPostUseCase: AddPostUseCase,
-    private val addMultiMediaUseCase: AddMultiMediaUseCase
+    private val addMultiMediaUseCase: AddMultiMediaUseCase,
 ) : ViewModel() {
 
     private val newPost: MutableLiveData<PostRequest> = MutableLiveData(editedPost)
@@ -37,6 +42,7 @@ class PostViewModel @Inject constructor(
     private val _media = MutableLiveData(noMedia)
     val media: LiveData<MediaModel>
         get() = _media
+
 
     fun createPost(content: String) {
         newPost.value = newPost.value?.copy(content = content)
@@ -52,24 +58,31 @@ class PostViewModel @Inject constructor(
             }
         }
     }
+
     fun changeMedia(uri: Uri?, file: File?, type: AttachmentType?) {
         _media.value = MediaModel(uri, file, type)
     }
+
     fun addMediaToPost(
         type: AttachmentType,
         file: MultipartBody.Part,
     ) {
         viewModelScope.launch {
-            when(val response = addMultiMediaUseCase.invoke(type, file)) {
+            when (val response = addMultiMediaUseCase.invoke(type, file)) {
                 is NetworkState.Success -> {
                     newPost.value = newPost.value?.copy(attachment = response.success)
-                println("ViewModel addMedia - ${response.success}")
+                    println("ViewModel addMedia - ${response.success}")
                 }
                 is NetworkState.Error -> throw RuntimeException("Error ${response.throwable}")
                 else -> {}
             }
         }
     }
+
+    fun addUsrsId(usersId: List<Int>) {
+        newPost.value = newPost.value?.copy(mentionIds = usersId)
+    }
+
     private fun deleteEditPost() {
         newPost.value = editedPost
     }

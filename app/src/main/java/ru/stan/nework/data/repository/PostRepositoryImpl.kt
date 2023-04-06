@@ -11,6 +11,7 @@ import ru.stan.nework.domain.models.network.post.PostRequest
 import ru.stan.nework.domain.models.network.user.User
 import ru.stan.nework.domain.models.ui.post.AttachmentType
 import ru.stan.nework.domain.models.ui.post.Post
+import ru.stan.nework.domain.models.ui.user.UserUI
 import ru.stan.nework.domain.repository.PostRepository
 import ru.stan.nework.utils.safeApiCall
 import javax.inject.Inject
@@ -40,9 +41,10 @@ class PostRepositoryImpl @Inject constructor(
             remoteDataSource.addMultimedia(type, file)
         }
     }
-    override suspend fun getUsers(): NetworkState<List<User>> {
+    override suspend fun getUsers(): NetworkState<List<UserUI>> {
         return safeApiCall(ioDispatcher) {
             remoteDataSource.getUsers()
+                .map { it.convertTo() }
         }
     }
 }
