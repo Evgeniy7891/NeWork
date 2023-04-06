@@ -80,12 +80,14 @@ class PostFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPostBinding.inflate(layoutInflater, container, false)
-
+        val userId = arguments?.getIntegerArrayList("ID")
+        if (userId != null) {
+            viewModel.addUsrsId(userId)
+        }
         binding.fbAdd.setOnClickListener {
             onAddButtonClicked()
         }
         binding.fbDone.setOnClickListener {
-            println("FBDONE")
             viewModel.createPost(binding.etContent.text.toString())
         }
 

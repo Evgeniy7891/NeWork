@@ -8,10 +8,11 @@ import ru.stan.nework.domain.models.network.post.PostRequest
 import ru.stan.nework.domain.models.network.user.User
 import ru.stan.nework.domain.models.ui.post.AttachmentType
 import ru.stan.nework.domain.models.ui.post.Post
+import ru.stan.nework.domain.models.ui.user.UserUI
 
 interface PostRepository {
 suspend fun getPosts() : NetworkState<List<Post>>
 suspend fun addPost(post: PostRequest) : NetworkState<PostModel>
 suspend fun addMultimedia(type: AttachmentType, file: MultipartBody.Part): NetworkState<Attachment>
-suspend fun getUsers(): NetworkState<List<User>>
+suspend fun getUsers(): NetworkState<List<UserUI>>
 }
