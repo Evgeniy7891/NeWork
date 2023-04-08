@@ -29,7 +29,6 @@ private val editedPost = PostRequest(
     mentionIds = mutableListOf()
 )
 private val noMedia = MediaModel()
-private val mentions = mutableListOf<UserUI>()
 
 @HiltViewModel
 class PostViewModel @Inject constructor(

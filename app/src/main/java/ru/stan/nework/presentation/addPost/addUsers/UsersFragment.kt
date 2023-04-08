@@ -1,4 +1,4 @@
-package ru.stan.nework.presentation.addPost
+package ru.stan.nework.presentation.addPost.addUsers
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,9 +13,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import ru.stan.nework.R
 import ru.stan.nework.databinding.FragmentUsersBinding
-import ru.stan.nework.domain.models.network.user.User
 import ru.stan.nework.domain.models.ui.user.UserUI
-import ru.stan.nework.presentation.home.PostAdapter
+import ru.stan.nework.presentation.addPost.CheckedListener
+import ru.stan.nework.presentation.addPost.UsersAdapter
 import java.util.ArrayList
 
 @AndroidEntryPoint
