@@ -15,4 +15,5 @@ suspend fun getPosts() : NetworkState<List<Post>>
 suspend fun addPost(post: PostRequest) : NetworkState<PostModel>
 suspend fun addMultimedia(type: AttachmentType, file: MultipartBody.Part): NetworkState<Attachment>
 suspend fun getUsers(): NetworkState<List<UserUI>>
+suspend fun getUser(id:Long): NetworkState<UserUI>
 }

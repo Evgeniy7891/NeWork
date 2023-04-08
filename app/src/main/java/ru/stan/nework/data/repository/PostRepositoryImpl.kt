@@ -26,7 +26,6 @@ class PostRepositoryImpl @Inject constructor(
             remoteDataSource.getPosts()
                 .map { it.convertTo() }
         }
-
     }
     override suspend fun addPost(post: PostRequest): NetworkState<PostModel> {
         return safeApiCall(ioDispatcher) {
@@ -45,6 +44,11 @@ class PostRepositoryImpl @Inject constructor(
         return safeApiCall(ioDispatcher) {
             remoteDataSource.getUsers()
                 .map { it.convertTo() }
+        }
+    }
+    override suspend fun getUser(id: Long): NetworkState<UserUI> {
+        return safeApiCall(ioDispatcher) {
+            remoteDataSource.getUser(id).convertTo()
         }
     }
 }

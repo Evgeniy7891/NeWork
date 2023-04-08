@@ -39,4 +39,7 @@ interface NetworkService {
 
     @GET("api/users")
     suspend fun getUsers(): List<User>
+
+    @GET("api/users/{id}")
+    suspend fun getUserById(@Path("id") id: Long): User
 }

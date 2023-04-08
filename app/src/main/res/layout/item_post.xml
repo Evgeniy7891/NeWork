@@ -122,15 +122,25 @@
         app:layout_constraintTop_toTopOf="@+id/ib_liked" />
 
     <ImageButton
-        android:id="@+id/ib_people"
+        android:id="@+id/ib_users"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:background="#00FFFFFF"
         android:src="@drawable/ic_people"
         app:layout_constraintBottom_toBottomOf="@+id/tv_count_liked"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tv_count_users"
         app:layout_constraintTop_toTopOf="@+id/tv_count_liked" />
+
+    <TextView
+        android:id="@+id/tv_count_users"
+        style="@style/TextStyleMonserrat"
+        android:layout_marginEnd="16dp"
+        android:text="0"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/ib_users"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ib_users" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

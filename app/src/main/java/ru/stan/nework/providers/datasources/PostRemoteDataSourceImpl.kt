@@ -27,4 +27,7 @@ class PostRemoteDataSourceImpl @Inject constructor(private val apiService: Netwo
     override suspend fun getUsers(): List<User> {
         return apiService.getUsers()
     }
+    override suspend fun getUser(id: Long): User {
+        return apiService.getUserById(id)
+    }
 }

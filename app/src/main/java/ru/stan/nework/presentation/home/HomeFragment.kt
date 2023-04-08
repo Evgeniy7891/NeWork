@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.collectLatest
 import ru.stan.nework.R
 import ru.stan.nework.databinding.FragmentHomeBinding
 import ru.stan.nework.domain.models.ui.post.Post
+import java.util.ArrayList
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -52,7 +53,13 @@ class HomeFragment : Fragment() {
     }
 
     private fun initAdapter(posts: List<Post>) {
-        val adapter = PostAdapter(posts)
+        val adapter = PostAdapter(posts, object : OnListener{
+            override fun getUsers(listId: List<Int>) {
+                val bundle = Bundle()
+                bundle.putIntegerArrayList("ID", listId as ArrayList<Int>?)
+                findNavController().navigate(R.id.action_homeFragment_to_usersBottomSheetFragment, bundle)
+            }
+        })
         binding.rvListPosts.adapter = adapter
         binding.rvListPosts.recycledViewPool.setMaxRecycledViews(
             PostAdapter.VIEW_TYPE, PostAdapter.MAX_POOL_SIZE

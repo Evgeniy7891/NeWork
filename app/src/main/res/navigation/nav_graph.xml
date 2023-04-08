@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeFragment_to_postFragment"
             app:destination="@id/postFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_usersBottomSheetFragment"
+            app:destination="@id/usersBottomSheetFragment" />
     </fragment>
     <fragment
         android:id="@+id/signInFragment"
@@ -46,11 +49,16 @@
     </fragment>
     <fragment
         android:id="@+id/usersFragment"
-        android:name="ru.stan.nework.presentation.addPost.UsersFragment"
+        android:name="ru.stan.nework.presentation.addPost.addUsers.UsersFragment"
         android:label="fragment_users"
         tools:layout="@layout/fragment_users" >
         <action
             android:id="@+id/action_usersFragment_to_postFragment"
             app:destination="@id/postFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/usersBottomSheetFragment"
+        android:name="ru.stan.nework.presentation.home.users.UsersBottomSheetFragment"
+        android:label="fragment_users_bottom_sheet"
+        tools:layout="@layout/fragment_users_bottom_sheet" />
 </navigation>

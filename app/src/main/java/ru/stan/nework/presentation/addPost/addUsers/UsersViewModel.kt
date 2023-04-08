@@ -1,4 +1,4 @@
-package ru.stan.nework.presentation.addPost
+package ru.stan.nework.presentation.addPost.addUsers
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
