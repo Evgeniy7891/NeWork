@@ -4,14 +4,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import ru.stan.nework.domain.models.network.NetworkState
 import ru.stan.nework.domain.models.ui.post.Post
 import ru.stan.nework.domain.usecase.post.GetPostsUseCase
+import ru.stan.nework.domain.usecase.post.RemovePostUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getPostsUseCase: GetPostsUseCase
+    private val getPostsUseCase: GetPostsUseCase,
+    private val removePostUseCase: RemovePostUseCase
 ): ViewModel() {
 
     private val _errorMessage = MutableSharedFlow<String>()
@@ -33,4 +36,7 @@ class HomeViewModel @Inject constructor(
             is NetworkState.Success -> emit(response.success)
         }
     }
+   fun deletePost(id: Long) = viewModelScope.launch {
+       removePostUseCase.invoke(id)
+   }
 }

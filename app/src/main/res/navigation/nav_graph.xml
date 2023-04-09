@@ -54,7 +54,9 @@
         tools:layout="@layout/fragment_users" >
         <action
             android:id="@+id/action_usersFragment_to_postFragment"
-            app:destination="@id/postFragment" />
+            app:destination="@id/postFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <dialog
         android:id="@+id/usersBottomSheetFragment"

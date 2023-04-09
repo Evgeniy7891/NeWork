@@ -51,4 +51,14 @@ class PostRepositoryImpl @Inject constructor(
             remoteDataSource.getUser(id).convertTo()
         }
     }
+    override suspend fun removeById(id: Long) {
+       safeApiCall(ioDispatcher) {
+           remoteDataSource.removeById(id)
+       }
+    }
+    override suspend fun getPost(id: Long): NetworkState<Post> {
+        return safeApiCall(ioDispatcher) {
+            remoteDataSource.getPost(id).convertTo()
+        }
+    }
 }

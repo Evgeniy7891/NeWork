@@ -42,4 +42,10 @@ interface NetworkService {
 
     @GET("api/users/{id}")
     suspend fun getUserById(@Path("id") id: Long): User
+
+    @DELETE("api/posts/{id}")
+    suspend fun removeById(@Path("id") id: Long)
+
+    @GET("api/posts/{post_id}")
+    suspend fun getPostById(@Path("post_id") id: Long): PostModel
 }
