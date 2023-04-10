@@ -13,4 +13,6 @@ interface PostRemoteDataSource {
     suspend fun addMultimedia(type: AttachmentType, file: MultipartBody.Part): Attachment
     suspend fun getUsers(): List<User>
     suspend fun getUser(id: Long): User
+    suspend fun removeById(id: Long)
+    suspend fun getPost(id: Long): PostModel
 }

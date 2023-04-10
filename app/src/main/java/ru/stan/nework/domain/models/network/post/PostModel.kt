@@ -26,7 +26,7 @@ data class PostModel(
 
    override fun convertTo() : Post {
         return Post(
-            attachment = attachment ?: Attachment(AttachmentType.IMAGE,""),
+            attachment = attachment ?: Attachment(null,null),
             author = author,
             authorAvatar = authorAvatar ?: "",
             authorId = authorId,
@@ -35,7 +35,7 @@ data class PostModel(
             id = id,
             likeOwnerIds = likeOwnerIds,
             likedByMe = likedByMe,
-            link = link ?: "",
+            link = link,
             mentionIds = mentionIds,
             mentionedMe = mentionedMe,
             ownedByMe = ownedByMe,

@@ -3,6 +3,8 @@ package ru.stan.nework.presentation.home
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.stan.nework.R
@@ -13,6 +15,8 @@ import ru.stan.nework.utils.MediaHelper
 
 interface OnListener {
     fun getUsers(listId: List<Int>) {}
+    fun onEdit(post: Post) {}
+    fun onRemove(post: Post) {}
 }
 
 class PostAdapter(private val listPosts: List<Post>, private val onListener: OnListener) :
@@ -45,33 +49,56 @@ class PostAdapter(private val listPosts: List<Post>, private val onListener: OnL
                 ibUsers.setOnClickListener {
                     onClickListener.getUsers(post.mentionIds)
                 }
+                tvCountLiked.setOnClickListener {
+                    onClickListener.getUsers(post.likeOwnerIds)
+                }
+                ibMenu.isVisible = post.ownedByMe
+                ibMenu.setOnClickListener {
+                    PopupMenu(it.context, it).apply {
+                        inflate(R.menu.options_menu)
+                        menu.setGroupVisible(R.id.menu_owned, post.ownedByMe)
+                        setOnMenuItemClickListener { item ->
+                            when(item.itemId) {
+                                R.id.remove -> {
+                                    onClickListener.onRemove(post)
+                                    true
+                                }
+                                R.id.edit -> {
+                                    onClickListener.onEdit(post)
+                                    true
+                                }
+                                else -> false
+                            }
+                        }
+                    }.show()
+                }
                 Glide.with(ivAvatar)
                     .load(post.authorAvatar)
                     .placeholder(R.drawable.ic_avatar)
                     .circleCrop()
                     .timeout(10_000)
                     .into(ivAvatar)
-                when (post.attachment.type) {
+                when (post.attachment?.type) {
                     AttachmentType.VIDEO -> {
                         exo.visibility = View.VISIBLE
-                        val media = MediaHelper(exo, post.attachment.url)
-                        media.create()
+                        val media = post.attachment?.url?.let { MediaHelper(exo, it) }
+                        media?.create()
                         exo.setOnClickListener {
-                            media.onPlay()
+                            media?.onPlay()
                         }
                     }
                     AttachmentType.IMAGE -> {
                         Glide.with(ivAtachment)
-                            .load(post.attachment.url)
+                            .load(post.attachment?.url)
                             .timeout(10_000)
                             .into(ivAtachment)
                     }
                     AttachmentType.AUDIO -> {
                         exo.visibility = View.VISIBLE
-                        val media = MediaHelper(exo, post.attachment.url)
-                        media.create()
+                        val media = post.attachment?.url?.let { MediaHelper(exo, it) }
+                        media?.create()
                         exo.setOnClickListener {
-                            media.onPlay()
+                            media?.onPlay()
                         }
                     }
                     else -> {

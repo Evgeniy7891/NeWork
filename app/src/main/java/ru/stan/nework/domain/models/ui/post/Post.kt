@@ -4,7 +4,7 @@ import ru.stan.nework.domain.models.network.post.Attachment
 import ru.stan.nework.domain.models.network.post.Users
 
 data class Post(
-    val attachment: Attachment,
+    val attachment: Attachment?,
     val author: String,
     val authorAvatar: String,
     val authorId: Int,
@@ -13,7 +13,7 @@ data class Post(
     val id: Int,
     val likeOwnerIds: List<Int>,
     val likedByMe: Boolean,
-    val link: String,
+    val link: String?,
     val mentionIds: List<Int>,
     val mentionedMe: Boolean,
     val ownedByMe: Boolean,

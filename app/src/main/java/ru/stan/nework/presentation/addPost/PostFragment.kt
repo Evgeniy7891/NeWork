@@ -84,6 +84,9 @@ class PostFragment : Fragment() {
         if (userId != null) {
             viewModel.addUsrsId(userId)
         }
+        val postId = arguments?.getInt("POST")
+        if(postId != null) viewModel.postInit(postId)
+        
         binding.fbAdd.setOnClickListener {
             onAddButtonClicked()
         }

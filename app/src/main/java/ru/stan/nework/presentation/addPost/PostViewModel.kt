@@ -17,6 +17,7 @@ import ru.stan.nework.domain.models.ui.post.MediaModel
 import ru.stan.nework.domain.models.ui.user.UserUI
 import ru.stan.nework.domain.usecase.post.AddMultiMediaUseCase
 import ru.stan.nework.domain.usecase.post.AddPostUseCase
+import ru.stan.nework.domain.usecase.post.GetPostByIdUseCase
 import ru.stan.nework.domain.usecase.post.GetUsersUseCase
 import java.io.File
 import javax.inject.Inject
@@ -34,6 +35,7 @@ private val noMedia = MediaModel()
 class PostViewModel @Inject constructor(
     private val addPostUseCase: AddPostUseCase,
     private val addMultiMediaUseCase: AddMultiMediaUseCase,
+    private val getPostByIdUseCase: GetPostByIdUseCase
 ) : ViewModel() {
 
     private val newPost: MutableLiveData<PostRequest> = MutableLiveData(editedPost)
@@ -42,6 +44,11 @@ class PostViewModel @Inject constructor(
     val media: LiveData<MediaModel>
         get() = _media
 
+    private val _errorMessage = MutableSharedFlow<String>()
+    val errorMessage = _errorMessage.asSharedFlow()
+
+    private val _isLoading = MutableStateFlow<Boolean>(false)
+    val isLoading = _isLoading.asStateFlow()
 
     fun createPost(content: String) {
         newPost.value = newPost.value?.copy(content = content)
@@ -84,5 +91,22 @@ class PostViewModel @Inject constructor(
 
     private fun deleteEditPost() {
         newPost.value = editedPost
+    }
+
+    fun postInit(id: Int) = viewModelScope.launch {
+        when (val response = getPostByIdUseCase.invoke(id.toLong())) {
+            is NetworkState.Error -> _errorMessage.emit(response.throwable)
+            is NetworkState.Loading -> TODO("not implemented yet")
+            is NetworkState.Success -> {
+                newPost.value = PostRequest(
+                    id = response.success.id,
+                    content = response.success.content,
+                    link = response.success.link,
+                    attachment = response.success.attachment,
+                    mentionIds = response.success.mentionIds
+                )
+                println("postInit - ${newPost.value}")
+            }
+        }
     }
 }

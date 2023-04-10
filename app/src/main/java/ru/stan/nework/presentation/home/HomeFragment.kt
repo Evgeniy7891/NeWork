@@ -59,6 +59,14 @@ class HomeFragment : Fragment() {
                 bundle.putIntegerArrayList("ID", listId as ArrayList<Int>?)
                 findNavController().navigate(R.id.action_homeFragment_to_usersBottomSheetFragment, bundle)
             }
+            override fun onRemove(post: Post) {
+                viewModel.deletePost(post.id.toLong())
+            }
+            override fun onEdit(post: Post) {
+                val bundle = Bundle()
+                bundle.putInt("POST", post.id)
+                findNavController().navigate(R.id.action_homeFragment_to_postFragment, bundle)
+            }
         })
         binding.rvListPosts.adapter = adapter
         binding.rvListPosts.recycledViewPool.setMaxRecycledViews(
