@@ -78,27 +78,27 @@ class PostAdapter(private val listPosts: List<Post>, private val onListener: OnL
                     .circleCrop()
                     .timeout(10_000)
                     .into(ivAvatar)
-                when (post.attachment.type) {
+                when (post.attachment?.type) {
                     AttachmentType.VIDEO -> {
                         exo.visibility = View.VISIBLE
-                        val media = MediaHelper(exo, post.attachment.url)
-                        media.create()
+                        val media = post.attachment?.url?.let { MediaHelper(exo, it) }
+                        media?.create()
                         exo.setOnClickListener {
-                            media.onPlay()
+                            media?.onPlay()
                         }
                     }
                     AttachmentType.IMAGE -> {
                         Glide.with(ivAtachment)
-                            .load(post.attachment.url)
+                            .load(post.attachment?.url)
                             .timeout(10_000)
                             .into(ivAtachment)
                     }
                     AttachmentType.AUDIO -> {
                         exo.visibility = View.VISIBLE
-                        val media = MediaHelper(exo, post.attachment.url)
-                        media.create()
+                        val media = post.attachment?.url?.let { MediaHelper(exo, it) }
+                        media?.create()
                         exo.setOnClickListener {
-                            media.onPlay()
+                            media?.onPlay()
                         }
                     }
                     else -> {

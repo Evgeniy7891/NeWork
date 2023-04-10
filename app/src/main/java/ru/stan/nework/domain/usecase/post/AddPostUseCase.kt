@@ -7,7 +7,6 @@ import ru.stan.nework.domain.repository.PostRepository
 import javax.inject.Inject
 
 class AddPostUseCase  @Inject constructor(private val repository: PostRepository){
-
     suspend operator fun invoke(post: PostRequest): NetworkState<PostModel> {
         return repository.addPost(post)
     }

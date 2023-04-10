@@ -84,23 +84,29 @@ class PostViewModel @Inject constructor(
             }
         }
     }
+
     fun addUsrsId(usersId: List<Int>) {
         newPost.value = newPost.value?.copy(mentionIds = usersId)
     }
+
     private fun deleteEditPost() {
         newPost.value = editedPost
     }
-    fun postInit(id:Int) = viewModelScope.launch {
-       when(val response = getPostByIdUseCase.invoke(id.toLong())){
-           is NetworkState.Error -> _errorMessage.emit(response.throwable)
-           is NetworkState.Loading -> TODO("not implemented yet")
-           is NetworkState.Success -> {
-               newPost.value?.id = response.success.id
-               newPost.value?.link = response.success.link
-               newPost.value?.content = response.success.content
-               newPost.value?.attachment = response.success.attachment
-               newPost.value?.mentionIds = response.success.mentionIds
-           }
+
+    fun postInit(id: Int) = viewModelScope.launch {
+        when (val response = getPostByIdUseCase.invoke(id.toLong())) {
+            is NetworkState.Error -> _errorMessage.emit(response.throwable)
+            is NetworkState.Loading -> TODO("not implemented yet")
+            is NetworkState.Success -> {
+                newPost.value = PostRequest(
+                    id = response.success.id,
+                    content = response.success.content,
+                    link = response.success.link,
+                    attachment = response.success.attachment,
+                    mentionIds = response.success.mentionIds
+                )
+                println("postInit - ${newPost.value}")
+            }
         }
     }
 }

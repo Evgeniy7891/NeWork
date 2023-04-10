@@ -6,6 +6,6 @@ import ru.stan.nework.domain.models.ui.post.AttachmentType
 
 @Parcelize
 data class Attachment(
-    val type: AttachmentType,
-    val url: String
+    val type: AttachmentType?,
+    val url: String?
 ) : Parcelable
