@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import retrofit2.http.POST
 import ru.stan.nework.R
 import ru.stan.nework.databinding.FragmentHomeBinding
 import ru.stan.nework.domain.models.ui.post.Post
@@ -21,6 +22,7 @@ import java.util.ArrayList
 class HomeFragment : Fragment() {
 
     private lateinit var viewModel: HomeViewModel
+    private lateinit var postAdapter: PostAdapter
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding ?: throw IllegalStateException("Cannot access view")
 
@@ -30,8 +32,8 @@ class HomeFragment : Fragment() {
     ): View? {
         _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        initAdapter()
         initPosts()
-
         binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_postFragment)
         }
@@ -39,7 +41,6 @@ class HomeFragment : Fragment() {
         binding.swipeRefresh.setOnClickListener {
            initPosts()
         }
-
         return binding.root
     }
 
@@ -47,13 +48,13 @@ class HomeFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.posts.collectLatest { posts ->
                 delay(500)
-                initAdapter(posts)
+                postAdapter.submitList(posts)
             }
         }
     }
 
-    private fun initAdapter(posts: List<Post>) {
-        val adapter = PostAdapter(posts, object : OnListener{
+    private fun initAdapter() {
+        postAdapter = PostAdapter(object : OnListener{
             override fun getUsers(listId: List<Int>) {
                 val bundle = Bundle()
                 bundle.putIntegerArrayList("ID", listId as ArrayList<Int>?)
@@ -68,7 +69,7 @@ class HomeFragment : Fragment() {
                 findNavController().navigate(R.id.action_homeFragment_to_postFragment, bundle)
             }
         })
-        binding.rvListPosts.adapter = adapter
+        binding.rvListPosts.adapter = postAdapter
         binding.rvListPosts.recycledViewPool.setMaxRecycledViews(
             PostAdapter.VIEW_TYPE, PostAdapter.MAX_POOL_SIZE
         )

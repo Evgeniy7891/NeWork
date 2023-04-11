@@ -98,14 +98,17 @@ class PostViewModel @Inject constructor(
             is NetworkState.Error -> _errorMessage.emit(response.throwable)
             is NetworkState.Loading -> TODO("not implemented yet")
             is NetworkState.Success -> {
-                newPost.value = PostRequest(
+                newPost.value = newPost.value?.copy(
                     id = response.success.id,
                     content = response.success.content,
                     link = response.success.link,
-                    attachment = response.success.attachment,
                     mentionIds = response.success.mentionIds
                 )
-                println("postInit - ${newPost.value}")
+                if(response.success.attachment?.type != null) {
+                    newPost.value = newPost.value?.copy(attachment = response.success.attachment)
+                }
+                println("postInit - ${response.success.attachment?.type}")
+                println("postInit - ${response.success.attachment?.url}")
             }
         }
     }
