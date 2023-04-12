@@ -20,9 +20,11 @@ interface OnListener {
     fun onEdit(post: Post) {}
     fun onRemove(post: Post) {}
 }
+var onLike: ((Post) -> Unit)? = null
 
 class PostAdapter(private val onListener: OnListener) :
     ListAdapter<Post, ViewHolder>(PostDiffCallback()) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding, onListener)
@@ -44,6 +46,7 @@ class ViewHolder(
     private val onClickListener: OnListener
 ) : RecyclerView.ViewHolder(binding.root) {
 
+
     fun bind(post: Post) {
         with(binding) {
             tvAuthor.text = post.author
@@ -56,6 +59,17 @@ class ViewHolder(
             }
             tvCountLiked.setOnClickListener {
                 onClickListener.getUsers(post.likeOwnerIds)
+            }
+            ibLiked.setOnClickListener {
+                onLike?.invoke(post)
+                if(!post.likedByMe) {
+                    ibLiked.setImageResource(R.drawable.ic_liked_full)
+                    val countLike = post.likeOwnerIds.size
+                    tvCountLiked.text = (countLike + 1).toString()
+                } else {
+                    ibLiked.setImageResource(R.drawable.ic_liked)
+                    tvCountLiked.text = (post.likeOwnerIds.size-1).toString()
+                }
             }
             ibMenu.isVisible = post.ownedByMe
             ibMenu.setOnClickListener {
@@ -132,4 +146,6 @@ class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
     override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
         return oldItem == newItem
     }
+
+    override fun getChangePayload(oldItem: Post, newItem: Post): Any = Unit
 }

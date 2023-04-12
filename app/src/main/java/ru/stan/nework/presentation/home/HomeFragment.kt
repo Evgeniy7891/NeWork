@@ -34,6 +34,7 @@ class HomeFragment : Fragment() {
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         initAdapter()
         initPosts()
+        setupClickListener()
         binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_postFragment)
         }
@@ -73,6 +74,14 @@ class HomeFragment : Fragment() {
         binding.rvListPosts.recycledViewPool.setMaxRecycledViews(
             PostAdapter.VIEW_TYPE, PostAdapter.MAX_POOL_SIZE
         )
+    }
+
+    private fun setupClickListener() {
+        onLike = {post ->
+            if (!post.likedByMe) {
+                viewModel.likeById(post.id.toLong())
+            }
+        }
     }
 
     override fun onDestroyView() {

@@ -8,13 +8,15 @@ import kotlinx.coroutines.launch
 import ru.stan.nework.domain.models.network.NetworkState
 import ru.stan.nework.domain.models.ui.post.Post
 import ru.stan.nework.domain.usecase.post.GetPostsUseCase
+import ru.stan.nework.domain.usecase.post.LikeByIdUseCase
 import ru.stan.nework.domain.usecase.post.RemovePostUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getPostsUseCase: GetPostsUseCase,
-    private val removePostUseCase: RemovePostUseCase
+    private val removePostUseCase: RemovePostUseCase,
+    private val likeByIdUseCase: LikeByIdUseCase
 ): ViewModel() {
 
     private val _errorMessage = MutableSharedFlow<String>()
@@ -29,7 +31,7 @@ class HomeViewModel @Inject constructor(
             started = SharingStarted.Eagerly,
             initialValue = emptyList()
         )
-    private fun getNewsList() = flow {
+   fun getNewsList() = flow {
         when (val response = getPostsUseCase.invoke()) {
             is NetworkState.Error -> _errorMessage.emit(response.throwable)
             is NetworkState.Loading -> TODO("not implemented yet")
@@ -39,4 +41,11 @@ class HomeViewModel @Inject constructor(
    fun deletePost(id: Long) = viewModelScope.launch {
        removePostUseCase.invoke(id)
    }
+    fun likeById(id:Long) = viewModelScope.launch {
+        when(val response = likeByIdUseCase.invoke(id)) {
+            is NetworkState.Error -> _errorMessage.emit(response.throwable)
+            is NetworkState.Loading -> TODO("not implemented yet")
+            is NetworkState.Success -> true
+        }
+    }
 }
