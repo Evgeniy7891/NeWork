@@ -1,22 +1,21 @@
 package ru.stan.nework.presentation.home
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
-import retrofit2.http.POST
 import ru.stan.nework.R
 import ru.stan.nework.databinding.FragmentHomeBinding
 import ru.stan.nework.domain.models.ui.post.Post
-import java.util.ArrayList
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -34,12 +33,13 @@ class HomeFragment : Fragment() {
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         initAdapter()
         initPosts()
+        setupClickListener()
         binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_postFragment)
         }
 
         binding.swipeRefresh.setOnClickListener {
-           initPosts()
+            initPosts()
         }
         return binding.root
     }
@@ -47,18 +47,36 @@ class HomeFragment : Fragment() {
     private fun initPosts() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.posts.collectLatest { posts ->
-                delay(500)
                 postAdapter.submitList(posts)
             }
         }
     }
 
     private fun initAdapter() {
-        postAdapter = PostAdapter(object : OnListener{
+        postAdapter = PostAdapter(object : OnListener {
             override fun getUsers(listId: List<Int>) {
                 val bundle = Bundle()
                 bundle.putIntegerArrayList("ID", listId as ArrayList<Int>?)
-                findNavController().navigate(R.id.action_homeFragment_to_usersBottomSheetFragment, bundle)
+                findNavController().navigate(
+                    R.id.action_homeFragment_to_usersBottomSheetFragment,
+                    bundle
+                )
+            }
+            override fun getUsersLikes(postId: Int) {
+                var listId = arrayListOf<Int>()
+                viewModel.getPost(postId)
+                viewModel.post.observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        listId = it as ArrayList<Int>
+                    }
+                }
+                viewModel.getNewsList()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    val bundle = Bundle()
+                    bundle.putIntegerArrayList("ID", listId)
+                    findNavController().navigate( R.id.action_homeFragment_to_usersBottomSheetFragment,
+                        bundle)
+                }, 1500)
             }
             override fun onRemove(post: Post) {
                 viewModel.deletePost(post.id.toLong())
@@ -75,8 +93,17 @@ class HomeFragment : Fragment() {
         )
     }
 
+    private fun setupClickListener() {
+        onLike = { post ->
+            if (!post.likedByMe) {
+                viewModel.likeById(post.id.toLong())
+            } else viewModel.deleteLike(post.id.toLong())
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
 }

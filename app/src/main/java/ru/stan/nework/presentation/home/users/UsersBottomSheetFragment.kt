@@ -23,11 +23,15 @@ class UsersBottomSheetFragment : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentUsersBottomSheetBinding.inflate(layoutInflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val userId = arguments?.getIntegerArrayList("ID")
         if (userId != null) {
             initUsers(userId)
         }
-        return binding.root
     }
 
     private fun initUsers(users:List<Int>){
@@ -47,5 +51,10 @@ class UsersBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.emptyList()
     }
 }

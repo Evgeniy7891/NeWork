@@ -48,4 +48,10 @@ interface NetworkService {
 
     @GET("api/posts/{post_id}")
     suspend fun getPostById(@Path("post_id") id: Long): PostModel
+
+    @POST("api/posts/{id}/likes")
+    suspend fun likeById(@Path("id") id: Long): PostModel
+
+    @DELETE("api/posts/{id}/likes")
+    suspend fun deleteLike(@Path("id") id: Long): PostModel
 }

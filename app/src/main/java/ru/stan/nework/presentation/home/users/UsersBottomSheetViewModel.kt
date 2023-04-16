@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -27,15 +28,15 @@ class UsersBottomSheetViewModel @Inject constructor(
     val isLoading = _isLoading.asStateFlow()
 
     private val _idUsers = MutableLiveData<List<UserUI>>()
-    val idUsers: LiveData<List<UserUI>>
+    val idUsers: MutableLiveData<List<UserUI>>
         get() = _idUsers
 
-    private val mentions = mutableListOf<UserUI>()
+    private var mentions = mutableListOf<UserUI>()
 
     fun getUser(id: Long) = viewModelScope.launch {
         when (val response = getMarkedUserUseCase.invoke(id)) {
             is NetworkState.Error -> _errorMessage.emit(response.throwable)
-            is NetworkState.Loading -> TODO("not implemented yet")
+            is NetworkState.Loading -> println("VIEWMODEL USER BOTTOM")
             is NetworkState.Success -> {
                 mentions.add(response.success)
                 addUserToList()
@@ -44,5 +45,10 @@ class UsersBottomSheetViewModel @Inject constructor(
     }
     private fun addUserToList(){
         _idUsers.value = mentions
+
+    }
+    fun emptyList(){
+        _idUsers.value = kotlin.collections.emptyList()
+        idUsers.value = kotlin.collections.emptyList()
     }
 }

@@ -61,4 +61,14 @@ class PostRepositoryImpl @Inject constructor(
             remoteDataSource.getPost(id).convertTo()
         }
     }
+    override suspend fun likeById(id: Long): NetworkState<Post> {
+       return safeApiCall(ioDispatcher) {
+           remoteDataSource.likeById(id).convertTo()
+       }
+    }
+    override suspend fun deleteLikeById(id: Long) {
+        safeApiCall(ioDispatcher) {
+            remoteDataSource.deleteLikeById(id)
+        }
+    }
 }

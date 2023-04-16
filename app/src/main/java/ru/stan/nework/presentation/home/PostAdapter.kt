@@ -17,12 +17,16 @@ import ru.stan.nework.utils.MediaHelper
 
 interface OnListener {
     fun getUsers(listId: List<Int>) {}
+    fun getUsersLikes(postId: Int) {}
     fun onEdit(post: Post) {}
     fun onRemove(post: Post) {}
 }
 
+var onLike: ((Post) -> Unit)? = null
+
 class PostAdapter(private val onListener: OnListener) :
     ListAdapter<Post, ViewHolder>(PostDiffCallback()) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding, onListener)
@@ -51,11 +55,29 @@ class ViewHolder(
             tvContent.text = post.content
             tvCountLiked.text = post.likeOwnerIds.size.toString()
             tvCountUsers.text = post.mentionIds.size.toString()
+            var liker = post.likedByMe
+            if (liker) {
+                ibLiked.setImageResource(R.drawable.ic_liked_full)
+            } else {
+                ibLiked.setImageResource(R.drawable.ic_liked)
+            }
             ibUsers.setOnClickListener {
                 onClickListener.getUsers(post.mentionIds)
             }
             tvCountLiked.setOnClickListener {
-                onClickListener.getUsers(post.likeOwnerIds)
+                onClickListener.getUsersLikes(post.id)
+            }
+            ibLiked.setOnClickListener {
+                onLike?.invoke(post)
+                if (!liker) {
+                    ibLiked.setImageResource(R.drawable.ic_liked_full)
+                    tvCountLiked.text = (post.likeOwnerIds.size + 1).toString()
+                    liker = true
+                } else {
+                    ibLiked.setImageResource(R.drawable.ic_liked)
+                    tvCountLiked.text = (post.likeOwnerIds.size - 1).toString()
+                    liker = false
+                }
             }
             ibMenu.isVisible = post.ownedByMe
             ibMenu.setOnClickListener {
@@ -83,7 +105,6 @@ class ViewHolder(
                 .circleCrop()
                 .timeout(10_000)
                 .into(ivAvatar)
-            println("Recycler VIEW!!! - ${post.author}, ${post.attachment?.type}, ${post.attachment?.url}")
 
             if (post.attachment?.url != "") {
                 when (post.attachment?.type) {
@@ -123,7 +144,6 @@ class ViewHolder(
     }
 }
 
-
 class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
     override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
         return oldItem.id == newItem.id
@@ -132,4 +152,6 @@ class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
     override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
         return oldItem == newItem
     }
+
+    override fun getChangePayload(oldItem: Post, newItem: Post): Any = Unit
 }
