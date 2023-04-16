@@ -8,7 +8,6 @@ import javax.inject.Inject
 
 class GetUsersUseCase  @Inject constructor(private val repository: PostRepository){
     suspend operator fun invoke(): NetworkState<List<UserUI>> {
-        println("Use case ${repository.getUsers()}")
         return repository.getUsers()
     }
 }

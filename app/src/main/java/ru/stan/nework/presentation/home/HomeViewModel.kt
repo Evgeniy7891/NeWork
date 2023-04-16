@@ -9,10 +9,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import ru.stan.nework.domain.models.network.NetworkState
 import ru.stan.nework.domain.models.ui.post.Post
-import ru.stan.nework.domain.usecase.post.GetPostByIdUseCase
-import ru.stan.nework.domain.usecase.post.GetPostsUseCase
-import ru.stan.nework.domain.usecase.post.LikeByIdUseCase
-import ru.stan.nework.domain.usecase.post.RemovePostUseCase
+import ru.stan.nework.domain.usecase.post.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,7 +17,8 @@ class HomeViewModel @Inject constructor(
     private val getPostsUseCase: GetPostsUseCase,
     private val removePostUseCase: RemovePostUseCase,
     private val likeByIdUseCase: LikeByIdUseCase,
-    private val getPostByIdUseCase: GetPostByIdUseCase
+    private val getPostByIdUseCase: GetPostByIdUseCase,
+    private val deleteLikeUseCase: DeleteLikeUseCase
 ): ViewModel() {
 
     private val _errorMessage = MutableSharedFlow<String>()
@@ -51,6 +49,9 @@ class HomeViewModel @Inject constructor(
    fun deletePost(id: Long) = viewModelScope.launch {
        removePostUseCase.invoke(id)
    }
+    fun deleteLike(id: Long) = viewModelScope.launch {
+        deleteLikeUseCase.invoke(id)
+    }
     fun likeById(id:Long) = viewModelScope.launch {
         when(val response = likeByIdUseCase.invoke(id)) {
             is NetworkState.Error -> _errorMessage.emit(response.throwable)

@@ -51,4 +51,7 @@ interface NetworkService {
 
     @POST("api/posts/{id}/likes")
     suspend fun likeById(@Path("id") id: Long): PostModel
+
+    @DELETE("api/posts/{id}/likes")
+    suspend fun deleteLike(@Path("id") id: Long): PostModel
 }

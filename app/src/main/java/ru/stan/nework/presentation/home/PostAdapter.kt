@@ -48,7 +48,6 @@ class ViewHolder(
     private val onClickListener: OnListener
 ) : RecyclerView.ViewHolder(binding.root) {
 
-
     fun bind(post: Post) {
         with(binding) {
             tvAuthor.text = post.author
@@ -56,8 +55,12 @@ class ViewHolder(
             tvContent.text = post.content
             tvCountLiked.text = post.likeOwnerIds.size.toString()
             tvCountUsers.text = post.mentionIds.size.toString()
-            if (post.likedByMe) ibLiked.setImageResource(R.drawable.ic_liked_full) else
+            var liker = post.likedByMe
+            if (liker) {
+                ibLiked.setImageResource(R.drawable.ic_liked_full)
+            } else {
                 ibLiked.setImageResource(R.drawable.ic_liked)
+            }
             ibUsers.setOnClickListener {
                 onClickListener.getUsers(post.mentionIds)
             }
@@ -66,13 +69,14 @@ class ViewHolder(
             }
             ibLiked.setOnClickListener {
                 onLike?.invoke(post)
-                if (!post.likedByMe) {
+                if (!liker) {
                     ibLiked.setImageResource(R.drawable.ic_liked_full)
-                    val countLike = post.likeOwnerIds.size
-                    tvCountLiked.text = (countLike + 1).toString()
+                    tvCountLiked.text = (post.likeOwnerIds.size + 1).toString()
+                    liker = true
                 } else {
                     ibLiked.setImageResource(R.drawable.ic_liked)
                     tvCountLiked.text = (post.likeOwnerIds.size - 1).toString()
+                    liker = false
                 }
             }
             ibMenu.isVisible = post.ownedByMe
@@ -101,7 +105,6 @@ class ViewHolder(
                 .circleCrop()
                 .timeout(10_000)
                 .into(ivAvatar)
-            println("Recycler VIEW!!! - ${post.author}, ${post.attachment?.type}, ${post.attachment?.url}")
 
             if (post.attachment?.url != "") {
                 when (post.attachment?.type) {
@@ -140,7 +143,6 @@ class ViewHolder(
         }
     }
 }
-
 
 class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
     override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {

@@ -6,6 +6,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -61,7 +62,6 @@ class HomeFragment : Fragment() {
                     bundle
                 )
             }
-
             override fun getUsersLikes(postId: Int) {
                 var listId = arrayListOf<Int>()
                 viewModel.getPost(postId)
@@ -70,6 +70,7 @@ class HomeFragment : Fragment() {
                         listId = it as ArrayList<Int>
                     }
                 }
+                viewModel.getNewsList()
                 Handler(Looper.getMainLooper()).postDelayed({
                     val bundle = Bundle()
                     bundle.putIntegerArrayList("ID", listId)
@@ -77,11 +78,9 @@ class HomeFragment : Fragment() {
                         bundle)
                 }, 1500)
             }
-
             override fun onRemove(post: Post) {
                 viewModel.deletePost(post.id.toLong())
             }
-
             override fun onEdit(post: Post) {
                 val bundle = Bundle()
                 bundle.putInt("POST", post.id)
@@ -98,9 +97,7 @@ class HomeFragment : Fragment() {
         onLike = { post ->
             if (!post.likedByMe) {
                 viewModel.likeById(post.id.toLong())
-                viewModel.getNewsList()
-                initPosts()
-            }
+            } else viewModel.deleteLike(post.id.toLong())
         }
     }
 
@@ -108,4 +105,5 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

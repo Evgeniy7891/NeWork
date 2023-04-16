@@ -15,7 +15,8 @@
             app:destination="@id/postFragment" />
         <action
             android:id="@+id/action_homeFragment_to_usersBottomSheetFragment"
-            app:destination="@id/usersBottomSheetFragment" />
+            app:destination="@id/usersBottomSheetFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/signInFragment"

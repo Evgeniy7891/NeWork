@@ -16,4 +16,5 @@ interface PostRemoteDataSource {
     suspend fun removeById(id: Long)
     suspend fun getPost(id: Long): PostModel
     suspend fun likeById(id: Long): PostModel
+    suspend fun deleteLikeById(id:Long)
 }

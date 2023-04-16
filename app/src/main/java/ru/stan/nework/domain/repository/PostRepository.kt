@@ -19,4 +19,5 @@ suspend fun getUser(id: Long): NetworkState<UserUI>
 suspend fun removeById(id: Long)
 suspend fun getPost(id: Long): NetworkState<Post>
 suspend fun likeById(id: Long): NetworkState<Post>
+suspend fun deleteLikeById(id: Long)
 }
