@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -23,9 +24,10 @@ interface OnListener {
 }
 
 var onLike: ((Post) -> Unit)? = null
+var disLike: ((Post) -> Unit)? = null
 
 class PostAdapter(private val onListener: OnListener) :
-    ListAdapter<Post, ViewHolder>(PostDiffCallback()) {
+    PagingDataAdapter<Post, ViewHolder>(PostDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -33,7 +35,7 @@ class PostAdapter(private val onListener: OnListener) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val post = getItem(position)
+        val post = getItem(position) ?: return
         holder.bind(post)
     }
 
@@ -53,8 +55,8 @@ class ViewHolder(
             tvAuthor.text = post.author
             tvTime.text = post.published
             tvContent.text = post.content
-            tvCountLiked.text = post.likeOwnerIds.size.toString()
-            tvCountUsers.text = post.mentionIds.size.toString()
+            tvCountLiked.text = post.likeOwnerIds?.size.toString()
+            tvCountUsers.text = post.mentionIds?.size.toString()
             var liker = post.likedByMe
             if (liker) {
                 ibLiked.setImageResource(R.drawable.ic_liked_full)
@@ -62,20 +64,21 @@ class ViewHolder(
                 ibLiked.setImageResource(R.drawable.ic_liked)
             }
             ibUsers.setOnClickListener {
-                onClickListener.getUsers(post.mentionIds)
+                post.mentionIds?.let { mentionsId -> onClickListener.getUsers(mentionsId) }
             }
             tvCountLiked.setOnClickListener {
-                onClickListener.getUsersLikes(post.id)
+                post.id?.let { likersId -> onClickListener.getUsersLikes(likersId) }
             }
             ibLiked.setOnClickListener {
-                onLike?.invoke(post)
                 if (!liker) {
+                    onLike?.invoke(post)
                     ibLiked.setImageResource(R.drawable.ic_liked_full)
-                    tvCountLiked.text = (post.likeOwnerIds.size + 1).toString()
+                    tvCountLiked.text = ((post.likeOwnerIds?.size ?: 0) + 1).toString()
                     liker = true
                 } else {
+                    disLike?.invoke(post)
                     ibLiked.setImageResource(R.drawable.ic_liked)
-                    tvCountLiked.text = (post.likeOwnerIds.size - 1).toString()
+                    tvCountLiked.text = ((post.likeOwnerIds?.size ?: 0) - 1).toString()
                     liker = false
                 }
             }

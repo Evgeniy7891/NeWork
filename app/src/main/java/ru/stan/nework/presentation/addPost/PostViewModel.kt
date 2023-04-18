@@ -98,12 +98,18 @@ class PostViewModel @Inject constructor(
             is NetworkState.Error -> _errorMessage.emit(response.throwable)
             is NetworkState.Loading -> TODO("not implemented yet")
             is NetworkState.Success -> {
-                newPost.value = newPost.value?.copy(
-                    id = response.success.id,
-                    content = response.success.content,
-                    link = response.success.link,
-                    mentionIds = response.success.mentionIds
-                )
+                newPost.value = response.success.id?.let {id ->
+                    response.success.content?.let { content ->
+                        response.success.mentionIds?.let { mentions ->
+                            newPost.value?.copy(
+                                id = id,
+                                content = content,
+                                link = response.success.link,
+                                mentionIds = mentions
+                            )
+                        }
+                    }
+                }
                 if(response.success.attachment?.type != null) {
                     newPost.value = newPost.value?.copy(attachment = response.success.attachment)
                 }

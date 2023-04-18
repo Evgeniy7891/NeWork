@@ -12,11 +12,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import ru.stan.nework.R
 import ru.stan.nework.databinding.FragmentHomeBinding
 import ru.stan.nework.domain.models.ui.post.Post
-
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
@@ -45,9 +46,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun initPosts() {
-        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            viewModel.posts.collectLatest { posts ->
-                postAdapter.submitList(posts)
+        lifecycleScope.launchWhenCreated {
+            viewModel.data.collectLatest { posts ->
+                postAdapter.submitData(posts)
             }
         }
     }
@@ -70,20 +71,19 @@ class HomeFragment : Fragment() {
                         listId = it as ArrayList<Int>
                     }
                 }
-                viewModel.getNewsList()
                 Handler(Looper.getMainLooper()).postDelayed({
                     val bundle = Bundle()
                     bundle.putIntegerArrayList("ID", listId)
                     findNavController().navigate( R.id.action_homeFragment_to_usersBottomSheetFragment,
                         bundle)
-                }, 1500)
+                }, 500)
             }
             override fun onRemove(post: Post) {
-                viewModel.deletePost(post.id.toLong())
+                post.id?.toLong()?.let { viewModel.deletePost(it) }
             }
             override fun onEdit(post: Post) {
                 val bundle = Bundle()
-                bundle.putInt("POST", post.id)
+                post.id?.let { bundle.putInt("POST", it) }
                 findNavController().navigate(R.id.action_homeFragment_to_postFragment, bundle)
             }
         })
@@ -95,9 +95,10 @@ class HomeFragment : Fragment() {
 
     private fun setupClickListener() {
         onLike = { post ->
-            if (!post.likedByMe) {
-                viewModel.likeById(post.id.toLong())
-            } else viewModel.deleteLike(post.id.toLong())
+            post.id?.let { viewModel.likeById(it.toLong()) }
+        }
+        disLike = { post ->
+            post.id?.let { viewModel.deleteLike(it.toLong()) }
         }
     }
 

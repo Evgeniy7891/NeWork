@@ -1,6 +1,11 @@
 package ru.stan.nework.data.repository
 
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 import ru.stan.nework.data.datasources.PostRemoteDataSource
 import ru.stan.nework.di.IoDispatcher
@@ -13,13 +18,22 @@ import ru.stan.nework.domain.models.ui.post.AttachmentType
 import ru.stan.nework.domain.models.ui.post.Post
 import ru.stan.nework.domain.models.ui.user.UserUI
 import ru.stan.nework.domain.repository.PostRepository
+import ru.stan.nework.providers.network.NetworkService
 import ru.stan.nework.utils.safeApiCall
 import javax.inject.Inject
 
 class PostRepositoryImpl @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    private val remoteDataSource: PostRemoteDataSource
+    private val remoteDataSource: PostRemoteDataSource,
+    private val apiService:NetworkService
 ) : PostRepository {
+
+    override val data = Pager(
+        config = PagingConfig(pageSize = 10, enablePlaceholders = false),
+        pagingSourceFactory = {
+            PostPagingSource(apiService)
+        }
+    ).flow
 
     override suspend fun getPosts(): NetworkState<List<Post>> {
         return safeApiCall(ioDispatcher) {
