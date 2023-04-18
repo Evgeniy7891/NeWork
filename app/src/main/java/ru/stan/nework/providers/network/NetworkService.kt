@@ -15,6 +15,21 @@ interface NetworkService {
     @GET("api/posts")
     suspend fun getPosts() : List<PostModel>
 
+    @GET("api/posts/latest")
+    suspend fun getLatest(@Query("count") count: Int) : Response<List<Post>>
+
+    @GET("api/posts/{id}/before")
+    suspend fun getBefore(
+        @Path("id") id: Long,
+        @Query("count") count: Int,
+    ): Response<List<Post>>
+
+    @GET("api/posts/{id}/after")
+    suspend fun getAfter(
+        @Path("id") id: Long,
+        @Query("count") count: Int,
+    ): Response<List<Post>>
+
     @FormUrlEncoded
     @POST("api/users/registration")
     suspend fun register(

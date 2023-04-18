@@ -8,7 +8,7 @@ import ru.stan.nework.domain.models.ui.post.Post
 @Parcelize
 data class PostModel(
     val id: Int,
-    val authorId: Int,
+    val authorId: Long,
     val author: String,
     val authorAvatar: String?,
     val authorJob: String?,
