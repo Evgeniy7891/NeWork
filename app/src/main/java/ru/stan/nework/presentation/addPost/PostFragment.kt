@@ -12,6 +12,7 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toFile
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -21,6 +22,7 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import ru.stan.nework.R
 import ru.stan.nework.databinding.FragmentPostBinding
 import ru.stan.nework.domain.models.ui.post.AttachmentType
+import ru.stan.nework.utils.BOTTONMENU
 
 @AndroidEntryPoint
 class PostFragment : Fragment() {
@@ -80,6 +82,7 @@ class PostFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPostBinding.inflate(layoutInflater, container, false)
+        BOTTONMENU.isVisible = false
         val userId = arguments?.getIntegerArrayList("ID")
         if (userId != null) {
             viewModel.addUsrsId(userId)

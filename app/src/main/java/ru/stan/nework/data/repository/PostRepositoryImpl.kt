@@ -29,7 +29,7 @@ class PostRepositoryImpl @Inject constructor(
 ) : PostRepository {
 
     override val data = Pager(
-        config = PagingConfig(pageSize = 10, enablePlaceholders = false),
+        config = PagingConfig(pageSize = 10, enablePlaceholders = false, initialLoadSize = 15),
         pagingSourceFactory = {
             PostPagingSource(apiService)
         }

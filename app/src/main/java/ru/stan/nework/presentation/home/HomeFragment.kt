@@ -7,16 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import ru.stan.nework.R
 import ru.stan.nework.databinding.FragmentHomeBinding
 import ru.stan.nework.domain.models.ui.post.Post
+import ru.stan.nework.utils.BOTTONMENU
+
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -31,17 +35,12 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
+        BOTTONMENU.isVisible = true
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         initAdapter()
         initPosts()
         setupClickListener()
-        binding.floatingActionButton.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_postFragment)
-        }
-
-        binding.swipeRefresh.setOnClickListener {
-            initPosts()
-        }
+        swipe()
         return binding.root
     }
 
@@ -63,6 +62,7 @@ class HomeFragment : Fragment() {
                     bundle
                 )
             }
+
             override fun getUsersLikes(postId: Int) {
                 var listId = arrayListOf<Int>()
                 viewModel.getPost(postId)
@@ -74,13 +74,17 @@ class HomeFragment : Fragment() {
                 Handler(Looper.getMainLooper()).postDelayed({
                     val bundle = Bundle()
                     bundle.putIntegerArrayList("ID", listId)
-                    findNavController().navigate( R.id.action_homeFragment_to_usersBottomSheetFragment,
-                        bundle)
+                    findNavController().navigate(
+                        R.id.action_homeFragment_to_usersBottomSheetFragment,
+                        bundle
+                    )
                 }, 500)
             }
+
             override fun onRemove(post: Post) {
                 post.id?.toLong()?.let { viewModel.deletePost(it) }
             }
+
             override fun onEdit(post: Post) {
                 val bundle = Bundle()
                 post.id?.let { bundle.putInt("POST", it) }
@@ -93,12 +97,25 @@ class HomeFragment : Fragment() {
         )
     }
 
+    private fun swipe() {
+        lifecycleScope.launchWhenCreated {
+            postAdapter.loadStateFlow.collectLatest { state ->
+                binding.swipeRefresh.isRefreshing =
+                    state.refresh is LoadState.Loading
+            }
+        }
+    }
+
     private fun setupClickListener() {
         onLike = { post ->
-            post.id?.let { viewModel.likeById(it.toLong()) }
+            post.id?.let {
+                viewModel.likeById(it.toLong())
+            }
         }
         disLike = { post ->
-            post.id?.let { viewModel.deleteLike(it.toLong()) }
+            post.id?.let {
+                viewModel.deleteLike(it.toLong())
+            }
         }
     }
 
