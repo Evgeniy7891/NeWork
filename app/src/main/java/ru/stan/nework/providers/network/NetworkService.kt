@@ -69,4 +69,7 @@ interface NetworkService {
 
     @DELETE("api/posts/{id}/likes")
     suspend fun deleteLike(@Path("id") id: Long): PostModel
+
+    @GET ("api/my/wall")
+    suspend fun myWall(): List<PostModel>
 }
