@@ -3,6 +3,7 @@ package ru.stan.nework.providers.network
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
+import ru.stan.nework.domain.models.network.event.EventModel
 import ru.stan.nework.domain.models.network.post.MediaResponse
 import ru.stan.nework.domain.models.network.post.PostModel
 import ru.stan.nework.domain.models.network.post.PostRequest
@@ -72,4 +73,7 @@ interface NetworkService {
 
     @GET ("api/my/wall")
     suspend fun myWall(): List<PostModel>
+
+    @GET("api/events")
+    suspend fun getEvents(): List<EventModel>
 }

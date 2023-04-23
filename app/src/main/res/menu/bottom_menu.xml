@@ -12,7 +12,7 @@
         android:icon="@drawable/ic_add_post"
         android:title="Add post"/>
 
-    <item android:id="@+id/eventsFragment"
+    <item android:id="@+id/eventsWallFragment"
         android:icon="@drawable/ic_event"
         android:title="Events"/>
 
