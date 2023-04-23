@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import ru.stan.nework.R
@@ -29,8 +30,8 @@ class WallFragment : Fragment() {
     ): View? {
         _binding = FragmentWallBinding.inflate(layoutInflater, container, false)
         viewModel = ViewModelProvider(this)[WallViewModel::class.java]
-        initAdapter()
         initWall()
+        initAdapter()
         return binding.root
     }
     private fun initWall() {
@@ -51,6 +52,9 @@ class WallFragment : Fragment() {
             }
         })
         binding.rvListPosts.adapter = wallAdapter
+        val linearLayout = LinearLayoutManager(requireContext())
+        linearLayout.reverseLayout = true
+        binding.rvListPosts.layoutManager = linearLayout
         binding.rvListPosts.recycledViewPool.setMaxRecycledViews(
             PostAdapter.VIEW_TYPE, PostAdapter.MAX_POOL_SIZE
         )
