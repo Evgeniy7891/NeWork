@@ -69,4 +69,9 @@
         android:name="ru.stan.nework.presentation.account.AccountFragment"
         android:label="fragment_account"
         tools:layout="@layout/fragment_account" />
+    <fragment
+        android:id="@+id/eventsWallFragment"
+        android:name="ru.stan.nework.presentation.events.EventsWallFragment"
+        android:label="fragment_events_wall"
+        tools:layout="@layout/fragment_events_wall" />
 </navigation>

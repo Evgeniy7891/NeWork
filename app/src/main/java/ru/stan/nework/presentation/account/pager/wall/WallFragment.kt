@@ -56,7 +56,7 @@ class WallFragment : Fragment() {
         linearLayout.reverseLayout = true
         binding.rvListPosts.layoutManager = linearLayout
         binding.rvListPosts.recycledViewPool.setMaxRecycledViews(
-            PostAdapter.VIEW_TYPE, PostAdapter.MAX_POOL_SIZE
+            WallAdapter.VIEW_TYPE, WallAdapter.MAX_POOL_SIZE
         )
     }
 
