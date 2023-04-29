@@ -8,6 +8,7 @@ import ru.stan.nework.domain.models.network.post.MediaResponse
 import ru.stan.nework.domain.models.network.post.PostModel
 import ru.stan.nework.domain.models.network.post.PostRequest
 import ru.stan.nework.domain.models.network.user.User
+import ru.stan.nework.domain.models.ui.event.Event
 import ru.stan.nework.domain.models.ui.post.MediaModel
 import ru.stan.nework.domain.models.ui.post.Post
 
@@ -76,4 +77,19 @@ interface NetworkService {
 
     @GET("api/events")
     suspend fun getEvents(): List<EventModel>
+
+    @POST("api/events")
+    suspend fun addEvent(@Body event: Event): EventModel
+
+    @DELETE("api/events/{id}")
+    suspend fun removeEvent(@Path("id") id: Long): EventModel
+
+    @GET("api/events/{event_id}")
+    suspend fun getEventById(@Path("event_id") id: Long): EventModel
+
+    @POST("api/events/{event_id}/likes")
+    suspend fun likeEventById(@Path("event_id") id: Long): EventModel
+
+    @DELETE("api/events/{event_id}/likes")
+    suspend fun deleteEventLike(@Path("event_id") id: Long): EventModel
 }

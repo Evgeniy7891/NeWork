@@ -73,5 +73,14 @@
         android:id="@+id/eventsWallFragment"
         android:name="ru.stan.nework.presentation.events.EventsWallFragment"
         android:label="fragment_events_wall"
-        tools:layout="@layout/fragment_events_wall" />
+        tools:layout="@layout/fragment_events_wall" >
+        <action
+            android:id="@+id/action_eventsWallFragment_to_newEventFragment"
+            app:destination="@id/newEventFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newEventFragment"
+        android:name="ru.stan.nework.presentation.addEvent.NewEventFragment"
+        android:label="fragment_new_event"
+        tools:layout="@layout/fragment_new_event" />
 </navigation>
