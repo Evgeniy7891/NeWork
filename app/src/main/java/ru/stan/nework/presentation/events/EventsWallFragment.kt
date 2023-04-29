@@ -7,9 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import ru.stan.nework.R
 import ru.stan.nework.databinding.FragmentEventsWallBinding
+import ru.stan.nework.domain.models.ui.event.Event
 
 @AndroidEntryPoint
 class EventsWallFragment : Fragment() {
@@ -28,6 +31,9 @@ class EventsWallFragment : Fragment() {
         viewModel = ViewModelProvider(this)[EventsWallViewModel::class.java]
         initAdapter()
         initEvents()
+        binding.floatingActionButton2.setOnClickListener {
+            findNavController().navigate(R.id.action_eventsWallFragment_to_newEventFragment)
+        }
         return binding.root
     }
 
@@ -41,7 +47,9 @@ class EventsWallFragment : Fragment() {
 
     private fun initEvents() {
     eventAdapter = EventAdapter(object : ru.stan.nework.presentation.events.OnListener{
-
+        override fun onRemove(event: Event) {
+            event.id?.toLong()?.let { viewModel.removeEvent(it) }
+        }
     })
         binding.rvListEvents.adapter = eventAdapter
         binding.rvListEvents.recycledViewPool.setMaxRecycledViews(
