@@ -5,6 +5,7 @@ import ru.stan.nework.data.datasources.EventsRemoteDataSource
 import ru.stan.nework.di.IoDispatcher
 import ru.stan.nework.domain.models.network.NetworkState
 import ru.stan.nework.domain.models.network.event.EventModel
+import ru.stan.nework.domain.models.network.event.EventRequest
 import ru.stan.nework.domain.models.ui.event.Event
 import ru.stan.nework.domain.repository.EventsRepository
 import ru.stan.nework.utils.safeApiCall
@@ -21,7 +22,7 @@ class EventRepositoryImpl @Inject constructor(
                 .map { it.convertTo() }
         }
     }
-    override suspend fun addEvent(event: Event): NetworkState<EventModel> {
+    override suspend fun addEvent(event: EventRequest): NetworkState<EventModel> {
         return safeApiCall(ioDispatcher) {
             remoteDataSource.addEvent(event)
         }

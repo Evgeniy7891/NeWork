@@ -10,7 +10,8 @@ data class User(
     val id: Int,
     val login: String,
     val name: String,
-    val avatar: String?
+    val avatar: String?,
+    var isChecked: Boolean = false,
 ) : Parcelable, IConvertableTo<UserUI> {
     override fun convertTo(): UserUI {
         return UserUI(
@@ -18,7 +19,7 @@ data class User(
             login = login,
             name = name,
             avatar = avatar ?: "",
-            isChecked = false
+            isChecked = isChecked
         )
     }
 }

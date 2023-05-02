@@ -53,7 +53,6 @@ class PostViewModel @Inject constructor(
     fun createPost(content: String) {
         newPost.value = newPost.value?.copy(content = content)
         val post = newPost.value!!
-        println("ViewModel Create - ${post}")
         viewModelScope.launch {
             when (val response = addPostUseCase.invoke(post)) {
                 is NetworkState.Success -> {
