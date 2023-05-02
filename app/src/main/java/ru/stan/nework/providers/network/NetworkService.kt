@@ -4,6 +4,7 @@ import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
 import ru.stan.nework.domain.models.network.event.EventModel
+import ru.stan.nework.domain.models.network.event.EventRequest
 import ru.stan.nework.domain.models.network.post.MediaResponse
 import ru.stan.nework.domain.models.network.post.PostModel
 import ru.stan.nework.domain.models.network.post.PostRequest
@@ -79,7 +80,7 @@ interface NetworkService {
     suspend fun getEvents(): List<EventModel>
 
     @POST("api/events")
-    suspend fun addEvent(@Body event: Event): EventModel
+    suspend fun addEvent(@Body event: EventRequest): EventModel
 
     @DELETE("api/events/{id}")
     suspend fun removeEvent(@Path("id") id: Long): EventModel

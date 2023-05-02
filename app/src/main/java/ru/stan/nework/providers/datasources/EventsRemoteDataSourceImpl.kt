@@ -2,6 +2,7 @@ package ru.stan.nework.providers.datasources
 
 import ru.stan.nework.data.datasources.EventsRemoteDataSource
 import ru.stan.nework.domain.models.network.event.EventModel
+import ru.stan.nework.domain.models.network.event.EventRequest
 import ru.stan.nework.domain.models.ui.event.Event
 import ru.stan.nework.providers.network.NetworkService
 import javax.inject.Inject
@@ -12,7 +13,7 @@ class EventsRemoteDataSourceImpl @Inject constructor(private val apiService: Net
         return apiService.getEvents()
     }
 
-    override suspend fun addEvent(event: Event): EventModel {
+    override suspend fun addEvent(event: EventRequest): EventModel {
         return apiService.addEvent(event)
     }
 

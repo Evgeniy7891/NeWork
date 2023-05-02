@@ -82,5 +82,18 @@
         android:id="@+id/newEventFragment"
         android:name="ru.stan.nework.presentation.addEvent.NewEventFragment"
         android:label="fragment_new_event"
-        tools:layout="@layout/fragment_new_event" />
+        tools:layout="@layout/fragment_new_event" >
+        <action
+            android:id="@+id/action_newEventFragment_to_speakersFragment"
+            app:destination="@id/speakersFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/speakersFragment"
+        android:name="ru.stan.nework.presentation.addEvent.addSpeakers.SpeakersFragment"
+        android:label="fragment_speakers"
+        tools:layout="@layout/fragment_speakers" >
+        <action
+            android:id="@+id/action_speakersFragment_to_newEventFragment"
+            app:destination="@id/newEventFragment" />
+    </fragment>
 </navigation>
