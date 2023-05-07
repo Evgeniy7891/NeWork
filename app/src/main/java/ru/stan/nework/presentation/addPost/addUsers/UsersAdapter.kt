@@ -2,6 +2,8 @@ package ru.stan.nework.presentation.addPost
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.stan.nework.R
@@ -15,21 +17,17 @@ interface CheckedListener {
 }
 
 class UsersAdapter(
-    private val listUser: List<UserUI>,
     private val checkedListener: CheckedListener
 ) :
-    RecyclerView.Adapter<UsersAdapter.ViewHolder>() {
+    ListAdapter<UserUI, UsersAdapter.ViewHolder>(UserDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemUsersBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding, checkedListener)
     }
 
-    override fun getItemCount(): Int {
-        return listUser.size
-    }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val user = listUser[position]
+        val user = getItem(position)
         holder.bind(user)
     }
 
@@ -41,6 +39,9 @@ class UsersAdapter(
         fun bind(user: UserUI) {
             with(binding) {
                 tvName.text = user.name
+                checkBox.apply {
+                    isChecked = user.isChecked
+                }
                 checkBox.setOnClickListener {
                     if (checkBox.isChecked) listener.checked(user.id) else listener.unChecked(
                         user.id
@@ -53,6 +54,16 @@ class UsersAdapter(
                     .timeout(10_000)
                     .into(ivAvatar)
             }
+        }
+    }
+
+    class UserDiffCallback : DiffUtil.ItemCallback<UserUI>() {
+        override fun areItemsTheSame(oldItem: UserUI, newItem: UserUI): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: UserUI, newItem: UserUI): Boolean {
+            return oldItem == newItem
         }
     }
 

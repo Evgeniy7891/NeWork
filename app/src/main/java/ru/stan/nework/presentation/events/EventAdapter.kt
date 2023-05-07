@@ -3,6 +3,7 @@ package ru.stan.nework.presentation.events
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -10,12 +11,15 @@ import com.bumptech.glide.Glide
 import ru.stan.nework.R
 import ru.stan.nework.databinding.ItemEventBinding
 import ru.stan.nework.domain.models.ui.event.Event
+import ru.stan.nework.domain.models.ui.post.Post
 
 interface OnListener {
     fun getUsers(listId: List<Int>) {}
     fun onEdit(event: Event) {}
     fun onRemove(event: Event) {}
 }
+
+var users: ((List<Int>) -> Unit)? = null
 
 class EventAdapter(private val onListener: OnListener) :
     ListAdapter<Event, ViewHolder>(PostDiffCallback()) {
@@ -47,10 +51,16 @@ class ViewHolder(
             tvTime.text = event.published
             tvContent.text = event.content
             tvLinkContent.text= event.link
-            tvSpeakerContent.text = event.speakerIds.toString()
             tvDatetimeContent.text = event.datetime
             tvCountLiked.text = event.likeOwnerIds.size.toString()
             tvCountUsers.text = event.users.users.size.toString()
+
+            tvGo.setOnClickListener {
+                users?.invoke(event.likeOwnerIds)
+            }
+            tvSpeakersContent.setOnClickListener {
+                users?.invoke(event.speakerIds)
+            }
 
             Glide.with(ivAvatar)
                 .load(event.authorAvatar)
@@ -59,6 +69,7 @@ class ViewHolder(
                 .timeout(10_000)
                 .into(ivAvatar)
 
+            ibMenu.isVisible = event.ownedByMe
             ibMenu.setOnClickListener {
                 PopupMenu(it.context, it).apply {
                     inflate(R.menu.options_menu)

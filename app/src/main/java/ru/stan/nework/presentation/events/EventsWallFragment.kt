@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.collectLatest
 import ru.stan.nework.R
 import ru.stan.nework.databinding.FragmentEventsWallBinding
 import ru.stan.nework.domain.models.ui.event.Event
+import ru.stan.nework.presentation.home.disLike
+import ru.stan.nework.presentation.home.onLike
 
 @AndroidEntryPoint
 class EventsWallFragment : Fragment() {
@@ -34,6 +36,7 @@ class EventsWallFragment : Fragment() {
         binding.floatingActionButton2.setOnClickListener {
             findNavController().navigate(R.id.action_eventsWallFragment_to_newEventFragment)
         }
+        setupClickListener()
         return binding.root
     }
 
@@ -46,16 +49,28 @@ class EventsWallFragment : Fragment() {
     }
 
     private fun initEvents() {
-    eventAdapter = EventAdapter(object : ru.stan.nework.presentation.events.OnListener{
-        override fun onRemove(event: Event) {
-            event.id?.toLong()?.let { viewModel.removeEvent(it) }
-        }
-    })
+        eventAdapter = EventAdapter(object : ru.stan.nework.presentation.events.OnListener {
+            override fun onRemove(event: Event) {
+                event.id?.toLong()?.let { viewModel.removeEvent(it) }
+            }
+        })
         binding.rvListEvents.adapter = eventAdapter
         binding.rvListEvents.recycledViewPool.setMaxRecycledViews(
             EventAdapter.VIEW_TYPE, EventAdapter.MAX_POOL_SIZE
         )
     }
+
+    private fun setupClickListener() {
+        users = { listId ->
+            val bundle = Bundle()
+            bundle.putIntegerArrayList("ID", listId as ArrayList<Int>?)
+            findNavController().navigate(
+                R.id.action_eventsWallFragment_to_usersBottomSheetFragment,
+                bundle
+            )
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

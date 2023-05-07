@@ -77,6 +77,9 @@
         <action
             android:id="@+id/action_eventsWallFragment_to_newEventFragment"
             app:destination="@id/newEventFragment" />
+        <action
+            android:id="@+id/action_eventsWallFragment_to_usersBottomSheetFragment"
+            app:destination="@id/usersBottomSheetFragment" />
     </fragment>
     <fragment
         android:id="@+id/newEventFragment"
@@ -86,6 +89,9 @@
         <action
             android:id="@+id/action_newEventFragment_to_speakersFragment"
             app:destination="@id/speakersFragment" />
+        <action
+            android:id="@+id/action_newEventFragment_to_eventsWallFragment"
+            app:destination="@id/eventsWallFragment" />
     </fragment>
     <fragment
         android:id="@+id/speakersFragment"

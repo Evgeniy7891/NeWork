@@ -19,6 +19,7 @@ import ru.stan.nework.presentation.addPost.PostViewModel
 import ru.stan.nework.presentation.home.users.UsersHomeAdapter
 import ru.stan.nework.utils.BOTTONMENU
 import ru.stan.nework.utils.DateHelper
+import java.util.ArrayList
 
 @AndroidEntryPoint
 class NewEventFragment : Fragment() {
