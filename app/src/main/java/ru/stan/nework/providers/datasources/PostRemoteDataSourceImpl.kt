@@ -7,6 +7,7 @@ import ru.stan.nework.domain.models.network.post.PostModel
 import ru.stan.nework.domain.models.network.post.PostRequest
 import ru.stan.nework.domain.models.network.user.User
 import ru.stan.nework.domain.models.ui.post.AttachmentType
+import ru.stan.nework.domain.models.ui.post.Post
 import ru.stan.nework.providers.network.NetworkService
 import javax.inject.Inject
 
@@ -39,7 +40,7 @@ class PostRemoteDataSourceImpl @Inject constructor(private val apiService: Netwo
     override suspend fun likeById(id: Long): PostModel {
        return apiService.likeById(id)
     }
-    override suspend fun deleteLikeById(id: Long) {
-        apiService.deleteLike(id)
+    override suspend fun deleteLikeById(id: Long): PostModel {
+       return apiService.deleteLike(id)
     }
 }

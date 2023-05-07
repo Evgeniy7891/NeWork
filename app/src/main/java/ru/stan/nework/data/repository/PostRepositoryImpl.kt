@@ -1,13 +1,19 @@
 package ru.stan.nework.data.repository
 
+import androidx.lifecycle.MutableLiveData
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.map
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import okhttp3.MultipartBody
 import ru.stan.nework.data.datasources.PostRemoteDataSource
+import ru.stan.nework.data.room.dao.PostDao
+import ru.stan.nework.data.room.entity.PostEntity
+import ru.stan.nework.data.room.entity.UserPreview
 import ru.stan.nework.di.IoDispatcher
 import ru.stan.nework.domain.models.network.NetworkState
 import ru.stan.nework.domain.models.network.post.Attachment
@@ -22,18 +28,25 @@ import ru.stan.nework.providers.network.NetworkService
 import ru.stan.nework.utils.safeApiCall
 import javax.inject.Inject
 
+@OptIn(ExperimentalPagingApi::class)
 class PostRepositoryImpl @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val remoteDataSource: PostRemoteDataSource,
-    private val apiService:NetworkService
+    mediator: PostRemoteMediator,
+    private val dao: PostDao,
+    private val apiService: NetworkService
 ) : PostRepository {
 
-    override val data = Pager(
-        config = PagingConfig(pageSize = 10, enablePlaceholders = false, initialLoadSize = 15),
-        pagingSourceFactory = {
-            PostPagingSource(apiService)
+    override val data: Flow<PagingData<Post>> =
+        Pager(
+            config = PagingConfig(pageSize = 10, enablePlaceholders = false, initialLoadSize = 15),
+            pagingSourceFactory = { dao.getAllPosts() },
+            remoteMediator = mediator
+        ).flow.map {
+            it.map (PostEntity::toDto)
         }
-    ).flow
+
+    override val postUsersData: MutableLiveData<List<UserPreview>> = MutableLiveData(emptyList())
 
     override suspend fun getPosts(): NetworkState<List<Post>> {
         return safeApiCall(ioDispatcher) {
@@ -41,11 +54,13 @@ class PostRepositoryImpl @Inject constructor(
                 .map { it.convertTo() }
         }
     }
+
     override suspend fun addPost(post: PostRequest): NetworkState<PostModel> {
         return safeApiCall(ioDispatcher) {
             remoteDataSource.addPost(post)
         }
     }
+
     override suspend fun addMultimedia(
         type: AttachmentType,
         file: MultipartBody.Part
@@ -54,35 +69,44 @@ class PostRepositoryImpl @Inject constructor(
             remoteDataSource.addMultimedia(type, file)
         }
     }
+
     override suspend fun getUsers(): NetworkState<List<UserUI>> {
         return safeApiCall(ioDispatcher) {
             remoteDataSource.getUsers()
                 .map { it.convertTo() }
         }
     }
+
     override suspend fun getUser(id: Long): NetworkState<UserUI> {
         return safeApiCall(ioDispatcher) {
             remoteDataSource.getUser(id).convertTo()
         }
     }
+
     override suspend fun removeById(id: Long) {
-       safeApiCall(ioDispatcher) {
-           remoteDataSource.removeById(id)
-       }
+        safeApiCall(ioDispatcher) {
+            remoteDataSource.removeById(id)
+        }
     }
+
     override suspend fun getPost(id: Long): NetworkState<Post> {
         return safeApiCall(ioDispatcher) {
             remoteDataSource.getPost(id).convertTo()
         }
     }
+
     override suspend fun likeById(id: Long): NetworkState<Post> {
-       return safeApiCall(ioDispatcher) {
-           remoteDataSource.likeById(id).convertTo()
-       }
+        return safeApiCall(ioDispatcher) {
+            val body = remoteDataSource.likeById(id)
+            dao.insert(PostEntity.fromDto(body.convertTo()))
+            body.convertTo()
+        }
     }
+
     override suspend fun deleteLikeById(id: Long) {
         safeApiCall(ioDispatcher) {
-            remoteDataSource.deleteLikeById(id)
+            val body = remoteDataSource.deleteLikeById(id).convertTo()
+            dao.insert(PostEntity.fromDto(body))
         }
     }
 }

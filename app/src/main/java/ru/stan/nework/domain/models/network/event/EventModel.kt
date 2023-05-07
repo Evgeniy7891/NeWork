@@ -6,6 +6,7 @@ import ru.stan.nework.domain.models.IConvertableTo
 import ru.stan.nework.domain.models.network.post.Attachment
 import ru.stan.nework.domain.models.network.post.Coords
 import ru.stan.nework.domain.models.ui.event.Event
+import ru.stan.nework.domain.models.ui.post.AttachmentType
 
 @Parcelize
 data class EventModel(
@@ -32,7 +33,7 @@ data class EventModel(
 
     override fun convertTo(): Event {
         return Event(
-            attachment = attachment ?: Attachment(null,null),
+            attachment = attachment ?: Attachment(AttachmentType.IMAGE, ""),
             author = author,
             authorAvatar = authorAvatar ?: "",
             authorId = authorId,
