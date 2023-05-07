@@ -6,6 +6,7 @@ import ru.stan.nework.domain.models.network.post.PostModel
 import ru.stan.nework.domain.models.network.post.PostRequest
 import ru.stan.nework.domain.models.network.user.User
 import ru.stan.nework.domain.models.ui.post.AttachmentType
+import ru.stan.nework.domain.models.ui.post.Post
 
 interface PostRemoteDataSource {
     suspend fun getPosts() : List<PostModel>
@@ -16,5 +17,5 @@ interface PostRemoteDataSource {
     suspend fun removeById(id: Long)
     suspend fun getPost(id: Long): PostModel
     suspend fun likeById(id: Long): PostModel
-    suspend fun deleteLikeById(id:Long)
+    suspend fun deleteLikeById(id:Long): PostModel
 }

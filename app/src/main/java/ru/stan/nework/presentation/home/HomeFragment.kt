@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.DividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
@@ -94,6 +95,13 @@ class HomeFragment : Fragment() {
         binding.rvListPosts.adapter = postAdapter
         binding.rvListPosts.recycledViewPool.setMaxRecycledViews(
             PostAdapter.VIEW_TYPE, PostAdapter.MAX_POOL_SIZE
+        )
+
+        binding.rvListPosts.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(),
+                DividerItemDecoration.VERTICAL
+            )
         )
     }
 

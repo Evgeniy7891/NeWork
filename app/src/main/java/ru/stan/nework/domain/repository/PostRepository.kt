@@ -1,8 +1,10 @@
 package ru.stan.nework.domain.repository
 
+import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagingData
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
+import ru.stan.nework.data.room.entity.UserPreview
 import ru.stan.nework.domain.models.network.NetworkState
 import ru.stan.nework.domain.models.network.post.Attachment
 import ru.stan.nework.domain.models.network.post.PostModel
@@ -15,6 +17,8 @@ import ru.stan.nework.domain.models.ui.user.UserUI
 interface PostRepository {
 
     val data: Flow<PagingData<Post>>
+
+    val postUsersData: MutableLiveData<List<UserPreview>>
 suspend fun getPosts() : NetworkState<List<Post>>
 suspend fun addPost(post: PostRequest) : NetworkState<PostModel>
 suspend fun addMultimedia(type: AttachmentType, file: MultipartBody.Part): NetworkState<Attachment>

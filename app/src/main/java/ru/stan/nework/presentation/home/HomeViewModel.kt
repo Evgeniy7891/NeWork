@@ -38,7 +38,7 @@ class HomeViewModel @Inject constructor(
     val data: Flow<PagingData<Post>> = auth.authStateFlow
         .flatMapLatest { (myId, ) ->
             cached.map {posts ->
-                    posts.map { it.copy(ownedByMe = it.authorId == myId)}
+                    posts.map { it.copy(ownedByMe = it.authorId.toLong() == myId)}
                 }
         }.flowOn(Dispatchers.Default)
 

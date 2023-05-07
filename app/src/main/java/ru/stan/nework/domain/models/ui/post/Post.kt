@@ -1,21 +1,22 @@
 package ru.stan.nework.domain.models.ui.post
 
+import ru.stan.nework.data.room.entity.UserPreview
 import ru.stan.nework.domain.models.network.post.Attachment
-import ru.stan.nework.domain.models.network.post.Users
 
 data class Post(
-    val attachment: Attachment?,
-    val author: String?,
+    val id: Int,
+    val authorId: Int,
+    val author: String,
     val authorAvatar: String?,
-    val authorId: Long?,
     val authorJob: String?,
-    val content: String?,
-    val id: Int?,
-    val likeOwnerIds: List<Int>?,
-    val likedByMe: Boolean,
+    val content: String,
+    val published: String,
     val link: String?,
-    val mentionIds: List<Int>?,
-    val mentionedMe: Boolean?,
+    val likeOwnerIds: List<Int>,
+    val mentionIds: List<Int>,
+    val likedByMe: Boolean,
+    val mentionedMe: Boolean,
+    val attachment: Attachment?,
     val ownedByMe: Boolean,
-    val published: String?,
+    val users: Map<Int, UserPreview>,
 )
