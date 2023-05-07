@@ -46,14 +46,13 @@ class UsersFragment : Fragment() {
     private fun initUsers() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.users.collectLatest { users ->
-                delay(500)
                 initAdapter(users)
             }
         }
     }
 
         private fun initAdapter(users: List<UserUI>) {
-            val adapter = UsersAdapter(users, object : CheckedListener {
+            val adapter = UsersAdapter(object : CheckedListener {
                 override fun checked(id: Int) {
                     viewModel.check(id)
                 }
@@ -67,6 +66,12 @@ class UsersFragment : Fragment() {
             binding.rvUsers.recycledViewPool.setMaxRecycledViews(
                 UsersAdapter.VIEW_TYPE, UsersAdapter.MAX_POOL_SIZE
             )
+            val newUser = adapter.itemCount < users.size
+            adapter.submitList(users) {
+                if (newUser) {
+                    binding.rvUsers.smoothScrollToPosition(0)
+                }
+            }
         }
 
         override fun onDestroyView() {

@@ -1,6 +1,5 @@
 package ru.stan.nework.presentation.addEvent
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -48,15 +47,17 @@ class NewEventViewModel @Inject constructor(
 
     fun createEvent(event: EventRequest) {
         viewModelScope.launch {
-            when(val response = addEventUseCase.invoke(event)){
+            when (val response = addEventUseCase.invoke(event)) {
                 is NetworkState.Success -> {
                     deleteEditEvent()
                 }
+
                 is NetworkState.Error -> throw RuntimeException("Error ${response.throwable}")
                 else -> {}
             }
         }
     }
+
     fun addLink(link: String) {
         if (link != "") {
             newEvent.value = newEvent.value?.copy(link = link)
@@ -64,6 +65,7 @@ class NewEventViewModel @Inject constructor(
             newEvent.value = newEvent.value?.copy(link = null)
         }
     }
+
     fun addDateAndTime(dateAndTime: String) {
         newEvent.value = newEvent.value?.copy(datetime = dateAndTime)
     }
@@ -71,6 +73,7 @@ class NewEventViewModel @Inject constructor(
     fun addUsrsId(usersId: List<Int>) {
         newEvent.value = newEvent.value?.copy(speakerIds = usersId)
     }
+
     fun check(id: Int) {
         usersList.value?.forEach {
             if (it.id == id) {
@@ -109,11 +112,12 @@ class NewEventViewModel @Inject constructor(
             }
         }
     }
-    private fun addUserToList(){
-        _idUsers.value = mentions
 
+    private fun addUserToList() {
+        _idUsers.value = mentions
     }
-    fun emptyList(){
+
+    fun emptyList() {
         _idUsers.value = kotlin.collections.emptyList()
         idUsers.value = kotlin.collections.emptyList()
     }

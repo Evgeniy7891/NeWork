@@ -93,31 +93,13 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_content" />
 
     <TextView
-        android:id="@+id/tv_speaker"
-        style="@style/TextStyleMonserrat"
-        android:layout_marginTop="8dp"
-        android:text="Спикеры"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@+id/tv_link"
-        app:layout_constraintTop_toBottomOf="@+id/tv_link" />
-
-    <TextView
-        android:id="@+id/tv_speaker_content"
-        style="@style/TextStyleMonserrat"
-        android:layout_marginStart="22dp"
-        android:text="Кирилл Розов"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_speaker"
-        app:layout_constraintStart_toEndOf="@+id/tv_speaker" />
-
-    <TextView
         android:id="@+id/tv_datetime"
         style="@style/TextStyleMonserrat"
         android:layout_marginTop="8dp"
         android:text="Время проведения"
         android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@+id/tv_speaker"
-        app:layout_constraintTop_toBottomOf="@+id/tv_speaker" />
+        app:layout_constraintStart_toStartOf="@+id/tv_link"
+        app:layout_constraintTop_toBottomOf="@+id/tv_link_content" />
 
     <TextView
         android:id="@+id/tv_datetime_content"
@@ -138,28 +120,47 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_datetime_content"
         tools:layout_editor_absoluteX="0dp" />
 
-    <ImageButton
-        android:id="@+id/ib_liked"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <TextView
+        android:id="@+id/tv_go"
+        style="@style/TextStyleMonserrat"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
-        android:background="#00FFFFFF"
-        android:src="@drawable/ic_liked"
+        android:text="Кто идет"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/line" />
 
     <TextView
+        android:id="@+id/tv_speakers_content"
+        style="@style/TextStyleMonserrat"
+        android:layout_marginEnd="24dp"
+        android:text="Спикеры"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ib_users"
+        app:layout_constraintTop_toBottomOf="@+id/line" />
+
+
+    <ImageButton
+        android:id="@+id/ib_liked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:background="#00FFFFFF"
+        android:src="@drawable/ic_liked"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_count_liked"
+        app:layout_constraintStart_toEndOf="@+id/tv_count_liked"
+        app:layout_constraintTop_toTopOf="@+id/tv_count_liked" />
+
+    <TextView
         android:id="@+id/tv_count_liked"
         style="@style/TextStyleMonserrat"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="24dp"
         android:text="0"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/ib_liked"
-        app:layout_constraintStart_toEndOf="@+id/ib_liked"
-        app:layout_constraintTop_toTopOf="@+id/ib_liked" />
+        app:layout_constraintBottom_toBottomOf="@+id/tv_go"
+        app:layout_constraintStart_toEndOf="@+id/tv_go"
+        app:layout_constraintTop_toTopOf="@+id/tv_go" />
 
     <ImageButton
         android:id="@+id/ib_users"
@@ -168,9 +169,9 @@
         android:layout_marginEnd="16dp"
         android:background="#00FFFFFF"
         android:src="@drawable/ic_people"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_count_liked"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_speakers_content"
         app:layout_constraintEnd_toStartOf="@+id/tv_count_users"
-        app:layout_constraintTop_toTopOf="@+id/tv_count_liked" />
+        app:layout_constraintTop_toTopOf="@+id/tv_speakers_content" />
 
     <TextView
         android:id="@+id/tv_count_users"
