@@ -1,4 +1,4 @@
-package ru.stan.nework.data.repository
+package ru.stan.nework.data.repository.posts
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.ExperimentalPagingApi
@@ -19,7 +19,6 @@ import ru.stan.nework.domain.models.network.NetworkState
 import ru.stan.nework.domain.models.network.post.Attachment
 import ru.stan.nework.domain.models.network.post.PostModel
 import ru.stan.nework.domain.models.network.post.PostRequest
-import ru.stan.nework.domain.models.network.user.User
 import ru.stan.nework.domain.models.ui.post.AttachmentType
 import ru.stan.nework.domain.models.ui.post.Post
 import ru.stan.nework.domain.models.ui.user.UserUI

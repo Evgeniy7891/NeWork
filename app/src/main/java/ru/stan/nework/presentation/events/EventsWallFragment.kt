@@ -42,9 +42,7 @@ class EventsWallFragment : Fragment() {
 
     private fun initAdapter() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            viewModel.events.collectLatest { events ->
-                eventAdapter.submitList(events)
-            }
+            viewModel.data.collectLatest (eventAdapter::submitData)
         }
     }
 
