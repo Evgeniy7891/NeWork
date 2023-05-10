@@ -10,8 +10,8 @@ import ru.stan.nework.data.datasources.EventsRemoteDataSource
 import ru.stan.nework.data.datasources.PostRemoteDataSource
 import ru.stan.nework.data.repository.AccountRepositoryImpl
 import ru.stan.nework.data.repository.AuthRepositoryImpl
-import ru.stan.nework.data.repository.EventRepositoryImpl
-import ru.stan.nework.data.repository.PostRepositoryImpl
+import ru.stan.nework.data.repository.events.EventRepositoryImpl
+import ru.stan.nework.data.repository.posts.PostRepositoryImpl
 import ru.stan.nework.domain.repository.AccountRepository
 import ru.stan.nework.domain.repository.AuthRepository
 import ru.stan.nework.domain.repository.EventsRepository

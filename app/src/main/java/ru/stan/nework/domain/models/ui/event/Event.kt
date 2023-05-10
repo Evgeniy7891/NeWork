@@ -1,23 +1,29 @@
 package ru.stan.nework.domain.models.ui.event
 
+import ru.stan.nework.data.room.entity.UserPreview
 import ru.stan.nework.domain.models.network.event.Users
 import ru.stan.nework.domain.models.network.post.Attachment
 
 data class Event(
-    val attachment: Attachment,
-    val author: String,
-    val authorAvatar: String,
+    val id: Int,
     val authorId: Int,
-    val authorJob: String,
+    val author: String,
+    val authorAvatar: String?,
+    val authorJob: String?,
     val content: String,
     val datetime: String,
-    val id: Int,
+    val published: String,
+    val type: EventType,
     val likeOwnerIds: List<Int>,
     val likedByMe: Boolean,
-    val link: String,
-    val ownedByMe: Boolean,
-    val participantsIds: List<Int>,
-    val published: String,
     val speakerIds: List<Int>,
-    val users: Users
+    val participantsIds: List<Int>,
+    val participatedByMe: Boolean,
+    val attachment: Attachment?,
+    val link: String?,
+    val ownedByMe: Boolean,
+    val users: Map<Int, UserPreview>,
 )
+enum class EventType{
+    OFFLINE, ONLINE
+}

@@ -2,10 +2,12 @@ package ru.stan.nework.domain.models.network.event
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import ru.stan.nework.data.room.entity.UserPreview
 import ru.stan.nework.domain.models.IConvertableTo
 import ru.stan.nework.domain.models.network.post.Attachment
 import ru.stan.nework.domain.models.network.post.Coords
 import ru.stan.nework.domain.models.ui.event.Event
+import ru.stan.nework.domain.models.ui.event.EventType
 import ru.stan.nework.domain.models.ui.post.AttachmentType
 
 @Parcelize
@@ -28,7 +30,7 @@ data class EventModel(
     val published: String?,
     val speakerIds: List<Int> = emptyList(),
     val type: String?,
-    val users: Users
+    val users: Map<Int, UserPreview>,
 ) : IConvertableTo<Event>, Parcelable {
 
     override fun convertTo(): Event {
@@ -48,7 +50,9 @@ data class EventModel(
             datetime = datetime ?: "",
             participantsIds = participantsIds,
             speakerIds = speakerIds,
-            users = users
+            users = users,
+            participatedByMe = false,
+            type = EventType.OFFLINE
         )
     }
 }

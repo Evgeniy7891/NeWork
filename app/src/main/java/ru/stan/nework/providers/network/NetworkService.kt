@@ -16,10 +16,10 @@ import ru.stan.nework.domain.models.ui.post.Post
 interface NetworkService {
 
     @GET("api/posts")
-    suspend fun getPosts() : List<PostModel>
+    suspend fun getPosts(): List<PostModel>
 
     @GET("api/posts/latest")
-    suspend fun getLatest(@Query("count") count: Int) : Response<List<Post>>
+    suspend fun getLatest(@Query("count") count: Int): Response<List<Post>>
 
     @GET("api/posts/{id}/before")
     suspend fun getBefore(
@@ -73,7 +73,7 @@ interface NetworkService {
     @DELETE("api/posts/{id}/likes")
     suspend fun deleteLike(@Path("id") id: Long): PostModel
 
-    @GET ("api/my/wall")
+    @GET("api/my/wall")
     suspend fun myWall(): List<PostModel>
 
     @GET("api/events")
@@ -93,4 +93,19 @@ interface NetworkService {
 
     @DELETE("api/events/{event_id}/likes")
     suspend fun deleteEventLike(@Path("event_id") id: Long): EventModel
+
+    @GET("api/events/latest")
+    suspend fun getLatestEvents(@Query("count") count: Int): Response<List<Event>>
+
+    @GET("api/events/{id}/before")
+    suspend fun getBeforeEvents(
+        @Path("id") id: Long,
+        @Query("count") count: Int,
+    ): Response<List<Event>>
+
+    @GET("api/events/{id}/after")
+    suspend fun getAfterEvents(
+        @Path("id") id: Long,
+        @Query("count") count: Int,
+    ): Response<List<Event>>
 }

@@ -4,11 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.stan.nework.R
+import ru.stan.nework.data.room.entity.EventEntity
 import ru.stan.nework.databinding.ItemEventBinding
 import ru.stan.nework.domain.models.ui.event.Event
 import ru.stan.nework.domain.models.ui.post.Post
@@ -22,7 +24,7 @@ interface OnListener {
 var users: ((List<Int>) -> Unit)? = null
 
 class EventAdapter(private val onListener: OnListener) :
-    ListAdapter<Event, ViewHolder>(PostDiffCallback()) {
+    PagingDataAdapter<Event, ViewHolder>(EventDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemEventBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding, onListener)
@@ -30,7 +32,9 @@ class EventAdapter(private val onListener: OnListener) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val event = getItem(position)
-        holder.bind(event)
+        if (event != null) {
+            holder.bind(event)
+        }
     }
 
     companion object {
@@ -53,7 +57,7 @@ class ViewHolder(
             tvLinkContent.text= event.link
             tvDatetimeContent.text = event.datetime
             tvCountLiked.text = event.likeOwnerIds.size.toString()
-            tvCountUsers.text = event.users.users.size.toString()
+            tvCountUsers.text = event.users.size.toString()
 
             tvGo.setOnClickListener {
                 users?.invoke(event.likeOwnerIds)
@@ -94,7 +98,7 @@ class ViewHolder(
 }
 
 
-class PostDiffCallback : DiffUtil.ItemCallback<Event>() {
+class EventDiffCallback : DiffUtil.ItemCallback<Event>() {
     override fun areItemsTheSame(oldItem: Event, newItem: Event): Boolean {
         return oldItem.id == newItem.id
     }

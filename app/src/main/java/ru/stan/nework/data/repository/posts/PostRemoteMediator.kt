@@ -1,4 +1,4 @@
-package ru.stan.nework.data.repository
+package ru.stan.nework.data.repository.posts
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
