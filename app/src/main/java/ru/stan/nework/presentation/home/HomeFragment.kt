@@ -6,7 +6,6 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -41,7 +40,14 @@ class HomeFragment : Fragment() {
         initAdapter()
         initPosts()
         setupClickListener()
-        swipe()
+
+//        postAdapter.loadStateFlow
+//        lifecycleScope.launchWhenCreated {
+//            postAdapter.loadStateFlow.collectLatest {
+//                binding.swipeRefresh.isRefreshing = it.refresh is LoadState.Loading
+//            }
+//        }
+
         return binding.root
     }
 
@@ -103,15 +109,6 @@ class HomeFragment : Fragment() {
                 DividerItemDecoration.VERTICAL
             )
         )
-    }
-
-    private fun swipe() {
-        lifecycleScope.launchWhenCreated {
-            postAdapter.loadStateFlow.collectLatest { state ->
-                binding.swipeRefresh.isRefreshing =
-                    state.refresh is LoadState.Loading
-            }
-        }
     }
 
     private fun setupClickListener() {
