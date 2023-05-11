@@ -27,20 +27,24 @@ class HomeViewModel @Inject constructor(
     private val likeByIdUseCase: LikeByIdUseCase,
     private val getPostByIdUseCase: GetPostByIdUseCase,
     private val deleteLikeUseCase: DeleteLikeUseCase,
-    private val repository: PostRepository,
     auth: AppAuth
 ): ViewModel() {
 
-    private val cached = repository
-        .data
-        .cachedIn(viewModelScope)
+    private val cached = getPostsUseCase.invoke().cachedIn(viewModelScope)
 
     val data: Flow<PagingData<Post>> = auth.authStateFlow
         .flatMapLatest { (myId, ) ->
             cached.map {posts ->
-                    posts.map { it.copy(ownedByMe = it.authorId.toLong() == myId)}
-                }
+                posts.map { it.copy(ownedByMe = it.authorId.toLong() == myId)}
+            }
         }.flowOn(Dispatchers.Default)
+
+    val post: MutableLiveData<List<Int>?>
+        get() = _post
+
+    private val _post = MutableLiveData<List<Int>?>()
+
+    private var mentionsId = mutableListOf<Int>()
 
     private val _errorMessage = MutableSharedFlow<String>()
     val errorMessage = _errorMessage.asSharedFlow()
@@ -48,25 +52,6 @@ class HomeViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow<Boolean>(false)
     val isLoading = _isLoading.asStateFlow()
 
-    private val _post = MutableLiveData<List<Int>?>()
-    val post: MutableLiveData<List<Int>?>
-        get() = _post
-
-    private var mentionsId = mutableListOf<Int>()
-
-//    val posts: StateFlow<List<Post>> =
-//        getNewsList().stateIn(
-//            scope = viewModelScope,
-//            started = SharingStarted.Eagerly,
-//            initialValue = emptyList()
-//        )
-//   fun getNewsList() = flow {
-//        when (val response = getPostsUseCase.invoke()) {
-//            is NetworkState.Error -> _errorMessage.emit(response.throwable)
-//            is NetworkState.Loading -> TODO("not implemented yet")
-//            is NetworkState.Success -> emit(response.success)
-//        }
-//    }
    fun deletePost(id: Long) = viewModelScope.launch {
        removePostUseCase.invoke(id)
    }

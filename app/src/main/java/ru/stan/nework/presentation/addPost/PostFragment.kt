@@ -1,6 +1,8 @@
 package ru.stan.nework.presentation.addPost
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,14 +17,19 @@ import androidx.core.net.toFile
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import ru.stan.nework.R
 import ru.stan.nework.databinding.FragmentPostBinding
 import ru.stan.nework.domain.models.ui.post.AttachmentType
+import ru.stan.nework.domain.models.ui.post.MediaModel
 import ru.stan.nework.utils.BOTTONMENU
+import ru.stan.nework.utils.MediaHelper
 
 @AndroidEntryPoint
 class PostFragment : Fragment() {
@@ -35,6 +42,7 @@ class PostFragment : Fragment() {
                 ImagePicker.RESULT_ERROR -> {
                     Toast.makeText(requireContext(), "Image pick error", Toast.LENGTH_SHORT).show()
                 }
+
                 else -> {
                     val uri = it.data?.data ?: return@registerForActivityResult
                     val resultFile = uri?.toFile()
@@ -88,13 +96,18 @@ class PostFragment : Fragment() {
             viewModel.addUsrsId(userId)
         }
         val postId = arguments?.getInt("POST")
-        if(postId != null) viewModel.postInit(postId)
-        
+        if (postId != null) viewModel.postInit(postId)
+
+        initPost()
+
         binding.fbAdd.setOnClickListener {
             onAddButtonClicked()
         }
         binding.fbDone.setOnClickListener {
             viewModel.createPost(binding.etContent.text.toString())
+            Handler(Looper.getMainLooper()).postDelayed({
+                findNavController().popBackStack()
+            }, DELAY_OPEN_NEXT_SCREEN)
         }
 
         binding.fbAttach.setOnClickListener {
@@ -118,12 +131,15 @@ class PostFragment : Fragment() {
                 AttachmentType.IMAGE -> {
                     binding.ivAttachment.setImageURI(mediaModel.uri)
                 }
+
                 AttachmentType.VIDEO -> {
 
                 }
+
                 AttachmentType.AUDIO -> {
 
                 }
+
                 null -> return@observe
             }
         }
@@ -134,6 +150,7 @@ class PostFragment : Fragment() {
 
         return binding.root
     }
+
 
     private fun onAddButtonClicked() {
         setVisibility(clicked)
@@ -178,5 +195,53 @@ class PostFragment : Fragment() {
             binding.fbAttach.isClickable = false
             binding.fbCamera.isClickable = false
         }
+    }
+
+    private fun initPost() {
+        viewModel.newPost.observe(viewLifecycleOwner) { post ->
+            with(binding) {
+                post.content.let(etContent::setText)
+                if (post.attachment?.url != "") {
+                    when (post.attachment?.type) {
+                        AttachmentType.VIDEO -> {
+                            exo.visibility = View.VISIBLE
+                            ivAttachment.visibility = View.GONE
+                            val media = post.attachment!!.url?.let { MediaHelper(exo, it) }
+                            media?.create()
+                            exo.setOnClickListener {
+                                media?.onPlay()
+                            }
+                        }
+
+                        AttachmentType.IMAGE -> {
+                            exo.visibility = View.GONE
+                            ivAttachment.visibility = View.VISIBLE
+                            Glide.with(ivAttachment)
+                                .load(post.attachment!!.url)
+                                .timeout(10_000)
+                                .into(ivAttachment)
+                        }
+
+                        AttachmentType.AUDIO -> {
+                            exo.visibility = View.VISIBLE
+                            ivAttachment.visibility = View.GONE
+                            val media = post.attachment!!.url?.let { MediaHelper(exo, it) }
+                            media?.create()
+                            exo.setOnClickListener {
+                                media?.onPlay()
+                            }
+                        }
+
+                        null -> {
+                            exo.visibility = View.GONE
+                            ivAttachment.visibility = View.GONE
+                        }
+                    }
+                }
+            }
+        }
+    }
+    companion object {
+        private const val DELAY_OPEN_NEXT_SCREEN = 2000L
     }
 }

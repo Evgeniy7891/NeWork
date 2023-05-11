@@ -38,7 +38,7 @@ class PostViewModel @Inject constructor(
     private val getPostByIdUseCase: GetPostByIdUseCase
 ) : ViewModel() {
 
-    private val newPost: MutableLiveData<PostRequest> = MutableLiveData(editedPost)
+    val newPost: MutableLiveData<PostRequest> = MutableLiveData(editedPost)
 
     private val _media = MutableLiveData(noMedia)
     val media: LiveData<MediaModel>
@@ -104,7 +104,7 @@ class PostViewModel @Inject constructor(
                                 id = id,
                                 content = content,
                                 link = response.success.link,
-                                mentionIds = mentions
+                                mentionIds = mentions,
                             )
                         }
                     }

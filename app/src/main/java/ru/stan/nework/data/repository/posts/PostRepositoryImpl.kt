@@ -1,12 +1,16 @@
 package ru.stan.nework.data.repository.posts
 
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import okhttp3.MultipartBody
@@ -23,7 +27,7 @@ import ru.stan.nework.domain.models.ui.post.AttachmentType
 import ru.stan.nework.domain.models.ui.post.Post
 import ru.stan.nework.domain.models.ui.user.UserUI
 import ru.stan.nework.domain.repository.PostRepository
-import ru.stan.nework.providers.network.NetworkService
+import ru.stan.nework.presentation.addPost.PostFragment
 import ru.stan.nework.utils.safeApiCall
 import javax.inject.Inject
 
@@ -33,7 +37,6 @@ class PostRepositoryImpl @Inject constructor(
     private val remoteDataSource: PostRemoteDataSource,
     mediator: PostRemoteMediator,
     private val dao: PostDao,
-    private val apiService: NetworkService
 ) : PostRepository {
 
     override val data: Flow<PagingData<Post>> =
@@ -42,7 +45,7 @@ class PostRepositoryImpl @Inject constructor(
             pagingSourceFactory = { dao.getAllPosts() },
             remoteMediator = mediator
         ).flow.map {
-            it.map (PostEntity::toDto)
+            it.map(PostEntity::toDto)
         }
 
     override val postUsersData: MutableLiveData<List<UserPreview>> = MutableLiveData(emptyList())
@@ -55,8 +58,11 @@ class PostRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addPost(post: PostRequest): NetworkState<PostModel> {
+
         return safeApiCall(ioDispatcher) {
-            remoteDataSource.addPost(post)
+           val body = remoteDataSource.addPost(post)
+            dao.insert(PostEntity.fromDto(body.convertTo()))
+            body
         }
     }
 
@@ -85,6 +91,7 @@ class PostRepositoryImpl @Inject constructor(
     override suspend fun removeById(id: Long) {
         safeApiCall(ioDispatcher) {
             remoteDataSource.removeById(id)
+            dao.removeById(id.toInt())
         }
     }
 
