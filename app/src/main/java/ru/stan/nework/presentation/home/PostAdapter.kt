@@ -58,17 +58,16 @@ class ViewHolder(
             tvCountLiked.text = post.likeOwnerIds?.size.toString()
             tvCountUsers.text = post.mentionIds?.size.toString()
             var liker = post.likedByMe
-            println("LIKER _ $liker")
             if (liker) {
                 ibLiked.setImageResource(R.drawable.ic_liked_full)
             } else {
                 ibLiked.setImageResource(R.drawable.ic_liked)
             }
             ibUsers.setOnClickListener {
-                post.mentionIds?.let { mentionsId -> onClickListener.getUsers(mentionsId) }
+                post.mentionIds.let { mentionsId -> onClickListener.getUsers(mentionsId) }
             }
             tvCountLiked.setOnClickListener {
-                post.id?.let { likersId -> onClickListener.getUsersLikes(likersId) }
+                post.id.let { likersId -> onClickListener.getUsersLikes(likersId) }
             }
             ibLiked.setOnClickListener {
                 if (!liker) {

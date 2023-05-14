@@ -112,8 +112,6 @@ class PostViewModel @Inject constructor(
                 if(response.success.attachment?.type != null) {
                     newPost.value = newPost.value?.copy(attachment = response.success.attachment)
                 }
-                println("postInit - ${response.success.attachment?.type}")
-                println("postInit - ${response.success.attachment?.url}")
             }
         }
     }

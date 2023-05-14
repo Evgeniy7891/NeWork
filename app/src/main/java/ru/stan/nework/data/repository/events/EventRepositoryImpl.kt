@@ -52,13 +52,17 @@ class EventRepositoryImpl @Inject constructor(
 
     override suspend fun addEvent(event: EventRequest): NetworkState<EventModel> {
         return safeApiCall(ioDispatcher) {
-            remoteDataSource.addEvent(event)
+            val body =   remoteDataSource.addEvent(event)
+            eventDao.insert(EventEntity.fromDto(body.convertTo()))
+            body
         }
     }
 
     override suspend fun removeEvents(id: Long): NetworkState<EventModel> {
         return safeApiCall(ioDispatcher) {
-            remoteDataSource.removeEvents(id)
+            val body = remoteDataSource.removeEvents(id)
+            eventDao.removeEventById(id.toInt())
+            body
         }
     }
 
@@ -70,13 +74,17 @@ class EventRepositoryImpl @Inject constructor(
 
     override suspend fun deleteEventLike(id: Long): NetworkState<EventModel> {
         return safeApiCall(ioDispatcher) {
-            remoteDataSource.removeEvents(id)
+            val body =  remoteDataSource.removeEvents(id)
+            eventDao.insert(EventEntity.fromDto(body.convertTo()))
+            body
         }
     }
 
     override suspend fun addEventLike(id: Long): NetworkState<EventModel> {
         return safeApiCall(ioDispatcher) {
-            remoteDataSource.addEventLike(id)
+            val body = remoteDataSource.addEventLike(id)
+            eventDao.insert(EventEntity.fromDto(body.convertTo()))
+            body
         }
     }
 }

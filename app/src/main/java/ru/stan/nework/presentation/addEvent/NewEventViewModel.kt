@@ -15,6 +15,7 @@ import ru.stan.nework.domain.models.network.event.Type
 import ru.stan.nework.domain.models.network.user.User
 import ru.stan.nework.domain.models.ui.user.UserUI
 import ru.stan.nework.domain.usecase.events.AddEventUseCase
+import ru.stan.nework.domain.usecase.events.GetEventByIdUseCase
 import ru.stan.nework.domain.usecase.post.GetMarkedUserUseCase
 import javax.inject.Inject
 
@@ -32,6 +33,7 @@ val speakers = mutableListOf<User>()
 @HiltViewModel
 class NewEventViewModel @Inject constructor(
     private val addEventUseCase: AddEventUseCase,
+    private val getEventByIdUseCase: GetEventByIdUseCase,
     private val getMarkedUserUseCase: GetMarkedUserUseCase
 ) : ViewModel() {
 
@@ -120,5 +122,27 @@ class NewEventViewModel @Inject constructor(
     fun emptyList() {
         _idUsers.value = kotlin.collections.emptyList()
         idUsers.value = kotlin.collections.emptyList()
+    }
+
+    fun eventInit(id: Int) = viewModelScope.launch {
+        when (val response = getEventByIdUseCase.invoke(id.toLong())) {
+            is NetworkState.Error -> _errorMessage.emit(response.throwable)
+            is NetworkState.Loading -> TODO("not implemented yet")
+            is NetworkState.Success -> {
+                newEvent.value = response.success.id.let { id ->
+                    response.success.content?.let { content ->
+                        response.success.speakerIds.let { speakers ->
+                            newEvent.value?.copy(
+                                id = id,
+                                content = content,
+                                link = response.success.link,
+                                datetime = response.success.datetime,
+                                speakerIds = speakers
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 }

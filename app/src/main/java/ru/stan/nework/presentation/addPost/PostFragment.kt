@@ -45,9 +45,9 @@ class PostFragment : Fragment() {
 
                 else -> {
                     val uri = it.data?.data ?: return@registerForActivityResult
-                    val resultFile = uri?.toFile()
+                    val resultFile = uri.toFile()
                     val file = MultipartBody.Part.createFormData(
-                        "file", resultFile?.name, resultFile!!.asRequestBody()
+                        "file", resultFile.name, resultFile!!.asRequestBody()
                     )
                     viewModel.changeMedia(uri, resultFile, AttachmentType.IMAGE)
                     viewModel.addMediaToPost(AttachmentType.IMAGE, file)
