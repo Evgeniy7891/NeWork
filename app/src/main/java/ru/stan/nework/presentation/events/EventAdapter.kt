@@ -22,6 +22,8 @@ interface OnListener {
 }
 
 var users: ((List<Int>) -> Unit)? = null
+var onGo: ((Event) -> Unit)? = null
+var notGo: ((Event) -> Unit)? = null
 
 class EventAdapter(private val onListener: OnListener) :
     PagingDataAdapter<Event, ViewHolder>(EventDiffCallback()) {
@@ -54,16 +56,36 @@ class ViewHolder(
             tvJob.text = event.authorJob
             tvTime.text = event.published
             tvContent.text = event.content
-            tvLinkContent.text= event.link
+            tvLinkContent.text = event.link
             tvDatetimeContent.text = event.datetime
             tvCountLiked.text = event.likeOwnerIds.size.toString()
-            tvCountUsers.text = event.users.size.toString()
+            tvCountUsers.text = event.speakerIds.size.toString()
 
             tvGo.setOnClickListener {
                 users?.invoke(event.likeOwnerIds)
             }
             tvSpeakersContent.setOnClickListener {
                 users?.invoke(event.speakerIds)
+            }
+
+            var liker = event.likedByMe
+
+            if (liker) {
+                ibLiked.setImageResource(R.drawable.ic_liked_full)
+            } else {
+                ibLiked.setImageResource(R.drawable.ic_liked)
+            }
+
+            ibLiked.setOnClickListener {
+                if (!liker) {
+                    onGo?.invoke(event)
+                    ibLiked.setImageResource(R.drawable.ic_liked_full)
+                    liker = true
+                } else {
+                    notGo?.invoke(event)
+                    ibLiked.setImageResource(R.drawable.ic_liked)
+                    liker = false
+                }
             }
 
             Glide.with(ivAvatar)
@@ -84,10 +106,12 @@ class ViewHolder(
                                 onClickListener.onRemove(event)
                                 true
                             }
+
                             R.id.edit -> {
                                 onClickListener.onEdit(event)
                                 true
                             }
+
                             else -> false
                         }
                     }

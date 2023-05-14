@@ -80,4 +80,15 @@ class EventsWallViewModel @Inject constructor(
             is NetworkState.Success -> getEventsList()
         }
     }
+
+    fun deleteLike(id: Long) = viewModelScope.launch {
+        deleteLikeUseCase.invoke(id)
+    }
+    fun likeById(id:Long) = viewModelScope.launch {
+        when(val response = addLikeUseCase.invoke(id)) {
+            is NetworkState.Error -> _errorMessage.emit(response.throwable)
+            is NetworkState.Loading -> TODO("not implemented yet")
+            is NetworkState.Success -> true
+        }
+    }
 }

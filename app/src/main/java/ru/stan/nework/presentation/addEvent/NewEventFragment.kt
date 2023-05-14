@@ -42,6 +42,18 @@ class NewEventFragment : Fragment() {
             initUsers(userId)
         }
 
+        val eventId = arguments?.getInt("EVENT")
+        if (eventId != null) {
+            viewModel.eventInit(eventId)
+            viewModel.newEvent.observe(viewLifecycleOwner){ event ->
+                event.speakerIds?.let { speakers -> initUsers(speakers) }
+                with(binding){
+                    event.content.let(etContentEvent::setText)
+                    event.link.let(etLink::setText)
+                    event.datetime.let(etData::setText)
+                }
+            }
+        }
 
         binding.etData.setOnClickListener {
                 DateHelper.pickDate(binding.etData, requireContext())

@@ -58,7 +58,6 @@ class PostRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addPost(post: PostRequest): NetworkState<PostModel> {
-
         return safeApiCall(ioDispatcher) {
            val body = remoteDataSource.addPost(post)
             dao.insert(PostEntity.fromDto(body.convertTo()))

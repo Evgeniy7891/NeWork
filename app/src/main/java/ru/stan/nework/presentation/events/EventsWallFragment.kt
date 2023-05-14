@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.collectLatest
 import ru.stan.nework.R
 import ru.stan.nework.databinding.FragmentEventsWallBinding
 import ru.stan.nework.domain.models.ui.event.Event
+import ru.stan.nework.domain.models.ui.post.Post
 import ru.stan.nework.presentation.home.disLike
 import ru.stan.nework.presentation.home.onLike
 
@@ -51,6 +52,12 @@ class EventsWallFragment : Fragment() {
             override fun onRemove(event: Event) {
                 event.id?.toLong()?.let { viewModel.removeEvent(it) }
             }
+            override fun onEdit(event: Event) {
+                val bundle = Bundle()
+                event.id?.let { bundle.putInt("EVENT", it) }
+                findNavController().navigate(R.id.action_eventsWallFragment_to_newEventFragment, bundle)
+            }
+
         })
         binding.rvListEvents.adapter = eventAdapter
         binding.rvListEvents.recycledViewPool.setMaxRecycledViews(
@@ -67,9 +74,17 @@ class EventsWallFragment : Fragment() {
                 bundle
             )
         }
+        onGo = { event ->
+            event.id.let {
+                viewModel.likeById(it.toLong())
+            }
+        }
+        notGo = { event ->
+            event.id.let {
+                viewModel.deleteLike(it.toLong())
+            }
+        }
     }
-
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
