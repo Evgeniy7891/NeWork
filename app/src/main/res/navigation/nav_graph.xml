@@ -105,4 +105,9 @@
             android:id="@+id/action_speakersFragment_to_newEventFragment"
             app:destination="@id/newEventFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/userFragment"
+        android:name="ru.stan.nework.presentation.users.UserFragment"
+        android:label="fragment_user"
+        tools:layout="@layout/fragment_user" />
 </navigation>
