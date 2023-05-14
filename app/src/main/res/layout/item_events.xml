@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardCornerRadius="25dp"
+    android:layout_margin="8dp"
+    android:backgroundTint="@color/teal_100"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_content"
+            style="@style/TextStylePoppins"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="10dp"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@tools:sample/lorem[55]" />
+
+        <TextView
+            android:id="@+id/tv_link"
+            style="@style/TextStyleMonserrat"
+            android:layout_marginTop="8dp"
+            android:text="Ссылка"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/tv_content"
+            app:layout_constraintTop_toBottomOf="@+id/tv_content" />
+
+        <TextView
+            android:id="@+id/tv_link_content"
+            style="@style/TextStyleMonserrat"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:text="https://yandex.ru/"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@+id/tv_link"
+            app:layout_constraintTop_toBottomOf="@+id/tv_content" />
+
+        <TextView
+            android:id="@+id/tv_datetime"
+            style="@style/TextStyleMonserrat"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:text="Время проведения"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tv_link"
+            app:layout_constraintTop_toBottomOf="@+id/tv_link_content" />
+
+        <TextView
+            android:id="@+id/tv_datetime_content"
+            style="@style/TextStyleMonserrat"
+            android:layout_marginStart="24dp"
+            android:text="23 апреля 2024 год"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_datetime"
+            app:layout_constraintStart_toEndOf="@+id/tv_datetime" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="24dp"
+            android:src="@drawable/ic_edit"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_content" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
