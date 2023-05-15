@@ -1,32 +1,56 @@
 package ru.stan.nework.presentation.account.pager.jobs
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import ru.stan.nework.R
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import ru.stan.nework.databinding.FragmentJobsBinding
 
+@AndroidEntryPoint
 class JobsFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = JobsFragment()
-    }
-
     private lateinit var viewModel: JobsViewModel
+    private lateinit var jobAdapter: JobAdapter
+    private var _binding: FragmentJobsBinding? = null
+    private val binding get() = _binding ?: throw IllegalStateException("Cannot access view")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_jobs, container, false)
+        _binding = FragmentJobsBinding.inflate(layoutInflater, container, false)
+        viewModel = ViewModelProvider(this)[JobsViewModel::class.java]
+        initWall()
+        initAdapter()
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(JobsViewModel::class.java)
-        // TODO: Use the ViewModel
+    private fun initWall() {
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.jobs.collectLatest { jobs ->
+                println("JOBS - $jobs")
+                jobAdapter.submitList(jobs)
+            }
+        }
+    }
+
+    private fun initAdapter() {
+        jobAdapter = JobAdapter()
+        binding.rvJobs.adapter = jobAdapter
+        val linearLayout = LinearLayoutManager(requireContext())
+        linearLayout.reverseLayout = true
+        binding.rvJobs.layoutManager = linearLayout
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
 }

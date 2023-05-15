@@ -5,6 +5,7 @@ import retrofit2.Response
 import retrofit2.http.*
 import ru.stan.nework.domain.models.network.event.EventModel
 import ru.stan.nework.domain.models.network.event.EventRequest
+import ru.stan.nework.domain.models.network.job.Job
 import ru.stan.nework.domain.models.network.post.MediaResponse
 import ru.stan.nework.domain.models.network.post.PostModel
 import ru.stan.nework.domain.models.network.post.PostRequest
@@ -108,4 +109,16 @@ interface NetworkService {
         @Path("id") id: Long,
         @Query("count") count: Int,
     ): Response<List<Event>>
+
+    @GET("api/{id}/jobs")
+    suspend fun getJobById(@Path("id") id: Long): List<Job>
+
+    @GET("api/my/jobs")
+    suspend fun getMyJobs(): List<Job>
+
+    @POST("api/my/jobs")
+    suspend fun saveJob(@Body job: Job): Job
+
+    @DELETE("api/my/jobs/{id}")
+    suspend fun removeJobById(@Path("id") id: Long): Response<Unit>
 }

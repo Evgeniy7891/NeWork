@@ -1,0 +1,14 @@
+package ru.stan.nework.data.datasources
+
+import ru.stan.nework.domain.models.network.job.Job
+
+interface JobsRemoteDataSource {
+
+    suspend fun getJob(id: Long): List<Job>
+
+    suspend fun saveJob(job: Job): Job
+
+    suspend fun removeJob(id: Long)
+
+    suspend fun getMyJobs(): List<Job>
+}

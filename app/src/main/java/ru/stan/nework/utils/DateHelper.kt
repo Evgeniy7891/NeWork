@@ -3,8 +3,12 @@ package ru.stan.nework.utils
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
+import android.os.Build
 import android.widget.EditText
+import androidx.annotation.RequiresApi
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.GregorianCalendar
 import java.util.Locale
@@ -29,5 +33,15 @@ object DateHelper {
                 editText?.setText(dateFormat.format(result))
             }, startHour, startMinute, false).show()
         }, startYear, startMonth, startDay).show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun convertDate(date: String): String {
+        return if (date == "") {
+            ""
+        } else {
+            val parsedDate = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME)
+            return parsedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+        }
     }
 }
