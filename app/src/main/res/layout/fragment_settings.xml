@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.account.pager.settings.SettingsFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_sign_in"
+        style="@style/TextStyleMonserrat"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:text="Добавить место работы"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_name_job"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_sign_in"
+        app:layout_constraintTop_toBottomOf="@+id/tv_sign_in">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_name_job"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/teal_100"
+            android:textSize="12sp"
+            style="@style/TextStyleMonserrat"
+            android:hint="Место работы" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_password"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/til_name_job"
+        app:layout_constraintStart_toStartOf="@+id/til_name_job"
+        app:layout_constraintTop_toBottomOf="@+id/til_name_job">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_password"
+            style="@style/TextStyleMonserrat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/teal_100"
+            android:hint="Должнсть"
+            android:textSize="12sp"
+            tools:layout_editor_absoluteX="94dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_start_job"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/til_password"
+        app:layout_constraintStart_toStartOf="@+id/til_password"
+        app:layout_constraintTop_toBottomOf="@+id/til_password">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_start_job"
+            style="@style/TextStyleMonserrat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/teal_100"
+            android:hint="Начало работы"
+            android:textSize="12sp"
+            tools:layout_editor_absoluteX="94dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_end_job"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/til_start_job"
+        app:layout_constraintStart_toStartOf="@+id/til_start_job"
+        app:layout_constraintTop_toBottomOf="@+id/til_start_job">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_end_job"
+            style="@style/TextStyleMonserrat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/teal_100"
+            android:hint="Конец работы"
+            android:textSize="12sp"
+            tools:layout_editor_absoluteX="94dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_link"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/til_end_job"
+        app:layout_constraintStart_toStartOf="@+id/til_end_job"
+        app:layout_constraintTop_toBottomOf="@+id/til_end_job">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_link"
+            style="@style/TextStyleMonserrat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/teal_100"
+            android:hint="Сайт"
+            android:textSize="12sp"
+            tools:layout_editor_absoluteX="94dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_sign_in"
+            android:layout_width="240dp"
+            android:layout_height="42dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="56dp"
+            android:background="@drawable/button"
+            android:fontFamily="@font/montserrat_medium"
+            android:text="Добавить"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/til_link"
+            app:layout_constraintStart_toStartOf="@+id/til_link"
+            app:layout_constraintTop_toBottomOf="@+id/til_link" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

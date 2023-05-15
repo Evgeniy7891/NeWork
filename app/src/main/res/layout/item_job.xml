@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_company"
+        style="@style/TextStyleMonserrat"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Компания:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_company_name"
+        style="@style/TextStylePoppins"
+        android:layout_marginStart="16dp"
+        android:text="Нетология"
+        app:layout_constraintStart_toEndOf="@+id/tv_company"
+        app:layout_constraintTop_toTopOf="@+id/tv_company" />
+
+    <TextView
+        android:id="@+id/tv_position"
+        style="@style/TextStyleMonserrat"
+        android:layout_marginTop="8dp"
+        android:text="Должность:"
+        app:layout_constraintStart_toStartOf="@+id/tv_company"
+        app:layout_constraintTop_toBottomOf="@+id/tv_company" />
+
+    <TextView
+        android:id="@+id/tv_position_name"
+        style="@style/TextStylePoppins"
+        android:layout_marginStart="16dp"
+        android:text="Стажер"
+        app:layout_constraintStart_toEndOf="@+id/tv_position"
+        app:layout_constraintTop_toTopOf="@+id/tv_position" />
+
+
+    <TextView
+        android:id="@+id/tv_start"
+        style="@style/TextStyleMonserrat"
+        android:layout_marginTop="8dp"
+        android:text="Начало:"
+        app:layout_constraintStart_toStartOf="@+id/tv_position"
+        app:layout_constraintTop_toBottomOf="@+id/tv_position" />
+
+    <TextView
+        android:id="@+id/tv_start_name"
+        style="@style/TextStylePoppins"
+        android:layout_marginStart="16dp"
+        android:text="2030"
+        app:layout_constraintStart_toEndOf="@+id/tv_start"
+        app:layout_constraintTop_toTopOf="@+id/tv_start" />
+
+    <TextView
+        android:id="@+id/tv_end"
+        style="@style/TextStyleMonserrat"
+        android:layout_marginTop="8dp"
+        android:text="Конец:"
+        app:layout_constraintStart_toStartOf="@+id/tv_start"
+        app:layout_constraintTop_toBottomOf="@+id/tv_start" />
+
+    <TextView
+        android:id="@+id/tv_end_name"
+        style="@style/TextStylePoppins"
+        android:layout_marginStart="16dp"
+        android:text="2030"
+        app:layout_constraintStart_toEndOf="@+id/tv_end"
+        app:layout_constraintTop_toTopOf="@+id/tv_end" />
+
+    <TextView
+        android:id="@+id/tv_link"
+        style="@style/TextStyleMonserrat"
+        android:layout_marginTop="8dp"
+        android:text="Сайт:"
+        app:layout_constraintStart_toStartOf="@+id/tv_end"
+        app:layout_constraintTop_toBottomOf="@+id/tv_end" />
+
+    <TextView
+        android:id="@+id/tv_link_name"
+        style="@style/TextStylePoppins"
+        android:layout_marginStart="16dp"
+        android:text="netology.ru"
+        app:layout_constraintStart_toEndOf="@+id/tv_link"
+        app:layout_constraintTop_toTopOf="@+id/tv_link" />
+
+    <ImageView
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/line"
+        android:paddingBottom="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_link_name" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
