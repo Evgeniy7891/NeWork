@@ -5,6 +5,7 @@ plugins {
     id 'kotlin-kapt'
     id "kotlinx-serialization"
     id 'dagger.hilt.android.plugin'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -102,4 +103,9 @@ dependencies {
     kapt 'androidx.room:room-compiler:2.5.1'
     implementation 'androidx.room:room-ktx:2.5.1'
     implementation "androidx.room:room-paging:2.5.1"
+
+    //FireBase
+    implementation 'com.google.firebase:firebase-common-ktx:20.3.2'
+    implementation "com.google.firebase:firebase-messaging-ktx"
+    implementation platform('com.google.firebase:firebase-bom:32.0.0')
 }
