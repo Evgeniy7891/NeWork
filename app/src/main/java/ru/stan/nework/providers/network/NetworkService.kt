@@ -3,6 +3,7 @@ package ru.stan.nework.providers.network
 import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
+import ru.stan.nework.domain.models.network.PushToken
 import ru.stan.nework.domain.models.network.event.EventModel
 import ru.stan.nework.domain.models.network.event.EventRequest
 import ru.stan.nework.domain.models.network.job.Job
@@ -121,4 +122,7 @@ interface NetworkService {
 
     @DELETE("api/my/jobs/{id}")
     suspend fun removeJobById(@Path("id") id: Long): Response<Unit>
+
+    @POST("api/users/push-tokens")
+    suspend fun sendPushToken(@Body pushToken: PushToken): Response<Unit>
 }

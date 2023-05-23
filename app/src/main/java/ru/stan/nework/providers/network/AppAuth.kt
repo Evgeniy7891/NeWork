@@ -1,15 +1,30 @@
 package ru.stan.nework.providers.network
 
+import android.content.Context
 import android.content.SharedPreferences
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import ru.stan.nework.domain.models.network.PushToken
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class AppAuth @Inject constructor(
-    private val prefs: SharedPreferences
+    private val prefs: SharedPreferences,
+    @ApplicationContext
+    private val context: Context,
 ) {
 
     companion object {
@@ -58,6 +73,26 @@ class AppAuth @Inject constructor(
         with(prefs.edit()) {
             clear()
             commit()
+        }
+    }
+
+    @InstallIn(SingletonComponent::class)
+    @EntryPoint
+    interface AppAuthEntryPoint {
+        fun getUserApiService(): NetworkService
+    }
+
+    fun sendPushToken(token: String? = null) {
+        CoroutineScope(Dispatchers.Default).launch {
+            try {
+                val pushToken =
+                    PushToken(token ?: Firebase.messaging.token.await())
+                val entryPoint =
+                    EntryPointAccessors.fromApplication(context, AppAuthEntryPoint::class.java)
+                entryPoint.getUserApiService().sendPushToken(pushToken)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 }
