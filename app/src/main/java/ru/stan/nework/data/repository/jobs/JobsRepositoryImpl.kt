@@ -33,4 +33,10 @@ class JobsRepositoryImpl @Inject constructor(
            jobsRemoteDataSource.getMyJobs()
        }
     }
+
+    override suspend fun getUserJobs(id: Long): NetworkState<List<Job>> {
+        return safeApiCall(ioDispatcher){
+            jobsRemoteDataSource.getUserJobs(id)
+        }
+    }
 }

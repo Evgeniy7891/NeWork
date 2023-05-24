@@ -46,25 +46,6 @@ class ViewHolder(
     fun bind(post: Post) {
         with(binding) {
             tvContent.text = post.content
-            ibMenu.setOnClickListener {
-                PopupMenu(it.context, it).apply {
-                    inflate(R.menu.options_menu)
-                    menu.setGroupVisible(R.id.menu_owned, post.ownedByMe)
-                    setOnMenuItemClickListener { item ->
-                        when (item.itemId) {
-                            R.id.remove -> {
-                                onClickListener.onRemove(post)
-                                true
-                            }
-                            R.id.edit -> {
-                                onClickListener.onEdit(post)
-                                true
-                            }
-                            else -> false
-                        }
-                    }
-                }.show()
-            }
 
             if (post.attachment?.url != "") {
                 when (post.attachment?.type) {

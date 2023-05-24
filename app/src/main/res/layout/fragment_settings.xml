@@ -130,7 +130,6 @@
             android:layout_width="240dp"
             android:layout_height="42dp"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="56dp"
             android:background="@drawable/button"
             android:fontFamily="@font/montserrat_medium"
             android:text="Добавить"

@@ -1,21 +1,17 @@
 package ru.stan.nework.presentation.users
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import ru.stan.nework.R
 import ru.stan.nework.databinding.FragmentUserBinding
-import ru.stan.nework.databinding.FragmentUsersBinding
 import ru.stan.nework.domain.models.ui.user.UserUI
-import ru.stan.nework.presentation.addPost.CheckedListener
 import ru.stan.nework.presentation.addPost.UsersAdapter
-import ru.stan.nework.presentation.addPost.addUsers.UsersViewModel
 import ru.stan.nework.presentation.home.users.UsersHomeAdapter
 
 @AndroidEntryPoint
