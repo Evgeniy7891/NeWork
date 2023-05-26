@@ -1,6 +1,7 @@
 package ru.stan.nework.data.datasources
 
 import okhttp3.MultipartBody
+import retrofit2.http.Path
 import ru.stan.nework.domain.models.network.post.Attachment
 import ru.stan.nework.domain.models.network.post.PostModel
 import ru.stan.nework.domain.models.network.post.PostRequest
@@ -18,4 +19,5 @@ interface PostRemoteDataSource {
     suspend fun getPost(id: Long): PostModel
     suspend fun likeById(id: Long): PostModel
     suspend fun deleteLikeById(id:Long): PostModel
+    suspend fun userWall(id: Long): List<PostModel>
 }

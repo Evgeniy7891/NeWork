@@ -22,4 +22,8 @@ class JobsRemoteDataSourceImpl @Inject constructor(private val apiService: Netwo
     override suspend fun getMyJobs(): List<Job> {
        return apiService.getMyJobs()
     }
+
+    override suspend fun getUserJobs(id: Long): List<Job> {
+        return apiService.getUserJobs(id)
+    }
 }

@@ -1,10 +1,12 @@
 package ru.stan.nework.presentation.home
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
+import androidx.navigation.Navigation
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -80,6 +82,14 @@ class ViewHolder(
                     liker = false
                 }
             }
+
+            tvAuthor.setOnClickListener {
+                    val id = post.id
+                    val bundle = Bundle()
+                    bundle.putLong("UserID", id.toLong())
+                    Navigation.createNavigateOnClickListener(R.id.action_homeFragment_to_userProfileFragment, bundle).onClick(it)
+            }
+
             ibMenu.isVisible = post.ownedByMe
             ibMenu.setOnClickListener {
                 PopupMenu(it.context, it).apply {

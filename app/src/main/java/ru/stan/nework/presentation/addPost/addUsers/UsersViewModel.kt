@@ -8,7 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import ru.stan.nework.domain.models.network.NetworkState
 import ru.stan.nework.domain.models.ui.user.UserUI
-import ru.stan.nework.domain.usecase.post.GetUsersUseCase
+import ru.stan.nework.domain.usecase.users.GetUsersUseCase
 import javax.inject.Inject
 
 @HiltViewModel

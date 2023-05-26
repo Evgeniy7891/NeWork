@@ -1,6 +1,7 @@
 package ru.stan.nework.providers.datasources
 
 import okhttp3.MultipartBody
+import retrofit2.http.Path
 import ru.stan.nework.data.datasources.PostRemoteDataSource
 import ru.stan.nework.domain.models.network.post.Attachment
 import ru.stan.nework.domain.models.network.post.PostModel
@@ -42,5 +43,8 @@ class PostRemoteDataSourceImpl @Inject constructor(private val apiService: Netwo
     }
     override suspend fun deleteLikeById(id: Long): PostModel {
        return apiService.deleteLike(id)
+    }
+    override suspend fun userWall(id: Long): List<PostModel> {
+        return apiService.userWall(id)
     }
 }

@@ -114,4 +114,10 @@ class PostRepositoryImpl @Inject constructor(
             dao.insert(PostEntity.fromDto(body))
         }
     }
+
+    override suspend fun userWall(id: Long): NetworkState<List<Post>> {
+        return safeApiCall(ioDispatcher){
+            remoteDataSource.userWall(id).map { it.convertTo() }
+        }
+    }
 }

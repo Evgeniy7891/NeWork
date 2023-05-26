@@ -125,4 +125,10 @@ interface NetworkService {
 
     @POST("api/users/push-tokens")
     suspend fun sendPushToken(@Body pushToken: PushToken): Response<Unit>
+
+    @GET("api/{id}/wall")
+    suspend fun userWall(@Path("id") id: Long): List<PostModel>
+
+    @GET("api/{id}/jobs")
+    suspend fun getUserJobs(@Path("id") id: Long): List<Job>
 }
