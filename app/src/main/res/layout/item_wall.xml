@@ -23,6 +23,7 @@
         style="@style/TextStylePoppins"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:textColor="@color/black"
         android:textSize="8sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,44 +32,40 @@
         tools:text="@tools:sample/lorem[55]" />
 
 
-        <ImageView
-            android:id="@+id/iv_atachment"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp"
-            android:adjustViewBounds="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/tv_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_content"
-            tools:srcCompat="@tools:sample/avatars[5]" />
+    <ImageView
+        android:id="@+id/iv_atachment"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:layout_marginBottom="8dp"
+        android:adjustViewBounds="true"
+        app:layout_constraintBottom_toTopOf="@id/line"
+        app:layout_constraintEnd_toEndOf="@+id/tv_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_content"
+        tools:srcCompat="@tools:sample/avatars[5]" />
 
     <com.google.android.exoplayer2.ui.StyledPlayerView
         android:id="@+id/exo"
         android:layout_width="match_parent"
-        android:layout_height="240dp"
+        android:layout_height="200dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         app:show_shuffle_button="true"
         app:show_buffering="when_playing"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/line"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_atachment" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_content" />
 
     <ImageView
         android:id="@+id/line"
         android:layout_width="match_parent"
-        android:layout_height="3dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="4dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/line"
         android:paddingBottom="6dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_atachment"
-        tools:layout_editor_absoluteX="8dp" />
+        app:layout_constraintTop_toBottomOf="@+id/exo" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package ru.stan.nework.domain.usecase.post
+package ru.stan.nework.domain.usecase.users
 
 import ru.stan.nework.domain.models.network.NetworkState
 import ru.stan.nework.domain.models.network.user.User

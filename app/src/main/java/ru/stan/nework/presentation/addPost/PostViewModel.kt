@@ -1,7 +1,6 @@
 package ru.stan.nework.presentation.addPost
 
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,11 +13,9 @@ import ru.stan.nework.domain.models.network.NetworkState
 import ru.stan.nework.domain.models.network.post.PostRequest
 import ru.stan.nework.domain.models.ui.post.AttachmentType
 import ru.stan.nework.domain.models.ui.post.MediaModel
-import ru.stan.nework.domain.models.ui.user.UserUI
 import ru.stan.nework.domain.usecase.post.AddMultiMediaUseCase
 import ru.stan.nework.domain.usecase.post.AddPostUseCase
 import ru.stan.nework.domain.usecase.post.GetPostByIdUseCase
-import ru.stan.nework.domain.usecase.post.GetUsersUseCase
 import java.io.File
 import javax.inject.Inject
 

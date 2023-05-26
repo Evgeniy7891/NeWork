@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import ru.stan.nework.domain.models.network.NetworkState
 import ru.stan.nework.domain.models.ui.user.UserUI
-import ru.stan.nework.domain.usecase.post.GetUsersUseCase
+import ru.stan.nework.domain.usecase.users.GetUsersUseCase
 import javax.inject.Inject
 
 @HiltViewModel

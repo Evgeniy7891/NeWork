@@ -15,7 +15,7 @@ class PagerUsersAdapter(fragmentActivity: FragmentActivity, private val id: Long
     override fun createFragment(position: Int): Fragment {
         return when(position){
             0 -> UserPostsFragment(id)
-            1 -> UserJobsFragment()
+            1 -> UserJobsFragment(id)
             else -> SettingsFragment()
         }
     }

@@ -17,6 +17,9 @@
             android:id="@+id/action_homeFragment_to_usersBottomSheetFragment"
             app:destination="@id/usersBottomSheetFragment"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_homeFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/signInFragment"

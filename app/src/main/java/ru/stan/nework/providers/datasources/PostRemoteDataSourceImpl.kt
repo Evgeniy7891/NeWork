@@ -44,7 +44,6 @@ class PostRemoteDataSourceImpl @Inject constructor(private val apiService: Netwo
     override suspend fun deleteLikeById(id: Long): PostModel {
        return apiService.deleteLike(id)
     }
-
     override suspend fun userWall(id: Long): List<PostModel> {
         return apiService.userWall(id)
     }
