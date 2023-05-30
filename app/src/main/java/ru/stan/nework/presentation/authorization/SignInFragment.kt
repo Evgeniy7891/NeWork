@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.stan.nework.R
 import ru.stan.nework.databinding.FragmentSignInBinding
 import ru.stan.nework.providers.network.AppAuth
+import ru.stan.nework.utils.BOTTONMENU
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -27,6 +29,8 @@ class SignInFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val binding = FragmentSignInBinding.inflate(inflater, container, false)
+
+        BOTTONMENU.isVisible = false
 
         binding.btnSignIn.setOnClickListener {
             val login = binding.etLogin.text.toString()

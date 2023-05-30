@@ -14,18 +14,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
-            android:id="@+id/et_content"
-            style="@style/TextStylePoppins"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_name_job"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="6dp"
+            android:paddingEnd="-12dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:text="Что нового?"
+            android:layout_marginEnd="32dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_content"
+                style="@style/TextStylePoppins"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:hint="Что нового?"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </com.google.android.material.textfield.TextInputLayout>
 
     </FrameLayout>
 
@@ -112,15 +125,27 @@
             app:layout_constraintEnd_toEndOf="@+id/fb_attach"
             android:focusable="true" />
 
-        <androidx.appcompat.widget.AppCompatButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/ib_add_urers"
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:visibility="invisible"
+            android:src="@drawable/ic_users"
+            app:layout_constraintBottom_toTopOf="@+id/fb_camera"
+            app:layout_constraintEnd_toEndOf="@+id/fb_camera"
+            android:focusable="true" />
+
+        <ImageButton
+            android:id="@+id/ib_back"
+            android:layout_width="60dp"
             android:layout_height="55dp"
             android:layout_marginStart="32dp"
+            android:src="@drawable/ic_back"
             android:background="@drawable/button"
             android:backgroundTint="#33A2C6"
             android:fontFamily="@font/montserrat_medium"
-            android:text="Отметить друзей"
             android:textAllCaps="false"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/fb_add"

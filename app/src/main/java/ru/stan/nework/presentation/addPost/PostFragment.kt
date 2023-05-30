@@ -100,6 +100,10 @@ class PostFragment : Fragment() {
 
         initPost()
 
+        binding.ibBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         binding.fbAdd.setOnClickListener {
             onAddButtonClicked()
         }
@@ -164,10 +168,12 @@ class PostFragment : Fragment() {
             binding.fbDone.visibility = View.VISIBLE
             binding.fbAttach.visibility = View.VISIBLE
             binding.fbCamera.visibility = View.VISIBLE
+            binding.ibAddUrers.visibility = View.VISIBLE
         } else {
             binding.fbDone.visibility = View.INVISIBLE
             binding.fbAttach.visibility = View.INVISIBLE
             binding.fbCamera.visibility = View.INVISIBLE
+            binding.ibAddUrers.visibility = View.INVISIBLE
         }
     }
 
@@ -177,11 +183,13 @@ class PostFragment : Fragment() {
             binding.fbAttach.startAnimation(fromBottom)
             binding.fbCamera.startAnimation(fromBottom)
             binding.fbAdd.startAnimation(rotateOpen)
+            binding.ibAddUrers.startAnimation(fromBottom)
         } else {
             binding.fbDone.startAnimation(toBottom)
             binding.fbAttach.startAnimation(toBottom)
             binding.fbCamera.startAnimation(toBottom)
             binding.fbAdd.startAnimation(rotateClose)
+            binding.ibAddUrers.startAnimation(toBottom)
         }
     }
 
@@ -190,10 +198,12 @@ class PostFragment : Fragment() {
             binding.fbDone.isClickable = true
             binding.fbAttach.isClickable = true
             binding.fbCamera.isClickable = true
+            binding.ibAddUrers.isClickable = true
         } else {
             binding.fbDone.isClickable = false
             binding.fbAttach.isClickable = false
             binding.fbCamera.isClickable = false
+            binding.ibAddUrers.isClickable = false
         }
     }
 

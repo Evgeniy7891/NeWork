@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,6 +26,10 @@ class AccountFragment : Fragment() {
     @Inject
     lateinit var prefs: SharedPreferences
 
+    @Inject
+    lateinit var appAuth: AppAuth
+
+
     private lateinit var viewModel: AccountViewModel
     private var _binding: FragmentAccountBinding? = null
     private val binding get() = _binding ?: throw IllegalStateException("Cannot access view")
@@ -38,6 +43,10 @@ class AccountFragment : Fragment() {
         viewModel = ViewModelProvider(this)[AccountViewModel::class.java]
         initial()
         initInfo()
+        binding.ibExit.setOnClickListener {
+        appAuth.removeAuth()
+            findNavController().navigate(R.id.action_accountFragment_to_signInFragment)
+        }
         return binding.root
     }
 

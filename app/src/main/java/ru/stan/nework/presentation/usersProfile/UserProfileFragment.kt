@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,11 +33,15 @@ class UserProfileFragment : Fragment() {
         viewModel = ViewModelProvider(this)[UserProfileViewModel::class.java]
         initial()
         initUserInfo()
+        binding.ibBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
         return binding.root
     }
 
     private fun initial() {
         val id = arguments?.getLong("UserID")
+        println("ID - $id")
         if (id != null) {
             viewModel.getUser(id)
         }
