@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import ru.stan.nework.databinding.FragmentUserBinding
@@ -15,7 +16,7 @@ import ru.stan.nework.presentation.addPost.UsersAdapter
 import ru.stan.nework.presentation.home.users.UsersHomeAdapter
 
 @AndroidEntryPoint
-class UserFragment : Fragment() {
+class UserFragment :  Fragment() {
 
     private val viewModel: UserViewModel by viewModels()
 

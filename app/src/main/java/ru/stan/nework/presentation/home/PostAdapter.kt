@@ -84,7 +84,7 @@ class ViewHolder(
             }
 
             tvAuthor.setOnClickListener {
-                    val id = post.id
+                    val id = post.authorId
                     val bundle = Bundle()
                     bundle.putLong("UserID", id.toLong())
                     Navigation.createNavigateOnClickListener(R.id.action_homeFragment_to_userProfileFragment, bundle).onClick(it)

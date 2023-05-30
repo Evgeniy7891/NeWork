@@ -11,7 +11,7 @@ import ru.stan.nework.databinding.FragmentUsersBottomSheetBinding
 import ru.stan.nework.domain.models.ui.user.UserUI
 
 @AndroidEntryPoint
-class UsersBottomSheetFragment : BottomSheetDialogFragment() {
+class UsersBottomSheetFragment :  BottomSheetDialogFragment(){
 
     private val viewModel: UsersBottomSheetViewModel by viewModels()
 
