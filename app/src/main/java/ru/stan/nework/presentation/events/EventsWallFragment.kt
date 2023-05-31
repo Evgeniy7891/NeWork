@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +17,7 @@ import ru.stan.nework.domain.models.ui.event.Event
 import ru.stan.nework.domain.models.ui.post.Post
 import ru.stan.nework.presentation.home.disLike
 import ru.stan.nework.presentation.home.onLike
+import ru.stan.nework.utils.BOTTONMENU
 
 @AndroidEntryPoint
 class EventsWallFragment : Fragment() {
@@ -32,6 +34,7 @@ class EventsWallFragment : Fragment() {
     ): View? {
         _binding = FragmentEventsWallBinding.inflate(layoutInflater, container, false)
         viewModel = ViewModelProvider(this)[EventsWallViewModel::class.java]
+        BOTTONMENU.isVisible = true
         initAdapter()
         initEvents()
         binding.floatingActionButton2.setOnClickListener {

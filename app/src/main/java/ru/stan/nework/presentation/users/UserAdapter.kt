@@ -1,4 +1,4 @@
-package ru.stan.nework.presentation.home.users
+package ru.stan.nework.presentation.users
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,8 +10,8 @@ import ru.stan.nework.R
 import ru.stan.nework.databinding.ItemHomeUsersBinding
 import ru.stan.nework.domain.models.ui.user.UserUI
 
-class UsersHomeAdapter(private val listUser: List<UserUI>):
-    RecyclerView.Adapter<UsersHomeAdapter.ViewHolder>() {
+class UserAdapter(private val listUser: List<UserUI>):
+    RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding =
@@ -19,15 +19,20 @@ class UsersHomeAdapter(private val listUser: List<UserUI>):
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val user = listUser[position]
-        holder.bind(user)
-    }
-
     override fun getItemCount(): Int {
         return listUser.size
     }
 
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val user = listUser[position]
+        holder.bind(user)
+        holder.itemView.setOnClickListener {
+            val id = user.id
+            val bundle = Bundle()
+            bundle.putLong("UserID", id.toLong())
+            Navigation.createNavigateOnClickListener(R.id.action_userFragment_to_userProfileFragment, bundle).onClick(it)
+        }
+    }
 
     class ViewHolder(
         private val binding: ItemHomeUsersBinding

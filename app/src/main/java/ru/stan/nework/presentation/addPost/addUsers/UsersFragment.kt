@@ -41,6 +41,9 @@ class UsersFragment : Fragment() {
                 findNavController().navigate(R.id.action_usersFragment_to_postFragment, bundle)
             }
         }
+        binding.ibBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
         return binding.root
     }
 

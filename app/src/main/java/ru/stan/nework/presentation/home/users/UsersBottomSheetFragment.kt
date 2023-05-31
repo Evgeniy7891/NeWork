@@ -9,6 +9,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import ru.stan.nework.databinding.FragmentUsersBottomSheetBinding
 import ru.stan.nework.domain.models.ui.user.UserUI
+import ru.stan.nework.presentation.users.UserAdapter
 
 @AndroidEntryPoint
 class UsersBottomSheetFragment :  BottomSheetDialogFragment(){

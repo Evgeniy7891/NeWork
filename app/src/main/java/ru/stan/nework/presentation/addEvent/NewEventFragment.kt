@@ -1,6 +1,5 @@
 package ru.stan.nework.presentation.addEvent
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,13 +12,10 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import ru.stan.nework.R
 import ru.stan.nework.databinding.FragmentNewEventBinding
-import ru.stan.nework.databinding.FragmentPostBinding
 import ru.stan.nework.domain.models.ui.user.UserUI
-import ru.stan.nework.presentation.addPost.PostViewModel
-import ru.stan.nework.presentation.home.users.UsersHomeAdapter
+import ru.stan.nework.presentation.users.UserAdapter
 import ru.stan.nework.utils.BOTTONMENU
 import ru.stan.nework.utils.DateHelper
-import java.util.ArrayList
 
 @AndroidEntryPoint
 class NewEventFragment : Fragment() {
@@ -40,6 +36,10 @@ class NewEventFragment : Fragment() {
         if (userId != null) {
             viewModel.addUsrsId(userId)
             initUsers(userId)
+        }
+
+        binding.ibBack.setOnClickListener {
+            findNavController().popBackStack()
         }
 
         val eventId = arguments?.getInt("EVENT")
@@ -86,12 +86,14 @@ class NewEventFragment : Fragment() {
             viewModel.getUser(it.toLong())
         }
         viewModel.idUsers.observe(viewLifecycleOwner){
-            initAdapter(it)
+            if (it != null) {
+                initAdapter(it.toList())
+            }
         }
     }
 
     private fun initAdapter(users: List<UserUI>) {
-        val adapter = UsersHomeAdapter(users)
+        val adapter = UserAdapter(users)
         binding.rvUsers.adapter = adapter
     }
 }

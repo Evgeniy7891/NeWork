@@ -1,9 +1,11 @@
 package ru.stan.nework.presentation.events
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.view.isVisible
+import androidx.navigation.Navigation
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -86,6 +88,15 @@ class ViewHolder(
                     ibLiked.setImageResource(R.drawable.ic_liked)
                     liker = false
                 }
+            }
+
+            ivAvatar.setOnClickListener {
+                val id = event?.authorId
+                val bundle = Bundle()
+                if (id != null) {
+                    bundle.putLong("UserID", id.toLong())
+                }
+                Navigation.createNavigateOnClickListener(R.id.action_eventsWallFragment_to_userProfileFragment, bundle).onClick(it)
             }
 
             Glide.with(ivAvatar)

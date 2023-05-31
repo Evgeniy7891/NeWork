@@ -38,7 +38,6 @@ class NewEventViewModel @Inject constructor(
 ) : ViewModel() {
 
     val newEvent: MutableLiveData<EventRequest> = MutableLiveData(editedEvent)
-    val usersList: MutableLiveData<List<User>> = MutableLiveData()
     val speakersData: MutableLiveData<MutableList<User>> = MutableLiveData()
 
     private val _errorMessage = MutableSharedFlow<String>()
@@ -76,33 +75,17 @@ class NewEventViewModel @Inject constructor(
         newEvent.value = newEvent.value?.copy(speakerIds = usersId)
     }
 
-    fun check(id: Int) {
-        usersList.value?.forEach {
-            if (it.id == id) {
-                it.isChecked = true
-            }
-        }
-    }
-
-    fun unCheck(id: Int) {
-        usersList.value?.forEach {
-            if (it.id == id) {
-                it.isChecked = false
-            }
-        }
-    }
-
     fun deleteEditEvent() {
         newEvent.postValue(editedEvent)
         speakers.clear()
         speakersData.postValue(speakers)
     }
 
-    private val _idUsers = MutableLiveData<List<UserUI>>()
-    val idUsers: MutableLiveData<List<UserUI>>
+    private val _idUsers = MutableLiveData<Set<UserUI>>()
+    val idUsers: MutableLiveData<Set<UserUI>>
         get() = _idUsers
 
-    private var mentions = mutableListOf<UserUI>()
+    private var mentions = mutableSetOf<UserUI>()
 
     fun getUser(id: Long) = viewModelScope.launch {
         when (val response = getMarkedUserUseCase.invoke(id)) {
@@ -120,8 +103,8 @@ class NewEventViewModel @Inject constructor(
     }
 
     fun emptyList() {
-        _idUsers.value = kotlin.collections.emptyList()
-        idUsers.value = kotlin.collections.emptyList()
+        _idUsers.value = kotlin.collections.emptySet()
+        idUsers.value = kotlin.collections.emptySet()
     }
 
     fun eventInit(id: Int) = viewModelScope.launch {
