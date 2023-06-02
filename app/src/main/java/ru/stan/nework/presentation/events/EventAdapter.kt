@@ -61,7 +61,7 @@ class ViewHolder(
             tvTime.text = DateHelper.convertDateAndTime(event.published)
             tvContent.text = event.content
             tvLinkContent.text = event.link
-            tvDatetimeContent.text = event.datetime
+            tvDatetimeContent.text = DateHelper.convertDateAndTime(event.datetime)
             tvCountLiked.text = event.likeOwnerIds.size.toString()
             tvCountUsers.text = event.speakerIds.size.toString()
 
