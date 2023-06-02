@@ -1,18 +1,14 @@
 package ru.stan.nework.presentation
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.view.Window
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailabilityLight
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
@@ -70,8 +66,6 @@ class MainActivity : AppCompatActivity() {
                 .show()
         }
 
-        firebaseMessaging.token.addOnSuccessListener {
-            println("TOKEN - $it")
-        }
+        firebaseMessaging.token.addOnSuccessListener { println("TOKEN - $it") }
     }
 }

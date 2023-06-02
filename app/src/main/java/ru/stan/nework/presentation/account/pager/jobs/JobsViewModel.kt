@@ -1,32 +1,21 @@
 package ru.stan.nework.presentation.account.pager.jobs
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import ru.stan.nework.domain.models.network.NetworkState
 import ru.stan.nework.domain.models.network.job.Job
 import ru.stan.nework.domain.usecase.jobs.GetMyJobsUseCase
-import ru.stan.nework.providers.network.AppAuth
+import ru.stan.nework.utils.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class JobsViewModel @Inject constructor(
     private val getMyJobsUseCase: GetMyJobsUseCase,
-) : ViewModel() {
-
-    private val _errorMessage = MutableSharedFlow<String>()
-    val errorMessage = _errorMessage.asSharedFlow()
-
-    private val _isLoading = MutableStateFlow<Boolean>(false)
-    val isLoading = _isLoading.asStateFlow()
+) : BaseViewModel() {
 
     val jobs: StateFlow<List<Job>> =
         getJobsList().stateIn(
@@ -38,7 +27,7 @@ class JobsViewModel @Inject constructor(
     private fun getJobsList() = flow {
         when (val response = getMyJobsUseCase.invoke()) {
             is NetworkState.Error -> _errorMessage.emit(response.throwable)
-            is NetworkState.Loading -> TODO("not implemented yet")
+            is NetworkState.Loading -> _isLoading.emit(true)
             is NetworkState.Success -> emit(response.success)
         }
     }

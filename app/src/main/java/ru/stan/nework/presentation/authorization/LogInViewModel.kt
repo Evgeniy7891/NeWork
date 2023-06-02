@@ -2,20 +2,20 @@ package ru.stan.nework.presentation.authorization
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.stan.nework.domain.models.network.NetworkState
 import ru.stan.nework.domain.usecase.auth.AuthUserUseCase
 import ru.stan.nework.providers.network.AppAuth
+import ru.stan.nework.utils.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class LogInViewModel @Inject constructor(
     private val authUserUseCase: AuthUserUseCase,
     private val auth: AppAuth
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val _entrance = MutableLiveData<Boolean>()
     val entrance: LiveData<Boolean>
@@ -28,7 +28,7 @@ class LogInViewModel @Inject constructor(
                 _entrance.value = true
             }
             is NetworkState.Error -> _entrance.value = false
-            else -> {}
+            else -> _isLoading.emit(true)
         }
     }
 }

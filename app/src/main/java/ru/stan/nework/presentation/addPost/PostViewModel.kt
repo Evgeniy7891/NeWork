@@ -3,10 +3,8 @@ package ru.stan.nework.presentation.addPost
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import ru.stan.nework.domain.models.network.NetworkState
@@ -16,6 +14,7 @@ import ru.stan.nework.domain.models.ui.post.MediaModel
 import ru.stan.nework.domain.usecase.post.AddMultiMediaUseCase
 import ru.stan.nework.domain.usecase.post.AddPostUseCase
 import ru.stan.nework.domain.usecase.post.GetPostByIdUseCase
+import ru.stan.nework.utils.BaseViewModel
 import java.io.File
 import javax.inject.Inject
 
@@ -33,7 +32,7 @@ class PostViewModel @Inject constructor(
     private val addPostUseCase: AddPostUseCase,
     private val addMultiMediaUseCase: AddMultiMediaUseCase,
     private val getPostByIdUseCase: GetPostByIdUseCase
-) : ViewModel() {
+) : BaseViewModel() {
 
     val newPost: MutableLiveData<PostRequest> = MutableLiveData(editedPost)
 
@@ -41,30 +40,20 @@ class PostViewModel @Inject constructor(
     val media: LiveData<MediaModel>
         get() = _media
 
-    private val _errorMessage = MutableSharedFlow<String>()
-    val errorMessage = _errorMessage.asSharedFlow()
-
-    private val _isLoading = MutableStateFlow<Boolean>(false)
-    val isLoading = _isLoading.asStateFlow()
-
     fun createPost(content: String) {
         newPost.value = newPost.value?.copy(content = content)
         val post = newPost.value!!
         viewModelScope.launch {
             when (val response = addPostUseCase.invoke(post)) {
-                is NetworkState.Success -> {
-                    deleteEditPost()
-                }
-                is NetworkState.Error -> throw RuntimeException("Error ${response.throwable}")
-                else -> {}
+                is NetworkState.Success -> { deleteEditPost() }
+                is NetworkState.Error -> _errorMessage.emit(response.throwable)
+                else -> _isLoading.emit(true)
             }
         }
     }
-
     fun changeMedia(uri: Uri?, file: File?, type: AttachmentType?) {
         _media.value = MediaModel(uri, file, type)
     }
-
     fun addMediaToPost(
         type: AttachmentType,
         file: MultipartBody.Part,
@@ -73,10 +62,9 @@ class PostViewModel @Inject constructor(
             when (val response = addMultiMediaUseCase.invoke(type, file)) {
                 is NetworkState.Success -> {
                     newPost.value = newPost.value?.copy(attachment = response.success)
-                    println("ViewModel addMedia - ${response.success}")
                 }
-                is NetworkState.Error -> throw RuntimeException("Error ${response.throwable}")
-                else -> {}
+                is NetworkState.Error -> _errorMessage.emit(response.throwable)
+                else -> _isLoading.emit(true)
             }
         }
     }

@@ -8,14 +8,11 @@ import androidx.core.view.isVisible
 import androidx.navigation.Navigation
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.stan.nework.R
-import ru.stan.nework.data.room.entity.EventEntity
 import ru.stan.nework.databinding.ItemEventBinding
 import ru.stan.nework.domain.models.ui.event.Event
-import ru.stan.nework.domain.models.ui.post.Post
 
 interface OnListener {
     fun getUsers(listId: List<Int>) {}
@@ -72,11 +69,8 @@ class ViewHolder(
 
             var liker = event.likedByMe
 
-            if (liker) {
-                ibLiked.setImageResource(R.drawable.ic_liked_full)
-            } else {
-                ibLiked.setImageResource(R.drawable.ic_liked)
-            }
+            if (liker) { ibLiked.setImageResource(R.drawable.ic_liked_full)
+            } else { ibLiked.setImageResource(R.drawable.ic_liked) }
 
             ibLiked.setOnClickListener {
                 if (!liker) {
@@ -117,12 +111,10 @@ class ViewHolder(
                                 onClickListener.onRemove(event)
                                 true
                             }
-
                             R.id.edit -> {
                                 onClickListener.onEdit(event)
                                 true
                             }
-
                             else -> false
                         }
                     }
@@ -132,12 +124,10 @@ class ViewHolder(
     }
 }
 
-
 class EventDiffCallback : DiffUtil.ItemCallback<Event>() {
     override fun areItemsTheSame(oldItem: Event, newItem: Event): Boolean {
         return oldItem.id == newItem.id
     }
-
     override fun areContentsTheSame(oldItem: Event, newItem: Event): Boolean {
         return oldItem == newItem
     }

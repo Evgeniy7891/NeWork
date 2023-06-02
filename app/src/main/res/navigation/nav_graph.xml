@@ -53,10 +53,12 @@
         <action
             android:id="@+id/action_postFragment_to_usersFragment"
             app:destination="@id/usersFragment"
-            app:popUpToInclusive="false"/>
+            app:popUpTo="@id/postFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_postFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/usersFragment"
@@ -65,7 +67,9 @@
         tools:layout="@layout/fragment_users" >
         <action
             android:id="@+id/action_usersFragment_to_postFragment"
-            app:destination="@id/postFragment" />
+            app:destination="@id/postFragment"
+            app:popUpTo="@id/usersFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <dialog
         android:id="@+id/usersBottomSheetFragment"

@@ -1,38 +1,29 @@
 package ru.stan.nework.presentation.account.pager.wall
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
-import ru.stan.nework.R
-import ru.stan.nework.databinding.FragmentHomeBinding
 import ru.stan.nework.databinding.FragmentWallBinding
-import ru.stan.nework.domain.models.ui.post.Post
-import ru.stan.nework.presentation.home.HomeViewModel
-import ru.stan.nework.presentation.home.PostAdapter
+import ru.stan.nework.utils.BaseFragment
+
 @AndroidEntryPoint
-class WallFragment : Fragment() {
+class WallFragment : BaseFragment<FragmentWallBinding>() {
 
-    private lateinit var viewModel: WallViewModel
+    override fun viewBindingInflate(): FragmentWallBinding = FragmentWallBinding.inflate(layoutInflater)
+
+    private val viewModel: WallViewModel by viewModels()
+
     private lateinit var wallAdapter: WallAdapter
-    private var _binding: FragmentWallBinding? = null
-    private val binding get() = _binding ?: throw IllegalStateException("Cannot access view")
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentWallBinding.inflate(layoutInflater, container, false)
-        viewModel = ViewModelProvider(this)[WallViewModel::class.java]
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         initWall()
         initAdapter()
-        return binding.root
     }
     private fun initWall() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
@@ -41,16 +32,8 @@ class WallFragment : Fragment() {
             }
         }
     }
-
     private fun initAdapter() {
-        wallAdapter = WallAdapter(object : OnListener{
-            override fun getUsers(listId: List<Int>) {
-            }
-            override fun onRemove(post: Post) {
-            }
-            override fun onEdit(post: Post) {
-            }
-        })
+        wallAdapter = WallAdapter()
         binding.rvListPosts.adapter = wallAdapter
         val linearLayout = LinearLayoutManager(requireContext())
         linearLayout.reverseLayout = true
@@ -59,10 +42,4 @@ class WallFragment : Fragment() {
             WallAdapter.VIEW_TYPE, WallAdapter.MAX_POOL_SIZE
         )
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
 }

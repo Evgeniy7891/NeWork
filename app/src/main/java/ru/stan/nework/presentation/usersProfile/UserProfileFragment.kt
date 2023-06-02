@@ -1,11 +1,8 @@
 package ru.stan.nework.presentation.usersProfile
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -15,33 +12,32 @@ import kotlinx.coroutines.flow.collectLatest
 import ru.stan.nework.R
 import ru.stan.nework.databinding.FragmentUserProfileBinding
 import ru.stan.nework.presentation.usersProfile.pager.PagerUsersAdapter
-import ru.stan.nework.presentation.usersProfile.pager.jobs.UserJobsViewModel
+import ru.stan.nework.utils.BaseFragment
 
 @AndroidEntryPoint
-class UserProfileFragment : Fragment() {
+class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>() {
 
-   private lateinit var viewModel: UserProfileViewModel
+    override fun viewBindingInflate(): FragmentUserProfileBinding =
+        FragmentUserProfileBinding.inflate(layoutInflater)
 
-    private var _binding: FragmentUserProfileBinding? = null
-    private val binding get() = _binding ?: throw IllegalStateException("Cannot access view")
+    private val viewModel: UserProfileViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentUserProfileBinding.inflate(layoutInflater, container, false)
-        viewModel = ViewModelProvider(this)[UserProfileViewModel::class.java]
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         initial()
         initUserInfo()
+        initClick()
+    }
+
+    private fun initClick() {
         binding.ibBack.setOnClickListener {
             findNavController().popBackStack()
         }
-        return binding.root
     }
 
     private fun initial() {
         val id = arguments?.getLong("UserID")
-        println("ID - $id")
         if (id != null) {
             viewModel.getUser(id)
         }
@@ -53,10 +49,11 @@ class UserProfileFragment : Fragment() {
             }
         }.attach()
     }
+
     private fun initUserInfo() {
         lifecycleScope.launchWhenCreated {
             viewModel.user.collectLatest { user ->
-               binding.tvAuthor.text = user.name
+                binding.tvAuthor.text = user.name
                 Glide.with(binding.ivAvatar)
                     .load(user.avatar)
                     .placeholder(R.drawable.ic_avatar)
@@ -65,10 +62,5 @@ class UserProfileFragment : Fragment() {
                     .into(binding.ivAvatar)
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

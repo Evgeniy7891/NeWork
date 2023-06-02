@@ -2,11 +2,8 @@ package ru.stan.nework.presentation.account
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -16,12 +13,13 @@ import kotlinx.coroutines.flow.collectLatest
 import ru.stan.nework.R
 import ru.stan.nework.databinding.FragmentAccountBinding
 import ru.stan.nework.presentation.account.pager.PagerAdapter
-import ru.stan.nework.presentation.usersProfile.UserProfileViewModel
 import ru.stan.nework.providers.network.AppAuth
+import ru.stan.nework.utils.BaseFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AccountFragment : Fragment() {
+class AccountFragment : BaseFragment<FragmentAccountBinding>() {
+    override fun viewBindingInflate() = FragmentAccountBinding.inflate(layoutInflater)
 
     @Inject
     lateinit var prefs: SharedPreferences
@@ -29,27 +27,14 @@ class AccountFragment : Fragment() {
     @Inject
     lateinit var appAuth: AppAuth
 
+    private val viewModel: AccountViewModel by viewModels()
 
-    private lateinit var viewModel: AccountViewModel
-    private var _binding: FragmentAccountBinding? = null
-    private val binding get() = _binding ?: throw IllegalStateException("Cannot access view")
-
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentAccountBinding.inflate(layoutInflater, container, false)
-        viewModel = ViewModelProvider(this)[AccountViewModel::class.java]
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initial()
         initInfo()
-        binding.ibExit.setOnClickListener {
-        appAuth.removeAuth()
-            findNavController().navigate(R.id.action_accountFragment_to_signInFragment)
-        }
-        return binding.root
+        exitForAccount()
     }
-
     private fun initial() {
         binding.viewPager.adapter = PagerAdapter(requireActivity())
 
@@ -61,9 +46,8 @@ class AccountFragment : Fragment() {
             }
         }.attach()
     }
-
     private fun initInfo(){
-        viewModel.data.observe(this) {auth ->
+        viewModel.data.observe(viewLifecycleOwner) {auth ->
             viewModel.getUser(auth.id)
             viewLifecycleOwner.lifecycleScope.launchWhenCreated {
                 viewModel.user.collectLatest { user->
@@ -78,10 +62,10 @@ class AccountFragment : Fragment() {
             }
         }
     }
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun exitForAccount() {
+        binding.ibExit.setOnClickListener {
+            appAuth.removeAuth()
+            findNavController().navigate(R.id.action_accountFragment_to_signInFragment)
+        }
     }
 }

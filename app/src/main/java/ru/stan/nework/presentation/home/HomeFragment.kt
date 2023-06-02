@@ -3,15 +3,11 @@ package ru.stan.nework.presentation.home
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,35 +16,27 @@ import ru.stan.nework.R
 import ru.stan.nework.databinding.FragmentHomeBinding
 import ru.stan.nework.domain.models.ui.post.Post
 import ru.stan.nework.utils.BOTTONMENU
+import ru.stan.nework.utils.BaseFragment
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment : BaseFragment<FragmentHomeBinding>() {
+    override fun viewBindingInflate(): FragmentHomeBinding = FragmentHomeBinding.inflate(layoutInflater)
 
     private lateinit var viewModel: HomeViewModel
-    private lateinit var postAdapter: PostAdapter
-    private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding ?: throw IllegalStateException("Cannot access view")
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
-        BOTTONMENU.isVisible = true
+    private lateinit var postAdapter: PostAdapter
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+
+        BOTTONMENU.isVisible = true
+
         initAdapter()
         initPosts()
         setupClickListener()
-
-//        postAdapter.loadStateFlow
-//        lifecycleScope.launchWhenCreated {
-//            postAdapter.loadStateFlow.collectLatest {
-//                binding.swipeRefresh.isRefreshing = it.refresh is LoadState.Loading
-//            }
-//        }
-
-        return binding.root
     }
 
     private fun initPosts() {
@@ -89,12 +77,12 @@ class HomeFragment : Fragment() {
             }
 
             override fun onRemove(post: Post) {
-                post.id?.toLong()?.let { viewModel.deletePost(it) }
+                post.id.toLong().let { viewModel.deletePost(it) }
             }
 
             override fun onEdit(post: Post) {
                 val bundle = Bundle()
-                post.id?.let { bundle.putInt("POST", it) }
+                post.id.let { bundle.putInt("POST", it) }
                 findNavController().navigate(R.id.action_homeFragment_to_postFragment, bundle)
             }
         })
@@ -113,20 +101,14 @@ class HomeFragment : Fragment() {
 
     private fun setupClickListener() {
         onLike = { post ->
-            post.id?.let {
+            post.id.let {
                 viewModel.likeById(it.toLong())
             }
         }
         disLike = { post ->
-            post.id?.let {
+            post.id.let {
                 viewModel.deleteLike(it.toLong())
             }
         }
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
 }

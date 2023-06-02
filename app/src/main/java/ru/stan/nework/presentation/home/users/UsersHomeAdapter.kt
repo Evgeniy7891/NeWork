@@ -1,9 +1,7 @@
 package ru.stan.nework.presentation.home.users
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.stan.nework.R
@@ -27,7 +25,6 @@ class UsersHomeAdapter(private val listUser: List<UserUI>):
     override fun getItemCount(): Int {
         return listUser.size
     }
-
 
     class ViewHolder(
         private val binding: ItemHomeUsersBinding

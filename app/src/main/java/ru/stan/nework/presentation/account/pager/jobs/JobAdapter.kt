@@ -47,10 +47,6 @@ class JobViewHolder(
             tvEndName.text =
                 if (job.finish == null) context.getString(R.string.job_now)
                 else DateHelper.convertDate(job.finish).substring(0, 10)
-
-//            textViewLinkCardJob.visibility =
-//                if (job.link == null) View.GONE else View.VISIBLE
-
             tvLinkName.text = job.link
         }
     }

@@ -1,13 +1,8 @@
 package ru.stan.nework.presentation.addEvent
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ru.stan.nework.domain.models.network.NetworkState
 import ru.stan.nework.domain.models.network.event.EventRequest
@@ -17,6 +12,7 @@ import ru.stan.nework.domain.models.ui.user.UserUI
 import ru.stan.nework.domain.usecase.events.AddEventUseCase
 import ru.stan.nework.domain.usecase.events.GetEventByIdUseCase
 import ru.stan.nework.domain.usecase.post.GetMarkedUserUseCase
+import ru.stan.nework.utils.BaseViewModel
 import javax.inject.Inject
 
 val editedEvent = EventRequest(
@@ -35,26 +31,24 @@ class NewEventViewModel @Inject constructor(
     private val addEventUseCase: AddEventUseCase,
     private val getEventByIdUseCase: GetEventByIdUseCase,
     private val getMarkedUserUseCase: GetMarkedUserUseCase
-) : ViewModel() {
+) : BaseViewModel() {
 
     val newEvent: MutableLiveData<EventRequest> = MutableLiveData(editedEvent)
+
     val speakersData: MutableLiveData<MutableList<User>> = MutableLiveData()
 
-    private val _errorMessage = MutableSharedFlow<String>()
-    val errorMessage = _errorMessage.asSharedFlow()
+    private val _idUsers = MutableLiveData<Set<UserUI>>()
+    val idUsers: MutableLiveData<Set<UserUI>>
+        get() = _idUsers
 
-    private val _isLoading = MutableStateFlow<Boolean>(false)
-    val isLoading = _isLoading.asStateFlow()
+    private var mentions = mutableSetOf<UserUI>()
 
     fun createEvent(event: EventRequest) {
         viewModelScope.launch {
             when (val response = addEventUseCase.invoke(event)) {
-                is NetworkState.Success -> {
-                    deleteEditEvent()
-                }
-
+                is NetworkState.Success ->  deleteEditEvent()
                 is NetworkState.Error -> throw RuntimeException("Error ${response.throwable}")
-                else -> {}
+                else -> _isLoading.emit(true)
             }
         }
     }
@@ -81,16 +75,10 @@ class NewEventViewModel @Inject constructor(
         speakersData.postValue(speakers)
     }
 
-    private val _idUsers = MutableLiveData<Set<UserUI>>()
-    val idUsers: MutableLiveData<Set<UserUI>>
-        get() = _idUsers
-
-    private var mentions = mutableSetOf<UserUI>()
-
     fun getUser(id: Long) = viewModelScope.launch {
         when (val response = getMarkedUserUseCase.invoke(id)) {
             is NetworkState.Error -> _errorMessage.emit(response.throwable)
-            is NetworkState.Loading -> println("VIEWMODEL USER BOTTOM")
+            is NetworkState.Loading -> _isLoading.emit(true)
             is NetworkState.Success -> {
                 mentions.add(response.success)
                 addUserToList()
@@ -103,14 +91,14 @@ class NewEventViewModel @Inject constructor(
     }
 
     fun emptyList() {
-        _idUsers.value = kotlin.collections.emptySet()
-        idUsers.value = kotlin.collections.emptySet()
+        _idUsers.value = emptySet()
+        idUsers.value = emptySet()
     }
 
     fun eventInit(id: Int) = viewModelScope.launch {
         when (val response = getEventByIdUseCase.invoke(id.toLong())) {
             is NetworkState.Error -> _errorMessage.emit(response.throwable)
-            is NetworkState.Loading -> TODO("not implemented yet")
+            is NetworkState.Loading -> _isLoading.emit(true)
             is NetworkState.Success -> {
                 newEvent.value = response.success.id.let { id ->
                     response.success.content?.let { content ->

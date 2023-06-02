@@ -3,36 +3,36 @@ package ru.stan.nework.presentation.addPost
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import com.github.dhaval2404.imagepicker.ImagePicker
-import com.github.dhaval2404.imagepicker.constant.ImageProvider
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.net.toFile
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.LoadState
 import com.bumptech.glide.Glide
+import com.github.dhaval2404.imagepicker.ImagePicker
+import com.github.dhaval2404.imagepicker.constant.ImageProvider
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import ru.stan.nework.R
 import ru.stan.nework.databinding.FragmentPostBinding
 import ru.stan.nework.domain.models.ui.post.AttachmentType
-import ru.stan.nework.domain.models.ui.post.MediaModel
 import ru.stan.nework.utils.BOTTONMENU
+import ru.stan.nework.utils.BaseFragment
 import ru.stan.nework.utils.MediaHelper
 
 @AndroidEntryPoint
-class PostFragment : Fragment() {
+class PostFragment : BaseFragment<FragmentPostBinding>() {
+
+    override fun viewBindingInflate(): FragmentPostBinding =
+        FragmentPostBinding.inflate(layoutInflater)
 
     private val viewModel: PostViewModel by viewModels()
 
@@ -40,7 +40,11 @@ class PostFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             when (it.resultCode) {
                 ImagePicker.RESULT_ERROR -> {
-                    Toast.makeText(requireContext(), "Image pick error", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Ошибка выбора изображения",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 
                 else -> {
@@ -82,23 +86,41 @@ class PostFragment : Fragment() {
 
     private var clicked = false
 
-    private var _binding: FragmentPostBinding? = null
-    private val binding get() = _binding ?: throw IllegalStateException("Cannot access view")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentPostBinding.inflate(layoutInflater, container, false)
         BOTTONMENU.isVisible = false
-        val userId = arguments?.getIntegerArrayList("ID")
-        if (userId != null) {
-            viewModel.addUsrsId(userId)
-        }
-        val postId = arguments?.getInt("POST")
-        if (postId != null) viewModel.postInit(postId)
-
         initPost()
+        initData()
+        initClick()
+        initErrors()
+
+        viewModel.media.observe(viewLifecycleOwner)
+        { mediaModel ->
+            if (mediaModel.uri == null) {
+                return@observe
+            }
+            when (mediaModel.type) {
+                AttachmentType.IMAGE -> {
+                    binding.ivAttachment.setImageURI(mediaModel.uri)
+                }
+
+                AttachmentType.VIDEO -> {}
+                AttachmentType.AUDIO -> {}
+                null -> return@observe
+            }
+        }
+    }
+
+    private fun initErrors() {
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            viewModel.errorMessage.collectLatest {
+                Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun initClick() {
 
         binding.ibBack.setOnClickListener {
             findNavController().popBackStack()
@@ -107,11 +129,15 @@ class PostFragment : Fragment() {
         binding.fbAdd.setOnClickListener {
             onAddButtonClicked()
         }
+
         binding.fbDone.setOnClickListener {
-            viewModel.createPost(binding.etContent.text.toString())
-            Handler(Looper.getMainLooper()).postDelayed({
-                findNavController().popBackStack()
-            }, DELAY_OPEN_NEXT_SCREEN)
+            val text = binding.etContent.text.toString()
+            if (text != "") {
+                viewModel.createPost(binding.etContent.text.toString())
+                Handler(Looper.getMainLooper()).postDelayed({
+                    findNavController().popBackStack()
+                }, DELAY_OPEN_NEXT_SCREEN)
+            } else initErrors()
         }
 
         binding.fbAttach.setOnClickListener {
@@ -126,35 +152,20 @@ class PostFragment : Fragment() {
             ImagePicker.Builder(this).cameraOnly().maxResultSize(2048, 2048)
                 .createIntent(photoLauncher::launch)
         }
-        viewModel.media.observe(viewLifecycleOwner)
-        { mediaModel ->
-            if (mediaModel.uri == null) {
-                return@observe
-            }
-            when (mediaModel.type) {
-                AttachmentType.IMAGE -> {
-                    binding.ivAttachment.setImageURI(mediaModel.uri)
-                }
-
-                AttachmentType.VIDEO -> {
-
-                }
-
-                AttachmentType.AUDIO -> {
-
-                }
-
-                null -> return@observe
-            }
-        }
 
         binding.ibAddUrers.setOnClickListener {
             findNavController().navigate(R.id.action_postFragment_to_usersFragment)
         }
-
-        return binding.root
     }
 
+    private fun initData() {
+        val userId = arguments?.getIntegerArrayList("ID")
+        if (userId != null) {
+            viewModel.addUsrsId(userId)
+        }
+        val postId = arguments?.getInt("POST")
+        if (postId != null) viewModel.postInit(postId)
+    }
 
     private fun onAddButtonClicked() {
         setVisibility(clicked)
@@ -251,7 +262,9 @@ class PostFragment : Fragment() {
             }
         }
     }
+
     companion object {
-        private const val DELAY_OPEN_NEXT_SCREEN = 2000L
+        private const val DELAY_OPEN_NEXT_SCREEN = 500L
     }
 }
+

@@ -3,28 +3,20 @@ package ru.stan.nework.presentation.account.pager.wall
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import ru.stan.nework.R
 import ru.stan.nework.databinding.ItemWallBinding
 import ru.stan.nework.domain.models.ui.post.AttachmentType
 import ru.stan.nework.domain.models.ui.post.Post
 import ru.stan.nework.utils.MediaHelper
 
-interface OnListener {
-    fun getUsers(listId: List<Int>) {}
-    fun onEdit(post: Post) {}
-    fun onRemove(post: Post) {}
-}
-
-class WallAdapter(private val onListener: OnListener) :
+class WallAdapter :
     ListAdapter<Post, ViewHolder>(PostDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemWallBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding, onListener)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -40,7 +32,6 @@ class WallAdapter(private val onListener: OnListener) :
 
 class ViewHolder(
     private val binding: ItemWallBinding,
-    private val onClickListener: OnListener
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(post: Post) {

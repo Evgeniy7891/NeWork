@@ -5,41 +5,37 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import ru.stan.nework.databinding.FragmentJobsBinding
+import ru.stan.nework.utils.BaseFragment
 
 @AndroidEntryPoint
-class JobsFragment : Fragment() {
+class JobsFragment : BaseFragment<FragmentJobsBinding>(){
+    override fun viewBindingInflate(): FragmentJobsBinding = FragmentJobsBinding.inflate(layoutInflater)
 
-    private lateinit var viewModel: JobsViewModel
+    private val viewModel: JobsViewModel by viewModels()
+
     private lateinit var jobAdapter: JobAdapter
-    private var _binding: FragmentJobsBinding? = null
-    private val binding get() = _binding ?: throw IllegalStateException("Cannot access view")
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentJobsBinding.inflate(layoutInflater, container, false)
-        viewModel = ViewModelProvider(this)[JobsViewModel::class.java]
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         initWall()
         initAdapter()
-        return binding.root
     }
 
     private fun initWall() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
             viewModel.jobs.collectLatest { jobs ->
-                println("JOBS - $jobs")
                 jobAdapter.submitList(jobs)
             }
         }
     }
-
     private fun initAdapter() {
         jobAdapter = JobAdapter()
         binding.rvJobs.adapter = jobAdapter
@@ -47,10 +43,4 @@ class JobsFragment : Fragment() {
         linearLayout.reverseLayout = true
         binding.rvJobs.layoutManager = linearLayout
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
 }

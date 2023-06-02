@@ -1,40 +1,33 @@
 package ru.stan.nework.presentation.addEvent.addSpeakers
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import ru.stan.nework.R
 import ru.stan.nework.databinding.FragmentSpeakersBinding
-import ru.stan.nework.databinding.FragmentUsersBinding
 import ru.stan.nework.domain.models.ui.user.UserUI
 import ru.stan.nework.presentation.addPost.CheckedListener
 import ru.stan.nework.presentation.addPost.UsersAdapter
-import ru.stan.nework.presentation.addPost.addUsers.UsersViewModel
-import java.util.ArrayList
+import ru.stan.nework.utils.BaseFragment
 
 @AndroidEntryPoint
-class SpeakersFragment : Fragment() {
+class SpeakersFragment : BaseFragment<FragmentSpeakersBinding>() {
+    override fun viewBindingInflate(): FragmentSpeakersBinding = FragmentSpeakersBinding.inflate(layoutInflater)
 
     private val viewModel: SpeakersViewModel by viewModels()
 
-    private var _binding: FragmentSpeakersBinding? = null
-    private val binding get() = _binding ?: throw IllegalStateException("Cannot access view")
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentSpeakersBinding.inflate(layoutInflater, container, false)
         initUsers()
+        addUser()
+    }
+
+    private fun addUser() {
         binding.btnAddUser.setOnClickListener {
             viewModel.addUsers()
             viewModel.idUsers.observe(viewLifecycleOwner) { users ->
@@ -43,7 +36,6 @@ class SpeakersFragment : Fragment() {
                 findNavController().navigate(R.id.action_speakersFragment_to_newEventFragment, bundle)
             }
         }
-        return binding.root
     }
 
     private fun initUsers() {
@@ -59,12 +51,10 @@ class SpeakersFragment : Fragment() {
             override fun checked(id: Int) {
                 viewModel.check(id)
             }
-
             override fun unChecked(id: Int) {
                 viewModel.uncheck(id)
             }
         })
-        println("LIST - $users")
         binding.rvUsers.adapter = adapter
         binding.rvUsers.recycledViewPool.setMaxRecycledViews(
             UsersAdapter.VIEW_TYPE, UsersAdapter.MAX_POOL_SIZE
@@ -75,10 +65,5 @@ class SpeakersFragment : Fragment() {
                 binding.rvUsers.smoothScrollToPosition(0)
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

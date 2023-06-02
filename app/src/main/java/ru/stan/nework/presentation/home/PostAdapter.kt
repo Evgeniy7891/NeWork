@@ -9,7 +9,6 @@ import androidx.core.view.isVisible
 import androidx.navigation.Navigation
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.stan.nework.R
@@ -57,8 +56,8 @@ class ViewHolder(
             tvAuthor.text = post.author
             tvTime.text = post.published
             tvContent.text = post.content
-            tvCountLiked.text = post.likeOwnerIds?.size.toString()
-            tvCountUsers.text = post.mentionIds?.size.toString()
+            tvCountLiked.text = post.likeOwnerIds.size.toString()
+            tvCountUsers.text = post.mentionIds.size.toString()
             var liker = post.likedByMe
             if (liker) {
                 ibLiked.setImageResource(R.drawable.ic_liked_full)
@@ -122,10 +121,10 @@ class ViewHolder(
                     AttachmentType.VIDEO -> {
                         exo.visibility = View.VISIBLE
                         ivAtachment.visibility = View.GONE
-                        val media = post.attachment.url?.let { MediaHelper(exo, it) }
-                        media?.create()
+                        val media = post.attachment.url.let { MediaHelper(exo, it) }
+                        media.create()
                         exo.setOnClickListener {
-                            media?.onPlay()
+                            media.onPlay()
                         }
                     }
                     AttachmentType.IMAGE -> {
@@ -139,10 +138,10 @@ class ViewHolder(
                     AttachmentType.AUDIO -> {
                         exo.visibility = View.VISIBLE
                         ivAtachment.visibility = View.GONE
-                        val media = post.attachment.url?.let { MediaHelper(exo, it) }
-                        media?.create()
+                        val media = post.attachment.url.let { MediaHelper(exo, it) }
+                        media.create()
                         exo.setOnClickListener {
-                            media?.onPlay()
+                            media.onPlay()
                         }
                     }
                     null -> {
@@ -159,10 +158,8 @@ class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
     override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
         return oldItem.id == newItem.id
     }
-
     override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
         return oldItem == newItem
     }
-
     override fun getChangePayload(oldItem: Post, newItem: Post): Any = Unit
 }

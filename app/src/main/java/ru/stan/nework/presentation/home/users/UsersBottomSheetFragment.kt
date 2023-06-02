@@ -1,31 +1,18 @@
 package ru.stan.nework.presentation.home.users
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import ru.stan.nework.databinding.FragmentUsersBottomSheetBinding
 import ru.stan.nework.domain.models.ui.user.UserUI
-import ru.stan.nework.presentation.users.UserAdapter
+import ru.stan.nework.utils.BaseDialogFragment
 
 @AndroidEntryPoint
-class UsersBottomSheetFragment :  BottomSheetDialogFragment(){
+class UsersBottomSheetFragment :  BaseDialogFragment<FragmentUsersBottomSheetBinding>(){
 
     private val viewModel: UsersBottomSheetViewModel by viewModels()
-
-    private var _binding: FragmentUsersBottomSheetBinding? = null
-    private val binding get() = _binding ?: throw IllegalStateException("Cannot access view")
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentUsersBottomSheetBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
+    override fun viewBindingInflate(): FragmentUsersBottomSheetBinding = FragmentUsersBottomSheetBinding.inflate(layoutInflater)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,11 +34,6 @@ class UsersBottomSheetFragment :  BottomSheetDialogFragment(){
     private fun initAdapter(users: List<UserUI>) {
         val adapter = UsersHomeAdapter(users)
         binding.rvUsers.adapter = adapter
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     override fun onStop() {
