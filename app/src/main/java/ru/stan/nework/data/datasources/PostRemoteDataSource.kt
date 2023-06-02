@@ -1,13 +1,11 @@
 package ru.stan.nework.data.datasources
 
 import okhttp3.MultipartBody
-import retrofit2.http.Path
 import ru.stan.nework.domain.models.network.post.Attachment
 import ru.stan.nework.domain.models.network.post.PostModel
 import ru.stan.nework.domain.models.network.post.PostRequest
 import ru.stan.nework.domain.models.network.user.User
 import ru.stan.nework.domain.models.ui.post.AttachmentType
-import ru.stan.nework.domain.models.ui.post.Post
 
 interface PostRemoteDataSource {
     suspend fun getPosts() : List<PostModel>

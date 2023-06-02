@@ -13,7 +13,7 @@
         android:id="@+id/tv_time"
         style="@style/TextStylePoppins"
         android:layout_marginStart="16dp"
-        android:text="2023-03-23 17-37"
+        android:text="@string/test_time_2"
         android:textSize="11sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -13,6 +13,7 @@ import ru.stan.nework.R
 import ru.stan.nework.databinding.FragmentUserProfileBinding
 import ru.stan.nework.presentation.usersProfile.pager.PagerUsersAdapter
 import ru.stan.nework.utils.BaseFragment
+import ru.stan.nework.utils.ID
 
 @AndroidEntryPoint
 class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>() {
@@ -37,7 +38,7 @@ class UserProfileFragment : BaseFragment<FragmentUserProfileBinding>() {
     }
 
     private fun initial() {
-        val id = arguments?.getLong("UserID")
+        val id = arguments?.getLong(ID)
         if (id != null) {
             viewModel.getUser(id)
         }

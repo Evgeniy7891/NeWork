@@ -13,6 +13,8 @@ import ru.stan.nework.databinding.FragmentEventsWallBinding
 import ru.stan.nework.domain.models.ui.event.Event
 import ru.stan.nework.utils.BOTTONMENU
 import ru.stan.nework.utils.BaseFragment
+import ru.stan.nework.utils.EVENTS
+import ru.stan.nework.utils.USERS
 
 @AndroidEntryPoint
 class EventsWallFragment : BaseFragment<FragmentEventsWallBinding>() {
@@ -42,13 +44,13 @@ class EventsWallFragment : BaseFragment<FragmentEventsWallBinding>() {
     }
 
     private fun initEvents() {
-        eventAdapter = EventAdapter(object : ru.stan.nework.presentation.events.OnListener {
+        eventAdapter = EventAdapter(object : OnListener {
             override fun onRemove(event: Event) {
                 event.id.toLong().let { viewModel.removeEvent(it) }
             }
             override fun onEdit(event: Event) {
                 val bundle = Bundle()
-                event.id.let { bundle.putInt("EVENT", it) }
+                event.id.let { bundle.putInt(EVENTS, it) }
                 findNavController().navigate(R.id.action_eventsWallFragment_to_newEventFragment, bundle)
             }
 
@@ -65,7 +67,7 @@ class EventsWallFragment : BaseFragment<FragmentEventsWallBinding>() {
         }
         users = { listId ->
             val bundle = Bundle()
-            bundle.putIntegerArrayList("ID", listId as ArrayList<Int>?)
+            bundle.putIntegerArrayList(USERS, listId as ArrayList<Int>?)
             findNavController().navigate(
                 R.id.action_eventsWallFragment_to_usersBottomSheetFragment,
                 bundle

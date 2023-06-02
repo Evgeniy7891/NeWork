@@ -13,6 +13,7 @@ import ru.stan.nework.domain.models.ui.user.UserUI
 import ru.stan.nework.presentation.addPost.CheckedListener
 import ru.stan.nework.presentation.addPost.UsersAdapter
 import ru.stan.nework.utils.BaseFragment
+import ru.stan.nework.utils.USERS
 
 @AndroidEntryPoint
 class UsersFragment : BaseFragment<FragmentUsersBinding>() {
@@ -34,7 +35,7 @@ class UsersFragment : BaseFragment<FragmentUsersBinding>() {
             viewModel.addUsers()
             viewModel.idUsers.observe(viewLifecycleOwner) { users ->
                 val bundle = Bundle()
-                bundle.putIntegerArrayList("ID", users as ArrayList<Int>?)
+                bundle.putIntegerArrayList(USERS, users as ArrayList<Int>?)
                 findNavController().navigate(R.id.action_usersFragment_to_postFragment, bundle)
             }
         }

@@ -26,7 +26,7 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/button"
         android:fontFamily="@font/montserrat_medium"
-        android:text="Добавить"
+        android:text="@string/add"
         android:textAllCaps="false"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"

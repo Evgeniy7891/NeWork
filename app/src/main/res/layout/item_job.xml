@@ -10,7 +10,7 @@
         style="@style/TextStyleMonserrat"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="Компания:"
+        android:text="@string/company"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -18,7 +18,7 @@
         android:id="@+id/tv_company_name"
         style="@style/TextStylePoppins"
         android:layout_marginStart="16dp"
-        android:text="Нетология"
+        android:text="@string/test_comp"
         app:layout_constraintStart_toEndOf="@+id/tv_company"
         app:layout_constraintTop_toTopOf="@+id/tv_company" />
 
@@ -26,7 +26,7 @@
         android:id="@+id/tv_position"
         style="@style/TextStyleMonserrat"
         android:layout_marginTop="8dp"
-        android:text="Должность:"
+        android:text="@string/post_jobs"
         app:layout_constraintStart_toStartOf="@+id/tv_company"
         app:layout_constraintTop_toBottomOf="@+id/tv_company" />
 
@@ -34,7 +34,7 @@
         android:id="@+id/tv_position_name"
         style="@style/TextStylePoppins"
         android:layout_marginStart="16dp"
-        android:text="Стажер"
+        android:text="@string/test_post"
         app:layout_constraintStart_toEndOf="@+id/tv_position"
         app:layout_constraintTop_toTopOf="@+id/tv_position" />
 
@@ -43,7 +43,7 @@
         android:id="@+id/tv_start"
         style="@style/TextStyleMonserrat"
         android:layout_marginTop="8dp"
-        android:text="Начало:"
+        android:text="@string/start_jobs"
         app:layout_constraintStart_toStartOf="@+id/tv_position"
         app:layout_constraintTop_toBottomOf="@+id/tv_position" />
 
@@ -59,7 +59,7 @@
         android:id="@+id/tv_end"
         style="@style/TextStyleMonserrat"
         android:layout_marginTop="8dp"
-        android:text="Конец:"
+        android:text="@string/end_jobs"
         app:layout_constraintStart_toStartOf="@+id/tv_start"
         app:layout_constraintTop_toBottomOf="@+id/tv_start" />
 

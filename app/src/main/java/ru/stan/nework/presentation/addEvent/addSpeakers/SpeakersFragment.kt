@@ -13,6 +13,7 @@ import ru.stan.nework.domain.models.ui.user.UserUI
 import ru.stan.nework.presentation.addPost.CheckedListener
 import ru.stan.nework.presentation.addPost.UsersAdapter
 import ru.stan.nework.utils.BaseFragment
+import ru.stan.nework.utils.SPEAKERS
 
 @AndroidEntryPoint
 class SpeakersFragment : BaseFragment<FragmentSpeakersBinding>() {
@@ -32,7 +33,7 @@ class SpeakersFragment : BaseFragment<FragmentSpeakersBinding>() {
             viewModel.addUsers()
             viewModel.idUsers.observe(viewLifecycleOwner) { users ->
                 val bundle = Bundle()
-                bundle.putIntegerArrayList("ID", users as ArrayList<Int>?)
+                bundle.putIntegerArrayList(SPEAKERS, users as ArrayList<Int>?)
                 findNavController().navigate(R.id.action_speakersFragment_to_newEventFragment, bundle)
             }
         }

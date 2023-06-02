@@ -1,16 +1,12 @@
 package ru.stan.nework.data.repository.posts
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.MutableLiveData
-import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import okhttp3.MultipartBody
@@ -27,7 +23,6 @@ import ru.stan.nework.domain.models.ui.post.AttachmentType
 import ru.stan.nework.domain.models.ui.post.Post
 import ru.stan.nework.domain.models.ui.user.UserUI
 import ru.stan.nework.domain.repository.PostRepository
-import ru.stan.nework.presentation.addPost.PostFragment
 import ru.stan.nework.utils.safeApiCall
 import javax.inject.Inject
 

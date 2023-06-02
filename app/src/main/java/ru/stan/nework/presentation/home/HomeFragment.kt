@@ -17,6 +17,8 @@ import ru.stan.nework.databinding.FragmentHomeBinding
 import ru.stan.nework.domain.models.ui.post.Post
 import ru.stan.nework.utils.BOTTONMENU
 import ru.stan.nework.utils.BaseFragment
+import ru.stan.nework.utils.POST
+import ru.stan.nework.utils.USERS
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -51,7 +53,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         postAdapter = PostAdapter(object : OnListener {
             override fun getUsers(listId: List<Int>) {
                 val bundle = Bundle()
-                bundle.putIntegerArrayList("ID", listId as ArrayList<Int>?)
+                bundle.putIntegerArrayList(USERS, listId as ArrayList<Int>?)
                 findNavController().navigate(
                     R.id.action_homeFragment_to_usersBottomSheetFragment,
                     bundle
@@ -68,7 +70,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 }
                 Handler(Looper.getMainLooper()).postDelayed({
                     val bundle = Bundle()
-                    bundle.putIntegerArrayList("ID", listId)
+                    bundle.putIntegerArrayList(USERS, listId)
                     findNavController().navigate(
                         R.id.action_homeFragment_to_usersBottomSheetFragment,
                         bundle
@@ -82,7 +84,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
             override fun onEdit(post: Post) {
                 val bundle = Bundle()
-                post.id.let { bundle.putInt("POST", it) }
+                post.id.let { bundle.putInt(POST, it) }
                 findNavController().navigate(R.id.action_homeFragment_to_postFragment, bundle)
             }
         })

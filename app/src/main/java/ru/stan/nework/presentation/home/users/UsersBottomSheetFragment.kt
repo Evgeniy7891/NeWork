@@ -7,6 +7,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import ru.stan.nework.databinding.FragmentUsersBottomSheetBinding
 import ru.stan.nework.domain.models.ui.user.UserUI
 import ru.stan.nework.utils.BaseDialogFragment
+import ru.stan.nework.utils.USERS
 
 @AndroidEntryPoint
 class UsersBottomSheetFragment :  BaseDialogFragment<FragmentUsersBottomSheetBinding>(){
@@ -16,7 +17,7 @@ class UsersBottomSheetFragment :  BaseDialogFragment<FragmentUsersBottomSheetBin
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val userId = arguments?.getIntegerArrayList("ID")
+        val userId = arguments?.getIntegerArrayList(USERS)
         if (userId != null) {
             initUsers(userId)
         }

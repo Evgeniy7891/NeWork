@@ -21,7 +21,7 @@
         android:id="@+id/tv_name"
         style="@style/TextStyleMonserrat"
         android:layout_marginStart="16dp"
-        android:text="Имя"
+        android:text="@string/your_name"
         app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
         app:layout_constraintStart_toEndOf="@+id/iv_avatar"
         app:layout_constraintTop_toTopOf="@+id/iv_avatar" />

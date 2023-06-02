@@ -7,15 +7,16 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import ru.stan.nework.databinding.FragmentSettingsBinding
 import ru.stan.nework.domain.models.network.job.Job
+import ru.stan.nework.presentation.account.AccountViewModel
 import ru.stan.nework.utils.BaseFragment
 import ru.stan.nework.utils.DateHelper
 
 @AndroidEntryPoint
 class SettingsFragment : BaseFragment<FragmentSettingsBinding>() {
-
-    private val viewModel: SettingsViewModel by viewModels()
     override fun viewBindingInflate(): FragmentSettingsBinding =
         FragmentSettingsBinding.inflate(layoutInflater)
+
+    private val viewModel: AccountViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

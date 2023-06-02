@@ -1,10 +1,8 @@
 package ru.stan.nework.data.datasources
 
-import retrofit2.http.Path
 import ru.stan.nework.domain.models.network.job.Job
 
 interface JobsRemoteDataSource {
-
     suspend fun getJob(id: Long): List<Job>
     suspend fun saveJob(job: Job): Job
     suspend fun removeJob(id: Long)

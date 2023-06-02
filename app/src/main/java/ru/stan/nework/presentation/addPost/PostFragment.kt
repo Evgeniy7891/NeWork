@@ -27,6 +27,7 @@ import ru.stan.nework.domain.models.ui.post.AttachmentType
 import ru.stan.nework.utils.BOTTONMENU
 import ru.stan.nework.utils.BaseFragment
 import ru.stan.nework.utils.MediaHelper
+import ru.stan.nework.utils.USERS
 
 @AndroidEntryPoint
 class PostFragment : BaseFragment<FragmentPostBinding>() {
@@ -159,7 +160,7 @@ class PostFragment : BaseFragment<FragmentPostBinding>() {
     }
 
     private fun initData() {
-        val userId = arguments?.getIntegerArrayList("ID")
+        val userId = arguments?.getIntegerArrayList(USERS)
         if (userId != null) {
             viewModel.addUsrsId(userId)
         }

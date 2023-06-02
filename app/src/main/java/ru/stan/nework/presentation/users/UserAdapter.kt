@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import ru.stan.nework.R
 import ru.stan.nework.databinding.ItemHomeUsersBinding
 import ru.stan.nework.domain.models.ui.user.UserUI
+import ru.stan.nework.utils.ID
 
 class UserAdapter(private val listUser: List<UserUI>):
     RecyclerView.Adapter<UserAdapter.ViewHolder>() {
@@ -29,7 +30,7 @@ class UserAdapter(private val listUser: List<UserUI>):
         holder.itemView.setOnClickListener {
             val id = user.id
             val bundle = Bundle()
-            bundle.putLong("UserID", id.toLong())
+            bundle.putLong(ID, id.toLong())
             Navigation.createNavigateOnClickListener(R.id.action_userFragment_to_userProfileFragment, bundle).onClick(it)
         }
     }

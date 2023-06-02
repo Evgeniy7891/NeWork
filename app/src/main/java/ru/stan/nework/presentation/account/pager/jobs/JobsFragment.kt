@@ -12,13 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import ru.stan.nework.databinding.FragmentJobsBinding
+import ru.stan.nework.presentation.account.AccountViewModel
 import ru.stan.nework.utils.BaseFragment
 
 @AndroidEntryPoint
 class JobsFragment : BaseFragment<FragmentJobsBinding>(){
     override fun viewBindingInflate(): FragmentJobsBinding = FragmentJobsBinding.inflate(layoutInflater)
 
-    private val viewModel: JobsViewModel by viewModels()
+    private val viewModel: AccountViewModel by viewModels()
 
     private lateinit var jobAdapter: JobAdapter
 

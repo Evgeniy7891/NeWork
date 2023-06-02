@@ -14,6 +14,8 @@ import ru.stan.nework.presentation.users.UserAdapter
 import ru.stan.nework.utils.BOTTONMENU
 import ru.stan.nework.utils.BaseFragment
 import ru.stan.nework.utils.DateHelper
+import ru.stan.nework.utils.EVENTS
+import ru.stan.nework.utils.SPEAKERS
 
 @AndroidEntryPoint
 class NewEventFragment : BaseFragment<FragmentNewEventBinding>() {
@@ -32,13 +34,13 @@ class NewEventFragment : BaseFragment<FragmentNewEventBinding>() {
     }
 
     private fun initData() {
-        val userId = arguments?.getIntegerArrayList("ID")
+        val userId = arguments?.getIntegerArrayList(SPEAKERS)
         if (userId != null) {
             viewModel.addUsrsId(userId)
             initUsers(userId)
         }
 
-        val eventId = arguments?.getInt("EVENT")
+        val eventId = arguments?.getInt(EVENTS)
         if (eventId != null) {
             viewModel.eventInit(eventId)
             viewModel.newEvent.observe(viewLifecycleOwner) { event ->

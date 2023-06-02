@@ -40,9 +40,9 @@ class AccountFragment : BaseFragment<FragmentAccountBinding>() {
 
         TabLayoutMediator(binding.tab, binding.viewPager) { tab, pos ->
             when (pos) {
-                0 -> tab.text = "Посты"
+                0 -> tab.text = "Добавить работу"
                 1 -> tab.text = "Работа"
-                2 -> tab.text = "Добавить работу"
+                2 -> tab.text = "Посты"
             }
         }.attach()
     }

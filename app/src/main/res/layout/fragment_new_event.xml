@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Описание события"
+        android:hint="@string/event_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -31,7 +31,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Сайт"
+        android:hint="@string/link"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/til_content">
@@ -51,7 +51,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Дата проведения"
+        android:hint="@string/time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/til_link">
@@ -75,7 +75,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_margin="16dp"
         android:backgroundTint="#33A2C6"
-        android:text="Добавить участников"
+        android:text="@string/speakers"
         android:textAllCaps="false"
         app:cornerRadius="16dp"
         app:layout_constraintEnd_toEndOf="parent"

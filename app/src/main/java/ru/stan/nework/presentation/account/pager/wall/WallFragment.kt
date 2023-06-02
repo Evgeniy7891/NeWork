@@ -6,8 +6,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import ru.stan.nework.databinding.FragmentWallBinding
+import ru.stan.nework.presentation.account.AccountViewModel
 import ru.stan.nework.utils.BaseFragment
 
 @AndroidEntryPoint
@@ -15,7 +15,7 @@ class WallFragment : BaseFragment<FragmentWallBinding>() {
 
     override fun viewBindingInflate(): FragmentWallBinding = FragmentWallBinding.inflate(layoutInflater)
 
-    private val viewModel: WallViewModel by viewModels()
+    private val viewModel: AccountViewModel by viewModels()
 
     private lateinit var wallAdapter: WallAdapter
 
@@ -27,7 +27,7 @@ class WallFragment : BaseFragment<FragmentWallBinding>() {
     }
     private fun initWall() {
         viewLifecycleOwner.lifecycleScope.launchWhenCreated {
-            viewModel.wall.collectLatest { wall ->
+            viewModel.wall.collect { wall ->
                 wallAdapter.submitList(wall)
             }
         }
