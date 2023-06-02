@@ -1,10 +1,8 @@
 package ru.stan.nework.presentation.events
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -13,32 +11,30 @@ import kotlinx.coroutines.flow.collectLatest
 import ru.stan.nework.R
 import ru.stan.nework.databinding.FragmentEventsWallBinding
 import ru.stan.nework.domain.models.ui.event.Event
-import ru.stan.nework.domain.models.ui.post.Post
-import ru.stan.nework.presentation.home.disLike
-import ru.stan.nework.presentation.home.onLike
+import ru.stan.nework.utils.BOTTONMENU
+import ru.stan.nework.utils.BaseFragment
+import ru.stan.nework.utils.EVENTS
+import ru.stan.nework.utils.USERS
 
 @AndroidEntryPoint
-class EventsWallFragment : Fragment() {
+class EventsWallFragment : BaseFragment<FragmentEventsWallBinding>() {
+
+    override fun viewBindingInflate(): FragmentEventsWallBinding = FragmentEventsWallBinding.inflate(layoutInflater)
 
     private lateinit var viewModel: EventsWallViewModel
+
     private lateinit var eventAdapter: EventAdapter
-    private var _binding: FragmentEventsWallBinding? = null
-    private val binding get() = _binding ?: throw IllegalStateException("Cannot access view")
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentEventsWallBinding.inflate(layoutInflater, container, false)
+        BOTTONMENU.isVisible = true
+
         viewModel = ViewModelProvider(this)[EventsWallViewModel::class.java]
+
         initAdapter()
         initEvents()
-        binding.floatingActionButton2.setOnClickListener {
-            findNavController().navigate(R.id.action_eventsWallFragment_to_newEventFragment)
-        }
         setupClickListener()
-        return binding.root
     }
 
     private fun initAdapter() {
@@ -48,13 +44,13 @@ class EventsWallFragment : Fragment() {
     }
 
     private fun initEvents() {
-        eventAdapter = EventAdapter(object : ru.stan.nework.presentation.events.OnListener {
+        eventAdapter = EventAdapter(object : OnListener {
             override fun onRemove(event: Event) {
-                event.id?.toLong()?.let { viewModel.removeEvent(it) }
+                event.id.toLong().let { viewModel.removeEvent(it) }
             }
             override fun onEdit(event: Event) {
                 val bundle = Bundle()
-                event.id?.let { bundle.putInt("EVENT", it) }
+                event.id.let { bundle.putInt(EVENTS, it) }
                 findNavController().navigate(R.id.action_eventsWallFragment_to_newEventFragment, bundle)
             }
 
@@ -66,9 +62,12 @@ class EventsWallFragment : Fragment() {
     }
 
     private fun setupClickListener() {
+        binding.floatingActionButton2.setOnClickListener {
+            findNavController().navigate(R.id.action_eventsWallFragment_to_newEventFragment)
+        }
         users = { listId ->
             val bundle = Bundle()
-            bundle.putIntegerArrayList("ID", listId as ArrayList<Int>?)
+            bundle.putIntegerArrayList(USERS, listId as ArrayList<Int>?)
             findNavController().navigate(
                 R.id.action_eventsWallFragment_to_usersBottomSheetFragment,
                 bundle
@@ -84,9 +83,5 @@ class EventsWallFragment : Fragment() {
                 viewModel.deleteLike(it.toLong())
             }
         }
-    }
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

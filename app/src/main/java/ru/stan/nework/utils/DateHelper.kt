@@ -7,13 +7,14 @@ import android.os.Build
 import android.widget.EditText
 import androidx.annotation.RequiresApi
 import java.text.SimpleDateFormat
+import java.time.Instant
 import java.time.LocalDateTime
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.util.Calendar
 import java.util.GregorianCalendar
 import java.util.Locale
-
-private val calendar = Calendar.getInstance()
 
 object DateHelper {
     fun pickDate(editText: EditText?, context: Context) {
@@ -58,5 +59,15 @@ object DateHelper {
             val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.uuu'Z'", Locale.getDefault())
             editText?.setText(dateFormat.format(result))
         }, startYear, startMonth, startDay).show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun convertDateAndTime(dateAndTime: String): String {
+        return if (dateAndTime == "") {
+            ""
+        } else {
+            val parsedDate = LocalDateTime.parse(dateAndTime, DateTimeFormatter.ISO_DATE_TIME)
+            return parsedDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"))
+        }
     }
 }

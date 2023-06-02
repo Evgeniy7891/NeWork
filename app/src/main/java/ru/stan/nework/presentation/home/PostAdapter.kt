@@ -1,21 +1,24 @@
 package ru.stan.nework.presentation.home
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.navigation.Navigation
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.stan.nework.R
 import ru.stan.nework.databinding.ItemPostBinding
 import ru.stan.nework.domain.models.ui.post.AttachmentType
 import ru.stan.nework.domain.models.ui.post.Post
+import ru.stan.nework.utils.DateHelper
+import ru.stan.nework.utils.ID
 import ru.stan.nework.utils.MediaHelper
 
 interface OnListener {
@@ -36,6 +39,7 @@ class PostAdapter(private val onListener: OnListener) :
         return ViewHolder(binding, onListener)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val post = getItem(position) ?: return
         holder.bind(post)
@@ -52,13 +56,14 @@ class ViewHolder(
     private val onClickListener: OnListener
 ) : RecyclerView.ViewHolder(binding.root) {
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun bind(post: Post) {
         with(binding) {
             tvAuthor.text = post.author
-            tvTime.text = post.published
+            tvTime.text = DateHelper.convertDateAndTime(post.published)
             tvContent.text = post.content
-            tvCountLiked.text = post.likeOwnerIds?.size.toString()
-            tvCountUsers.text = post.mentionIds?.size.toString()
+            tvCountLiked.text = post.likeOwnerIds.size.toString()
+            tvCountUsers.text = post.mentionIds.size.toString()
             var liker = post.likedByMe
             if (liker) {
                 ibLiked.setImageResource(R.drawable.ic_liked_full)
@@ -86,7 +91,7 @@ class ViewHolder(
             tvAuthor.setOnClickListener {
                     val id = post.authorId
                     val bundle = Bundle()
-                    bundle.putLong("UserID", id.toLong())
+                    bundle.putLong(ID, id.toLong())
                     Navigation.createNavigateOnClickListener(R.id.action_homeFragment_to_userProfileFragment, bundle).onClick(it)
             }
 
@@ -122,10 +127,10 @@ class ViewHolder(
                     AttachmentType.VIDEO -> {
                         exo.visibility = View.VISIBLE
                         ivAtachment.visibility = View.GONE
-                        val media = post.attachment.url?.let { MediaHelper(exo, it) }
-                        media?.create()
+                        val media = post.attachment.url.let { MediaHelper(exo, it) }
+                        media.create()
                         exo.setOnClickListener {
-                            media?.onPlay()
+                            media.onPlay()
                         }
                     }
                     AttachmentType.IMAGE -> {
@@ -139,10 +144,10 @@ class ViewHolder(
                     AttachmentType.AUDIO -> {
                         exo.visibility = View.VISIBLE
                         ivAtachment.visibility = View.GONE
-                        val media = post.attachment.url?.let { MediaHelper(exo, it) }
-                        media?.create()
+                        val media = post.attachment.url.let { MediaHelper(exo, it) }
+                        media.create()
                         exo.setOnClickListener {
-                            media?.onPlay()
+                            media.onPlay()
                         }
                     }
                     null -> {
@@ -159,10 +164,8 @@ class PostDiffCallback : DiffUtil.ItemCallback<Post>() {
     override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean {
         return oldItem.id == newItem.id
     }
-
     override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean {
         return oldItem == newItem
     }
-
     override fun getChangePayload(oldItem: Post, newItem: Post): Any = Unit
 }

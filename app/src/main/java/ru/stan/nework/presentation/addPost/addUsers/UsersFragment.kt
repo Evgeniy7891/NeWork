@@ -1,47 +1,47 @@
 package ru.stan.nework.presentation.addPost.addUsers
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import ru.stan.nework.R
 import ru.stan.nework.databinding.FragmentUsersBinding
 import ru.stan.nework.domain.models.ui.user.UserUI
 import ru.stan.nework.presentation.addPost.CheckedListener
 import ru.stan.nework.presentation.addPost.UsersAdapter
-import java.util.ArrayList
+import ru.stan.nework.utils.BaseFragment
+import ru.stan.nework.utils.USERS
 
 @AndroidEntryPoint
-class UsersFragment : Fragment() {
+class UsersFragment : BaseFragment<FragmentUsersBinding>() {
 
     private val viewModel: UsersViewModel by viewModels()
+    override fun viewBindingInflate(): FragmentUsersBinding =
+        FragmentUsersBinding.inflate(layoutInflater)
 
-    private var _binding: FragmentUsersBinding? = null
-    private val binding get() = _binding ?: throw IllegalStateException("Cannot access view")
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentUsersBinding.inflate(layoutInflater, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         initUsers()
+        initClick()
+    }
+
+    private fun initClick() {
         binding.btnAddUser.setOnClickListener {
             viewModel.addUsers()
             viewModel.idUsers.observe(viewLifecycleOwner) { users ->
                 val bundle = Bundle()
-                bundle.putIntegerArrayList("ID", users as ArrayList<Int>?)
+                bundle.putIntegerArrayList(USERS, users as ArrayList<Int>?)
                 findNavController().navigate(R.id.action_usersFragment_to_postFragment, bundle)
             }
         }
-        return binding.root
+        binding.ibBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     private fun initUsers() {
@@ -52,31 +52,24 @@ class UsersFragment : Fragment() {
         }
     }
 
-        private fun initAdapter(users: List<UserUI>) {
-            val adapter = UsersAdapter(object : CheckedListener {
-                override fun checked(id: Int) {
-                    viewModel.check(id)
-                }
-
-                override fun unChecked(id: Int) {
-                    viewModel.uncheck(id)
-                }
-            })
-            println("LIST - $users")
-            binding.rvUsers.adapter = adapter
-            binding.rvUsers.recycledViewPool.setMaxRecycledViews(
-                UsersAdapter.VIEW_TYPE, UsersAdapter.MAX_POOL_SIZE
-            )
-            val newUser = adapter.itemCount < users.size
-            adapter.submitList(users) {
-                if (newUser) {
-                    binding.rvUsers.smoothScrollToPosition(0)
-                }
+    private fun initAdapter(users: List<UserUI>) {
+        val adapter = UsersAdapter(object : CheckedListener {
+            override fun checked(id: Int) {
+                viewModel.check(id)
+            }
+            override fun unChecked(id: Int) {
+                viewModel.uncheck(id)
+            }
+        })
+        binding.rvUsers.adapter = adapter
+        binding.rvUsers.recycledViewPool.setMaxRecycledViews(
+            UsersAdapter.VIEW_TYPE, UsersAdapter.MAX_POOL_SIZE
+        )
+        val newUser = adapter.itemCount < users.size
+        adapter.submitList(users) {
+            if (newUser) {
+                binding.rvUsers.smoothScrollToPosition(0)
             }
         }
-
-        override fun onDestroyView() {
-            super.onDestroyView()
-            _binding = null
-        }
     }
+}

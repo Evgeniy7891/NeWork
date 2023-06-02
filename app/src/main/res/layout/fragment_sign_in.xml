@@ -10,7 +10,7 @@
         android:id="@+id/tv_sign_in"
         style="@style/TextStyleMonserrat"
         android:layout_marginBottom="42dp"
-        android:text="Регистрация"
+        android:text="@string/regist"
         android:textSize="26sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/til_login"
@@ -33,7 +33,7 @@
             android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Пароль" />
+            android:hint="@string/password" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -49,7 +49,7 @@
             android:id="@+id/et_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Логин" />
+            android:hint="@string/login" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -65,14 +65,14 @@
             android:id="@+id/et_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Имя" />
+            android:hint="@string/your_name" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/tv_have_account"
         style="@style/TextStyleMonserrat"
         android:layout_marginTop="16dp"
-        android:text="Уже есть аккаунт?"
+        android:text="@string/you_have_account"
         android:textSize="11sp"
         app:layout_constraintStart_toStartOf="@+id/btn_sign_in"
         app:layout_constraintTop_toBottomOf="@+id/btn_sign_in" />
@@ -82,7 +82,7 @@
         style="@style/TextStyleMonserrat"
         android:layout_marginStart="8dp"
         android:padding="4dp"
-        android:text="Вход"
+        android:text="@string/go"
         android:textColor="@color/black"
         android:textSize="11sp"
         android:textStyle="bold"
@@ -97,7 +97,7 @@
         android:layout_marginTop="32dp"
         android:background="@drawable/button"
         android:fontFamily="@font/montserrat_medium"
-        android:text="Войти"
+        android:text="@string/enter"
         android:textAllCaps="false"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="@+id/til_name"

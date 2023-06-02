@@ -41,6 +41,9 @@
         <action
             android:id="@+id/action_logInFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_logInFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
     </fragment>
     <fragment
         android:id="@+id/postFragment"
@@ -50,10 +53,12 @@
         <action
             android:id="@+id/action_postFragment_to_usersFragment"
             app:destination="@id/usersFragment"
-            app:popUpToInclusive="false"/>
+            app:popUpTo="@id/postFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_postFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/usersFragment"
@@ -62,13 +67,19 @@
         tools:layout="@layout/fragment_users" >
         <action
             android:id="@+id/action_usersFragment_to_postFragment"
-            app:destination="@id/postFragment" />
+            app:destination="@id/postFragment"
+            app:popUpTo="@id/usersFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <dialog
         android:id="@+id/usersBottomSheetFragment"
         android:name="ru.stan.nework.presentation.home.users.UsersBottomSheetFragment"
         android:label="fragment_users_bottom_sheet"
-        tools:layout="@layout/fragment_users_bottom_sheet" />
+        tools:layout="@layout/fragment_users_bottom_sheet" >
+        <action
+            android:id="@+id/action_usersBottomSheetFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
+    </dialog>
     <fragment
         android:id="@+id/accountFragment"
         android:name="ru.stan.nework.presentation.account.AccountFragment"
@@ -89,6 +100,9 @@
         <action
             android:id="@+id/action_eventsWallFragment_to_usersBottomSheetFragment"
             app:destination="@id/usersBottomSheetFragment" />
+        <action
+            android:id="@+id/action_eventsWallFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/newEventFragment"

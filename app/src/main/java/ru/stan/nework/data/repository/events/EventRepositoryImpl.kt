@@ -14,7 +14,6 @@ import ru.stan.nework.data.repository.EventRemoteMediator
 import ru.stan.nework.data.room.dao.EventDao
 import ru.stan.nework.data.room.entity.EventEntity
 import ru.stan.nework.data.room.entity.UserPreview
-import ru.stan.nework.data.room.entity.toEntity
 import ru.stan.nework.di.IoDispatcher
 import ru.stan.nework.domain.models.network.NetworkState
 import ru.stan.nework.domain.models.network.event.EventModel
@@ -23,6 +22,7 @@ import ru.stan.nework.domain.models.ui.event.Event
 import ru.stan.nework.domain.repository.EventsRepository
 import ru.stan.nework.utils.safeApiCall
 import javax.inject.Inject
+
 @OptIn(ExperimentalPagingApi::class)
 class EventRepositoryImpl @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
@@ -30,7 +30,6 @@ class EventRepositoryImpl @Inject constructor(
     mediator: EventRemoteMediator,
     private val eventDao: EventDao,
 ) : EventsRepository {
-
 
     override val data: Flow<PagingData<Event>> =
         Pager(

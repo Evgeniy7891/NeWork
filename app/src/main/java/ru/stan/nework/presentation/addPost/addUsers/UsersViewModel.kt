@@ -2,30 +2,26 @@ package ru.stan.nework.presentation.addPost.addUsers
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 import ru.stan.nework.domain.models.network.NetworkState
 import ru.stan.nework.domain.models.ui.user.UserUI
 import ru.stan.nework.domain.usecase.users.GetUsersUseCase
+import ru.stan.nework.utils.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class UsersViewModel @Inject constructor(
     private val getUsersUseCase: GetUsersUseCase
-) : ViewModel() {
-
-    private val _errorMessage = MutableSharedFlow<String>()
-    val errorMessage = _errorMessage.asSharedFlow()
-
-    private val _isLoading = MutableStateFlow<Boolean>(false)
-    val isLoading = _isLoading.asStateFlow()
+) : BaseViewModel() {
 
     private val _idUsers = MutableLiveData<List<Int>>()
     val idUsers: LiveData<List<Int>>
         get() = _idUsers
-
 
     val users: StateFlow<List<UserUI>> =
         getNewsList().stateIn(
@@ -37,7 +33,7 @@ class UsersViewModel @Inject constructor(
     private fun getNewsList() = flow {
         when (val response = getUsersUseCase.invoke()) {
             is NetworkState.Error -> _errorMessage.emit(response.throwable)
-            is NetworkState.Loading -> TODO("not implemented yet")
+            is NetworkState.Loading -> _isLoading.emit(true)
             is NetworkState.Success -> emit(response.success)
         }
     }
@@ -45,14 +41,11 @@ class UsersViewModel @Inject constructor(
         users.value.forEach {
             if (it.id == id) it.isChecked = true
         }
-        println("VIEW MODEL chech ${users.value}")
     }
-
     fun uncheck(id: Int) {
         users.value.forEach {
             if (it.id == id) it.isChecked = false
         }
-        println("VIEW MODEL unchec ${users.value}")
     }
     fun addUsers() {
         val listChecked = mutableListOf<Int>()
@@ -61,7 +54,6 @@ class UsersViewModel @Inject constructor(
             if(user.isChecked) {
                 listChecked.add(user.id)
                 userList.add(user)
-                println("VIEW MODEL user list ${userList}")
             }
         }
         _idUsers.value = listChecked

@@ -11,14 +11,14 @@ import ru.stan.nework.domain.models.network.NetworkState
 import ru.stan.nework.domain.usecase.auth.RegisterUserUseCase
 import ru.stan.nework.providers.network.AppAuth
 import ru.stan.nework.providers.network.AuthState
+import ru.stan.nework.utils.BaseViewModel
 import javax.inject.Inject
-
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
     private val registerUserUseCase: RegisterUserUseCase,
     private val auth: AppAuth
-) : ViewModel() {
+) : BaseViewModel() {
 
     fun register(login: String, password: String, name: String) = viewModelScope.launch {
         when (val response = registerUserUseCase.invoke(login, password, name)) {
@@ -31,7 +31,7 @@ class SignInViewModel @Inject constructor(
                 )
             }
             is NetworkState.Error -> throw RuntimeException("Error ${response.throwable}")
-            else -> {}
+            else -> _isLoading.emit(true)
         }
     }
 

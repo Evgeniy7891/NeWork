@@ -1,9 +1,7 @@
 package ru.stan.nework.presentation.home.users
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.stan.nework.R
@@ -19,19 +17,13 @@ class UsersHomeAdapter(private val listUser: List<UserUI>):
         return ViewHolder(binding)
     }
 
-    override fun getItemCount(): Int {
-        return listUser.size
-    }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val user = listUser[position]
         holder.bind(user)
-        holder.itemView.setOnClickListener {
-            val id = user.id
-            val bundle = Bundle()
-            bundle.putLong("UserID", id.toLong())
-            Navigation.createNavigateOnClickListener(R.id.action_userFragment_to_userProfileFragment, bundle).onClick(it)
-        }
+    }
+
+    override fun getItemCount(): Int {
+        return listUser.size
     }
 
     class ViewHolder(

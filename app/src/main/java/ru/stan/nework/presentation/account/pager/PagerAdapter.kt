@@ -11,12 +11,12 @@ class PagerAdapter(fragmentActivity: FragmentActivity): FragmentStateAdapter(fra
     override fun getItemCount(): Int {
         return 3
     }
-
     override fun createFragment(position: Int): Fragment {
         return when(position){
-            0 -> WallFragment()
+            2 -> WallFragment()
             1 -> JobsFragment()
-            else -> SettingsFragment()
+            0 -> SettingsFragment()
+            else -> WallFragment()
         }
     }
 }

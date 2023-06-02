@@ -1,19 +1,21 @@
 package ru.stan.nework.presentation.events
 
+import android.os.Build
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
+import androidx.navigation.Navigation
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.stan.nework.R
-import ru.stan.nework.data.room.entity.EventEntity
 import ru.stan.nework.databinding.ItemEventBinding
 import ru.stan.nework.domain.models.ui.event.Event
-import ru.stan.nework.domain.models.ui.post.Post
+import ru.stan.nework.utils.DateHelper
 
 interface OnListener {
     fun getUsers(listId: List<Int>) {}
@@ -32,6 +34,7 @@ class EventAdapter(private val onListener: OnListener) :
         return ViewHolder(binding, onListener)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val event = getItem(position)
         if (event != null) {
@@ -50,11 +53,12 @@ class ViewHolder(
     private val onClickListener: OnListener
 ) : RecyclerView.ViewHolder(binding.root) {
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun bind(event: Event) {
         with(binding) {
             tvAuthor.text = event.author
             tvJob.text = event.authorJob
-            tvTime.text = event.published
+            tvTime.text = DateHelper.convertDateAndTime(event.published)
             tvContent.text = event.content
             tvLinkContent.text = event.link
             tvDatetimeContent.text = event.datetime
@@ -70,11 +74,8 @@ class ViewHolder(
 
             var liker = event.likedByMe
 
-            if (liker) {
-                ibLiked.setImageResource(R.drawable.ic_liked_full)
-            } else {
-                ibLiked.setImageResource(R.drawable.ic_liked)
-            }
+            if (liker) { ibLiked.setImageResource(R.drawable.ic_liked_full)
+            } else { ibLiked.setImageResource(R.drawable.ic_liked) }
 
             ibLiked.setOnClickListener {
                 if (!liker) {
@@ -86,6 +87,15 @@ class ViewHolder(
                     ibLiked.setImageResource(R.drawable.ic_liked)
                     liker = false
                 }
+            }
+
+            ivAvatar.setOnClickListener {
+                val id = event?.authorId
+                val bundle = Bundle()
+                if (id != null) {
+                    bundle.putLong("UserID", id.toLong())
+                }
+                Navigation.createNavigateOnClickListener(R.id.action_eventsWallFragment_to_userProfileFragment, bundle).onClick(it)
             }
 
             Glide.with(ivAvatar)
@@ -106,12 +116,10 @@ class ViewHolder(
                                 onClickListener.onRemove(event)
                                 true
                             }
-
                             R.id.edit -> {
                                 onClickListener.onEdit(event)
                                 true
                             }
-
                             else -> false
                         }
                     }
@@ -121,12 +129,10 @@ class ViewHolder(
     }
 }
 
-
 class EventDiffCallback : DiffUtil.ItemCallback<Event>() {
     override fun areItemsTheSame(oldItem: Event, newItem: Event): Boolean {
         return oldItem.id == newItem.id
     }
-
     override fun areContentsTheSame(oldItem: Event, newItem: Event): Boolean {
         return oldItem == newItem
     }

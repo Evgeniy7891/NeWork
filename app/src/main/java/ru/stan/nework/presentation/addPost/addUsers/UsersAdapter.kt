@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.stan.nework.R
 import ru.stan.nework.databinding.ItemUsersBinding
-import ru.stan.nework.domain.models.network.user.User
 import ru.stan.nework.domain.models.ui.user.UserUI
 
 interface CheckedListener {
@@ -24,13 +23,10 @@ class UsersAdapter(
         val binding = ItemUsersBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding, checkedListener)
     }
-
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val user = getItem(position)
         holder.bind(user)
     }
-
     class ViewHolder(
         private val binding: ItemUsersBinding,
         private val listener: CheckedListener
@@ -56,17 +52,14 @@ class UsersAdapter(
             }
         }
     }
-
     class UserDiffCallback : DiffUtil.ItemCallback<UserUI>() {
         override fun areItemsTheSame(oldItem: UserUI, newItem: UserUI): Boolean {
             return oldItem.id == newItem.id
         }
-
         override fun areContentsTheSame(oldItem: UserUI, newItem: UserUI): Boolean {
             return oldItem == newItem
         }
     }
-
     companion object {
         const val MAX_POOL_SIZE = 20
         const val VIEW_TYPE = 0
