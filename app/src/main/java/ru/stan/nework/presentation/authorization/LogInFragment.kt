@@ -34,13 +34,11 @@ class LogInFragment : BaseFragment<FragmentLogInBinding>() {
                 Toast.makeText(activity, "Заполните все поля", Toast.LENGTH_LONG).show()
             } else {
                 viewModel.authentication(login, pass)
-                Handler(Looper.getMainLooper()).postDelayed({
-                    viewModel.entrance.observe(viewLifecycleOwner){
-                        if(it) findNavController().navigate(R.id.action_logInFragment_to_homeFragment)
-                        else  Snackbar.make(binding.root, "Неверное имя или пароль", Snackbar.LENGTH_SHORT).show()
-                    }
-                }, 2000L)
             }
+            }
+            viewModel.entrance.observe(viewLifecycleOwner){
+                if(it) findNavController().navigate(R.id.action_logInFragment_to_homeFragment)
+                else  Snackbar.make(binding.root, "Неверное имя или пароль", Snackbar.LENGTH_SHORT).show()
         }
         binding.ibBack.setOnClickListener {
             findNavController().popBackStack()
